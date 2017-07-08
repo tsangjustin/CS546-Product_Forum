@@ -1,4 +1,4 @@
-# CS546-Shoe_Forum
+# CS546-Outfit_Product_Forum
 ## Team
 + Daniel Heyman
 + Justin Tsang
