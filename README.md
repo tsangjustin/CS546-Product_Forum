@@ -60,6 +60,7 @@
       createdBy: 'string', // id of user,
       createdOn: 'date',
       label: ['string', 'label'],
+      title: 'string',
       contents: 'string',
       clothing: ['string', "clothing_id"],
       comments: [ 'string', {

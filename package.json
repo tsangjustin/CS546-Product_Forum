@@ -1,0 +1,19 @@
+{
+  "name": "cs546-project",
+  "version": "0.0.1",
+  "description": "Clothing forum webpage",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tsangjustin/CS546-Product_Forum.git"
+  },
+  "author": "Daniel Heyman, Justin Tsang, Weronika Zamlynny",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tsangjustin/CS546-Product_Forum/issues"
+  },
+  "homepage": "https://github.com/tsangjustin/CS546-Product_Forum#readme"
+}
