@@ -4,6 +4,9 @@
 + Justin Tsang
 + Weronika Zamlynny
 
+## Project Name
+Style With Me?
+
 ## Project Idea
 ### 1. General
 
@@ -11,7 +14,7 @@
     - Login page
     - Sign up page
     - Landing page will allow users to navigate to certain clothing type (dress, t-shirt, shoes)
-    - Create forums and comments
+    - Create threads and comments
     - View their existing forums and new notifications
   - **Reach Features**:
     - View list of most popular clothing item
@@ -25,20 +28,32 @@
     - Use APIs to retrieve price information about clothing
   - **Reach Features**:
     - Scrape Internet for information of sales and price of given product and update daily
-    - Get list of suggestions on where to purchse given product
+    - Display graph of the daily price change
+    - Allow multiple clothing items to be tracked in a single feed
+    - Get list of suggestions on where to purchase given product
     - Sub threads for comments
+    - Comments can contain clothing items as well
+    
+### 3. Forum Post Typing
 
-### 3. Clothing Selection
+  - **Primary Features**:
+    - Tag clothing items with `#clothing_name[clothing_url]`
+  - **Reach Feature**:
+    - Markdown support
+    - Tag users with `@user`
+
+### 4. Clothing Selection
 
   - **Primary Features**:
     - Using APIs from clothing stores to get thumbnails and links to specific aritcles of clothing
     - User can select thumbnails and create a forum on them
-  - **Reach Feature**:      
+  - **Reach Feature**:
     - User can view what forums already include this article of clothing
 
 ## Clothing Resources:
 1. Amazon
   - Look into a scraper
+2. Or track based on link provided by the user and scan page for prices and thumbnails
 
 ## Database Design:
 1. Users
@@ -47,9 +62,9 @@
       _id: 'string'
       displayName: 'string',
       email: 'string',
-      password: 'string',
+      password: 'string', // hashed
       isMale: 'boolean',
-      interestedForums: ["string", "forum_id"],
+      followedForums: ["string"], // ids of forums
       avatar: "string" // base64 encoding
     }
   ```
@@ -57,19 +72,20 @@
   ```javascript
     {
       _id: 'string',
-      createdBy: 'string', // id of user,
+      createdBy: 'string', // id of user
       createdOn: 'date',
-      label: ['string', 'label'],
       title: 'string',
+      label: ['string'],
       contents: 'string',
-      clothing: ['string', "clothing_id"],
-      comments: [ 'string', {
+      clothing: ['string'], // ids of referenced clothing
+      likes: ['string'], // ids of users that liked
+      comments: [{
           _id: 'string',
           datePosted: 'date',
           contents: 'string',
           user_id: 'string', // id of commenter
-          likes: ['string', 'user_id'],
-          subthreads: ['object', 'comment'] // Nice to have
+          likes: ['string'], // ids of users that liked
+          subthreads: [comment_schema] // schema is identical to parent comment object
       } ]
     }
   ```
@@ -78,9 +94,20 @@
     {
       _id: 'string',
       url: 'string',
-      forums: ['string', 'forum_id'],
       snapshot: 'string', // Base 64
       label: 'string',
-      price: 'int'
+      clothingType: 'int', // Enum linked to config file with types? 
+      prices: [{
+        _id: 'string',
+        dateScanned: 'date',
+        price: 'int'
+      }]
     }
   ```
+
+## Additional Tools:
+1. React
+
+**TBA**:
+
+2. Flux (stores & dispatching)
