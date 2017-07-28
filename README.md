@@ -5,7 +5,10 @@
 + Weronika Zamlynny
 
 ## Project Name
-Style With Me?
+Style With Me?  
+
+## Project Proposal
+A clothing forum website that allows users to create new and search for existing forum threads that focus on certain clothing brand, type, or outfit. The forum thread provides a platform for users to converse about that brand, type, or outfit and each forum can link sources to purchase those item(s) as well as provide general statistic information regarding those item(s).  
 
 ## Project Idea
 ### 1. General
@@ -34,7 +37,7 @@ Style With Me?
     - Get list of suggestions on where to purchase given product
     - Sub threads for comments
     - Comments can contain clothing items as well
-    
+
 ### 3. Forum Post Typing
 
   - **Primary Features**:
@@ -97,7 +100,7 @@ Style With Me?
       url: 'string',
       snapshot: 'string', // Base 64
       label: 'string',
-      clothingType: 'int', // Enum linked to config file with types? 
+      clothingType: 'int', // Enum linked to config file with types?
       prices: [{
         _id: 'string',
         dateScanned: 'date',
