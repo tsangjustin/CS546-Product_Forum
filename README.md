@@ -26,6 +26,7 @@ Style With Me?
     - Create new thread to discuss certain shoe and/or clothing brand/outfit(s)
     - Users can post comments and likes for given thread
     - Use APIs to retrieve price information about clothing
+    - All users can search for existing thread based on clothing type/brand
   - **Reach Features**:
     - Scrape Internet for information of sales and price of given product and update daily
     - Display graph of the daily price change
