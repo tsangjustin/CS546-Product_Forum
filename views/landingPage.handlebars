@@ -1,0 +1,18 @@
+<div>
+	<section>
+		{{#if avatar}}
+			<article>
+				<img
+					src="{{avatar}}"
+					alt="User profile image" />
+			</article>
+		{{else}}
+			<p>
+				<a href="/log_in">Login</a>
+			</p>
+			<p>
+				<a href="/sign_up">Sign Up</a>
+			</p>
+		{{/if}}
+	</section>
+</div>
