@@ -106,4 +106,9 @@ router.post('/log_in/', (req, res, next) => {
 	})(req, res, next);
 });
 
+router.get('/log_out/', (req, res) => {
+	req.logout();
+	return res.redirect('/');
+});
+
 module.exports = exports = router
