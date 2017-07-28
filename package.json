@@ -4,6 +4,7 @@
   "description": "Clothing forum webpage",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,8 +19,14 @@
   "homepage": "https://github.com/tsangjustin/CS546-Product_Forum#readme",
   "dependencies": {
     "bcrypt": "^1.0.2",
+    "body-parser": "^1.17.2",
+    "cookie-parser": "^1.4.3",
     "express": "^4.15.3",
     "express-handlebars": "^3.0.0",
-    "mongodb": "^2.2.30"
+    "express-session": "^1.15.4",
+    "mongodb": "^2.2.30",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "uuid": "^3.1.0"
   }
 }
