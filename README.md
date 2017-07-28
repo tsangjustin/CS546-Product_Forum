@@ -22,6 +22,8 @@ A clothing forum website that allows users to create new and search for existing
   - **Reach Features**:
     - View list of most popular clothing item
     - Prioritize forums (most recent, trending, most popular)
+	- Email reset password
+	- Password lockout
 
 ### 2. Forum
 
