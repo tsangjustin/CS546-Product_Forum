@@ -8,6 +8,6 @@ module.exports = exports = (app) => {
 	app.use('/', authRoutes);
 	app.use('/', landingPageRoute);
 	app.use('*', (req, res) => {
-		return res.render('error/404');
+		return res.status(404).render('error/404');
 	});
 }

@@ -34,24 +34,13 @@ router.get('/sign_up/', (req, res) => {
 	let errorString = undefined;
 	if (req.cookies.loginError) {
 		errorString = req.cookies.loginError;
+		res.clearCookie('loginError');
 	}
-	res.clearCookie('loginError');
-	console.log(errorString);
 	return res.render('auth/sign_up', {error: errorString});
 });
 
 router.post('/sign_up/', (req, res, next) => {
-	const sign_up_user = req.body;
-	console.log(sign_up_user);
-	if (!isValidString(sign_up_user.username)) {
-		res.cookie('loginError', 'Invalid username');
-		return res.redirect('/sign_up');
-	}
-	if (!isMatchingPassword(sign_up_user.password)) {
-		res.cookie('loginError', 'Invalid and/or non-matching password');
-		return res.redirect('/sign_up');
-	}
-	userData.createUser(sign_up_user).then((user) => {
+	userData.createUser(req.body).then((user) => {
 		req.login(user, (loginErr) => {
 			if (loginErr) {
 				res.cookie('loginError', loginErr);
@@ -60,7 +49,6 @@ router.post('/sign_up/', (req, res, next) => {
 			return res.redirect('/');
 		});
 	}).catch((err) => {
-		console.log(err);
 		res.cookie('loginError', err);
 		return res.redirect('/sign_up');
 	});
@@ -73,9 +61,8 @@ router.get('/log_in/', (req, res) => {
 	let errorString = undefined;
 	if (req.cookies.loginError) {
 		errorString = req.cookies.loginError;
+		res.clearCookie('loginError');
 	}
-	res.clearCookie('loginError');
-	console.log(errorString);
 	return res.render('auth/log_in', {error: errorString});
 });
 
@@ -97,7 +84,6 @@ router.post('/log_in/', (req, res, next) => {
 	    // ***********************************************************************
     	req.login(user, (loginErr) => {
 			if (loginErr) {
-				console.log(loginErr);
 				res.cookie('loginError', loginErr);
 				return res.redirect('/log_in');
 			}

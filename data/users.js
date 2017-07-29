@@ -208,24 +208,12 @@ user.updateRecipe = (id, changeUser) => {
 	});
 }
 
-user.deleteRecipe = (id) => {
+user.deleteUser = (id, password) => {
 	return new Promise((success, reject) => {
 		if (!isValidString(id)) {
 			return reject("Invalid id to get recipe");
 		}
 		foodRecipes().then((foodColl) => {
-			// foodColl.findAndModify(
-			// 	{_id: id},
-			// 	[],
-			// 	{},
-			// 	{remove: true},
-			// 	(err, result) => {
-			// 		if (err) {
-			// 			return reject(err);
-			// 		}
-			// 		return success(result.value);
-			// 	}
-			// );
 			foodColl.removeOne({_id: id}, (err, deletedInfo) => {
 				if (err) {
 					return reject(err);
