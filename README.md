@@ -11,13 +11,15 @@ Style With Me?
 A clothing forum website that allows users to create new and search for existing forum threads that focus on certain clothing brand, type, or outfit. The forum thread provides a platform for users to converse about that brand, type, or outfit and each forum can link sources to purchase those item(s) as well as provide general statistic information regarding those item(s).  
 
 ## Backlog
+
 ### Core Features
 1. User creation and preference modification
 2. Create and maintain own forums regarding certain clothing type, brand, or outfit
-3. View and comment in other users' forums 
+3. View and comment in other users' forums
 4. Allow user to post images of that outfit or clothes
 5. Search new forum based on clothing type, brand, or tag(s)
 6. Landing page that displays forums sorted by most recent or most popular and can filter by clothing type/tag(s)
+
 ### Nice-to-Have Features
 1. Link forum to external webpage to purchase and/or scrape info about brand or clothes
 2. Display graphs in webpage showing visual of price changes and sales of outfit
