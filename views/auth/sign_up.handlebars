@@ -1,0 +1,28 @@
+<section>
+	<h2>Sign Up Form</h2>
+	<form action="/sign_up" method="post">
+	    <div>
+	        <label for="username">Username:</label>
+	        <input type="text" id="username" name="username" />
+	    </div>
+	    <div>
+	        <label for="password">Password:</label>
+	        <input type="password" id="password" name="password" />
+	    </div>
+		<div>
+	        <label for="password">Retype Password:</label>
+	        <input type="password" id="retype-password" name="password" />
+	    </div>
+	    <div>
+	        <button type="submit" value="Sign Up"/>Sign Up</button>
+	    </div>
+	</form>
+	<p>
+		{{ error }}
+	</p>
+	<section>
+		<p>
+			Already have an account? <a href="/log_in">Login here</a>!
+		</p>
+	</section>
+</section>
