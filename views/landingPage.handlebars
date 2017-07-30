@@ -1,0 +1,21 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="float-right">
+			{{#if avatar}}
+				<img
+					src="{{avatar}}"
+					alt="User profile image" />
+				<p>
+					<a href="/log_out">Logout</a>
+				</p>
+			{{else}}
+				<p>
+					<a href="/log_in">Login</a>
+				</p>
+				<p>
+					<a href="/sign_up">Sign Up</a>
+				</p>
+			{{/if}}
+		</div>
+	</div>
+</div>
