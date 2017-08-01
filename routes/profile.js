@@ -6,10 +6,12 @@ router.get('/', (req, res) => {
 	}
 	const userInfo = {
 		avatar: req.user.avatar,
+		username: req.user.username,
 		email: req.user.email,
-		username:req.user.username,
+		gender: (req.user.isMale) ? "Male" : "Female",
 	};
-	return res.render('profile', userInfo);
+	console.log(userInfo);
+	return res.render('profile/profile', userInfo);
 });
 
 module.exports = exports = router;
