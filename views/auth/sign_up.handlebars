@@ -1,17 +1,17 @@
-<section>
+<section class="row col-md-4 col-md-offset-4">
 	<h2>Sign Up Form</h2>
 	<form action="/sign_up" method="post">
 	    <div>
 	        <label for="username">Username:</label>
-	        <input type="text" id="username" name="username" />
+	        <input type="text" id="username" name="username" placeholder="John Doe" required />
 	    </div>
 	    <div>
 	        <label for="password">Password:</label>
-	        <input type="password" id="password" name="password" />
+	        <input type="password" id="password" name="password" placeholder="Enter password" required />
 	    </div>
 		<div>
 	        <label for="password">Retype Password:</label>
-	        <input type="password" id="retype-password" name="password" />
+	        <input type="password" id="retype-password" name="password" placeholder="Retype password" required />
 	    </div>
 	    <div>
 	        <button type="submit" value="Sign Up"/>Sign Up</button>
