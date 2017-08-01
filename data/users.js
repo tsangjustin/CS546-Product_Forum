@@ -53,14 +53,12 @@ user.createUser = (forumUser) => {
 			return reject("Expect password for forum user");
 		}
 		const userName = forumUser.username;
-		const userPassword = bcrypt.hashSync(forumUser.password[0], 10);
 		let _user = {
 			_id: uuidV4(),
-			userName,
-			userPassword,
-			userAvatar: forumUser.avatar || '/public/image/avatar.png',
+			username: userName,
+			password: bcrypt.hashSync(forumUser.password[0], 10),
+			avatar: forumUser.avatar || '/public/image/avatar.png',
 	  	};
-		console.log('Setting up new user');
 		user.getUser(userName).then((existingUser) => {
 			console.log(`${userName} already exists`);
 			return reject('Username already exists');
@@ -101,7 +99,7 @@ user.getUser = (username) => {
 		}
 		UserCollection().then((userColl) => {
 			userColl.findOne(
-				{userName: username},
+				{username: username},
 				(err, userItem) => {
 					if (err) {
 						console.log(err);
