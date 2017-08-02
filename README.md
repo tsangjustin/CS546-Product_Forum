@@ -25,6 +25,242 @@ A clothing forum website that allows users to create new and search for existing
 2. Display graphs in webpage showing visual of price changes and sales of outfit
 3. Get notification when user comments on forum, price update or stock update on outfit
 
+## Database Proposal
+### 1. Users
+- The user collection will store all users and their profiles. Users will be able to login, update their profile, delete their account, and view forums they created.  
+```javascript
+{
+    _id: 'string',
+    password: 'string', // hashed
+    sessionId: 'string', // Session ID
+    followedForums: ["string"], // ids of forums
+    profile: {
+        avatar: "string" // base64 encoding
+        displayName: 'string',
+        email: 'string',
+        isMale: 'boolean',
+    }
+}
+```
+- Ex:
+
+```javascript
+{
+    _id: '7b7997a2-c0d2-4f8c-b27a-6a1d4b5b6310',
+    password: '$2a$08$XdvNkfdNIL8Fq7l8xsuIUeSbNOFgK0M0iV5HOskfVn7.PWncShU.O',
+    sessionId: 'b3988882-627f-4c59-8d5d-54b7a43b030e',
+    followedForums: ["3eb58e7d-4826-4ab5-bb9b-7eca07fc0d11", "a3652ef7-8b63-478e-b431-516825227827"],
+    profile: {
+        avatar: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wgARCAGQAlgDASIAAhEBAxEB/8QAHAAAAgMBAQEBAAAAAAAAAAAAAQIAAwQFBgcI/8QAGQEBAQEBAQEAAAAAAAAAAAAAAAECAwQF/9oADAMBAAIQAxAAAAHlekxcfN7Wvm8xNvA9Np3ny+u7TqZdmjtY15fZr2nP39ivF5mfrDWeF2+Vtw9ZX5x+e+7fiWXtTg6tZ6kxXVfEepJCSQkkJJCSQkkJJCSQkkJJCSQkkJJCSQkkJJCSQkkIDASRZJIEIIDIEkX86bvTei9nD5tb9k1ct/Bun9j5tvivaN1eeuPX6XnxN/P5idtvB9LU7/A7OSzkZOvNc+dfmeX1V/mzy6+ixZKle9",
+        displayName: 'Justin Tsang',
+        email: 'justin@test.com',
+        isMale: true,
+    }
+}
+```
+
+| Name | Type | Description |
+|------|------|-------------|
+| _id  | string | A globally unique identifier to represent the user |
+| password | string | A bcrypted string that is the salted, hashed version of the user's password |
+| sessionId | string | A globally unique identifier to represent the user's current session |
+| profile | User Profile | The user's basic profile that is modifiable |
+
+### 2. User Profile (subdocument and not a collection; stored in User collection)
+- The subdocument of a user profile part of the User collection
+```javascript
+{
+    avatar: "string" // base64 encoding
+    displayName: 'string',
+    email: 'string',
+    isMale: 'boolean',
+}
+```
+- Ex:
+
+```javascript
+{
+    avatar: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wgARCAGQAlgDASIAAhEBAxEB/8QAHAAAAgMBAQEBAAAAAAAAAAAAAQIAAwQFBgcI/8QAGQEBAQEBAQEAAAAAAAAAAAAAAAECAwQF/9oADAMBAAIQAxAAAAHlekxcfN7Wvm8xNvA9Np3ny+u7TqZdmjtY15fZr2nP39ivF5mfrDWeF2+Vtw9ZX5x+e+7fiWXtTg6tZ6kxXVfEepJCSQkkJJCSQkkJJCSQkkJJCSQkkJJCSQkkJJCSQkkIDASRZJIEIIDIEkX86bvTei9nD5tb9k1ct/Bun9j5tvivaN1eeuPX6XnxN/P5idtvB9LU7/A7OSzkZOvNc+dfmeX1V/mzy6+ixZKle9",
+    displayName: 'Justin Tsang',
+    email: 'justin@test.com',
+    isMale: true,
+}
+```
+
+| Name | Type | Description |
+|------|------|-------------|
+| avatar  | string | base 64 encoding of user profile image; if no image uploaded, will use a stock avatar stored in public directory of server  |
+| displayName | string | A display name to represent user's name |
+| email | string | The email that is associated to user |
+| isMale | boolean | boolean value to identify gender of user |
+
+### 3. Forums
+- The forum collection is used to store all forums created on the website
+```javascript
+{
+    _id: 'string',
+    createdBy: 'string', // id of user
+    createdOn: 'date',
+    title: 'string',
+    label: ['string'],
+    contents: 'string',
+    clothing: ['string'], // ids of referenced clothing
+    likes: ['string'], // ids of users that liked
+    comments: [{
+        _id: 'string',
+        datePosted: 'date',
+        contents: 'string',
+        user_id: 'string', // id of commenter
+        likes: ['string'], // ids of users that liked
+        subthreads: [comments] // schema is identical to parent comment object
+    }]
+}
+```
+- Ex:
+
+```javascript
+{
+    _id: '9e4a1c14-9dd1-485b-87e8-047237020388',
+    createdBy: '7b7997a2-c0d2-4f8c-b27a-6a1d4b5b6310',
+    createdOn: '2017-05-30T09:00:00',
+    title: 'The new Yeezy Zebra: Buy or wait?',
+    label: ['Sneaker', 'Adidas', 'Yeezy'],
+    contents: 'With the release of the new Yeezy Zebra, do you think I should buy now or wait for resell value to drop?',
+    clothing: ['string'], // ids of referenced clothing
+    likes: ['9e4a1c14-9dd1-485b-87e8-047237020422', '1b5d8bf6-d279-42b1-ba4e-a46b8ad55985'], // ids of users that liked
+    comments: [{
+        _id: '2c384c5b-a2fb-4ef3-a583-6103b025c986',
+        datePosted: '2017-05-30T19:00:00',
+        contents: 'I think you should wait for resell to drop. The new version comes out in a month!',
+        user_id: '1b5d8bf6-d279-42b1-ba4e-a46b8ad55985', // id of commenter
+        likes: ['7b7997a2-c0d2-4f8c-b27a-6a1d4b5b6310'], // ids of users that liked
+        subthreads: [comments] // schema is identical to parent comment object
+    }]
+}
+```
+
+| Name | Type | Description |
+|------|------|-------------|
+| _id  | string | A globally unique identifier to represent the forum |
+| createdBy | string | The unique identifer of the user who created the forum |
+| createdOn | date | A datetime of when the user created the forum |
+| title | string | The title of the forum that user's will see in the landing page and will be the header of the forum |
+| label | array of string | Array of strings that can tag forum to clothing type and/or brand. Allow for searchability |
+| contents | string | A description of the forum and allow for a main talking point for the forum |
+| clothing | array of string | |
+| likes | array of string | array of unique identifier of the users who likes the forum |
+| comments | array of Comment | Comment users make on the forum |
+
+### 4. Comment (subdocument and not collection, part of the Forum collection)
+
+- A comment subdocument that is part of a forum document.  
+
+```javascript
+{
+    _id: 'string',
+    datePosted: 'date',
+    contents: 'string',
+    user_id: 'string', // id of commenter
+    likes: ['string'], // ids of users that liked
+    subthreads: [comments] // schema is identical to parent comment object
+}
+```
+
+- Ex:
+
+```javascript
+{
+    _id: '2c384c5b-a2fb-4ef3-a583-6103b025c986',
+    datePosted: '2017-05-30T19:00:00',
+    contents: 'I think you should wait for resell to drop. The new version comes out in a month!',
+    user_id: '1b5d8bf6-d279-42b1-ba4e-a46b8ad55985', // id of commenter
+    likes: ['7b7997a2-c0d2-4f8c-b27a-6a1d4b5b6310'], // ids of users that liked
+    subthreads: [comments] // schema is identical to parent comment object
+}
+```
+
+| Name | Type | Description |
+|------|------|-------------|
+| _id  | string | A globally unique identifier to represent the comment |
+| datePosted | date | A datetime of when the comment was posted |
+| contents | string | A description of the comment |
+| user_id | string | A globally unique identifier of the user who posted the comment |
+| likes | array | array of unique identifier of the users who likes the comment |
+| subthreads | array of Comment | Replies to a comment made on forum |
+
+### 5. Clothing
+
+- Clothing collection that is an archive of all clothing type and brand
+
+```javascript
+{
+    _id: 'string',
+    url: 'string',
+    snapshot: 'string', // Base 64
+    label: 'string',
+    clothingType: 'int', // Enum linked to config file with types?
+    prices: [{
+        _id: 'string',
+        dateScanned: 'date',
+        price: 'int'
+    }]
+}
+```
+
+- Ex:
+
+```javascript
+{
+    _id: 'abb04c80-85b2-44d7-8365-d88cb58bdbc3',
+    url: 'https://www.amazon.com/gp/product/B01NAQ9ZBP/ref=s9_acsd_aas_bw_c_x_1_w?pf_rd_m=ATVPDKIKX0DER&pf_rd_s=merchandised-search-2&pf_rd_r=H31VTCP8995FQYGKASNC&pf_rd_r=H31VTCP8995FQYGKASNC&pf_rd_t=101&pf_rd_p=5a17ae6f-af2b-44a1-9c7f-e996bf8a562c&pf_rd_p=5a17ae6f-af2b-44a1-9c7f-e996bf8a562c&pf_rd_i=16613802011',
+    snapshot: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7', // Base 64
+    label: 'string',
+    clothingType: 1, // Enum linked to config file with types?
+    prices: [{
+        _id: 'cf4d11c7-7426-43a7-8057-9e3ec2c6cd7a',
+        dateScanned: '2017-07-30T19:00:00',
+        price: 19.25
+    }]
+}
+```
+
+| Name | Type | Description |
+|------|------|-------------|
+| _id  | string | A globally unique identifier to represent the clothing |
+| url | string | A string url of where to scrape images and statistics for clothing. Also where to purchase item |
+| snapshot | string | A base64 encoding of the image for the clothing item |
+| label | string | a string of the label for the clothing type |
+| clothingType | int | int value that maps the clothing type to a config file |
+| prices | array of Price | Price object for the clothing type |
+
+### 6. Price (subdocument and not collection; part of the Clothing collection)
+
+- Price subdocument that is part of the Clothing collection
+
+```javascript
+{
+    _id: 'string',
+    dateScanned: 'date',
+    price: 'int'
+}
+```
+
+- Ex:
+
+```javascript
+{
+    _id: 'cf4d11c7-7426-43a7-8057-9e3ec2c6cd7a',
+    dateScanned: '2017-07-30T19:00:00',
+    price: 19.25
+}
+```
+
+| Name | Type | Description |
+|------|------|-------------|
+| _id  | string | A globally unique identifier to represent the clothing |
+| dateScanned | data | The datetime of when the link was scraped and integrated into website |
+| price | int | Price of the clothing |
+
 ## Project Idea
 ### 1. General
 
