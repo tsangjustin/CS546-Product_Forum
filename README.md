@@ -33,9 +33,9 @@ A clothing forum website that allows users to create new and search for existing
     _id: 'string',
     password: 'string', // hashed
     sessionId: 'string', // Session ID
-    followedForums: ["string"], // ids of forums
+    followedForums: ['string'], // ids of forums
     profile: {
-        avatar: "string" // base64 encoding
+        avatar: 'string' // base64 encoding
         displayName: 'string',
         email: 'string',
         isMale: 'boolean',
@@ -70,7 +70,7 @@ A clothing forum website that allows users to create new and search for existing
 - The subdocument of a user profile part of the User collection
 ```javascript
 {
-    avatar: "string" // base64 encoding
+    avatar: 'string' // base64 encoding
     displayName: 'string',
     email: 'string',
     isMale: 'boolean',
@@ -126,7 +126,7 @@ A clothing forum website that allows users to create new and search for existing
     title: 'The new Yeezy Zebra: Buy or wait?',
     label: ['Sneaker', 'Adidas', 'Yeezy'],
     contents: 'With the release of the new Yeezy Zebra, do you think I should buy now or wait for resell value to drop?',
-    clothing: ['string'], // ids of referenced clothing
+    clothing: ['3bd10b1e-77d7-11e7-b5a5-be2e44b06b34','3bd10ed4-77d7-11e7-b5a5-be2e44b06b34'], // ids of referenced clothing
     likes: ['9e4a1c14-9dd1-485b-87e8-047237020422', '1b5d8bf6-d279-42b1-ba4e-a46b8ad55985'], // ids of users that liked
     comments: [{
         _id: '2c384c5b-a2fb-4ef3-a583-6103b025c986',
@@ -197,7 +197,7 @@ A clothing forum website that allows users to create new and search for existing
     _id: 'string',
     url: 'string',
     snapshot: 'string', // Base 64
-    label: 'string',
+    label: ['string'],
     clothingType: 'int', // Enum linked to config file with types?
     prices: [{
         _id: 'string',
@@ -214,7 +214,7 @@ A clothing forum website that allows users to create new and search for existing
     _id: 'abb04c80-85b2-44d7-8365-d88cb58bdbc3',
     url: 'https://www.amazon.com/gp/product/B01NAQ9ZBP/ref=s9_acsd_aas_bw_c_x_1_w?pf_rd_m=ATVPDKIKX0DER&pf_rd_s=merchandised-search-2&pf_rd_r=H31VTCP8995FQYGKASNC&pf_rd_r=H31VTCP8995FQYGKASNC&pf_rd_t=101&pf_rd_p=5a17ae6f-af2b-44a1-9c7f-e996bf8a562c&pf_rd_p=5a17ae6f-af2b-44a1-9c7f-e996bf8a562c&pf_rd_i=16613802011',
     snapshot: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7', // Base 64
-    label: 'string',
+    label: ['shoes'],
     clothingType: 1, // Enum linked to config file with types?
     prices: [{
         _id: 'cf4d11c7-7426-43a7-8057-9e3ec2c6cd7a',
