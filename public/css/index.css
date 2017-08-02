@@ -12,6 +12,10 @@ html, body {
 	bottom: 0;
 }
 
+.navbar {
+	margin-bottom: 0px;
+}
+
 .navbar-brand {
 	/*background-image: url('/public/image/Brand.png');*/
 	background-repeat: no-repeat;

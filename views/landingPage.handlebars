@@ -1,4 +1,53 @@
 <div class="row">
-	<div class="col-md-8">.col-md-8</div>
-	<div class="col-md-4">.col-md-4</div>
+	<div id="your-forum-panel" class="col-md-4">
+		<header id="your-forum-panel-header" class="row">
+			<p class="col-md-6 col-md-offset-3">
+				Your Forums
+			</p>
+			<p class="col-md-3">
+				<a href="/forum/create">
+					<i class="fa fa-plus-square-o landing-header-icon" aria-hidden="true"></i>
+				</a>
+			</p>
+		</header>
+		<ul class="list-group">
+			{{#each forum}}
+				<li class="list-group-item">
+				</li>
+			{{else}}
+				<li class="text-center list-group-item">
+					<p>
+						No forums
+					</p>
+				</li>
+				<li class="text-center list-group-item">
+					<a href="/forum/create">
+						<i class="fa fa-plus" aria-hidden="true"></i>
+					</a>
+				</li>
+			{{/each}}
+		</ul>
+	</div>
+	<div class="col-md-8">
+		<header id="community-forum-panel-header" class="row">
+			<p class="col-md-6 col-md-offset-3">
+				Community Forums
+			</p>
+			<span class="col-md-3">
+				<i class="fa fa-sort landing-header-icon" aria-hidden="true"></i>
+			</span>
+		</header>
+		<ul class="list-group">
+			{{#each communityForum}}
+				<li class="list-group-item">
+				</li>
+			{{else}}
+				<li class="text-center list-group-item">
+					<p>
+						No forums
+					</p>
+				</li>
+			{{/each}}
+		</ul>
+	</div>
 </div>
