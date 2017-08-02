@@ -147,7 +147,7 @@ A clothing forum website that allows users to create new and search for existing
 | title | string | The title of the forum that user's will see in the landing page and will be the header of the forum |
 | label | array of string | Array of strings that can tag forum to clothing type and/or brand. Allow for searchability |
 | contents | string | A description of the forum and allow for a main talking point for the forum |
-| clothing | array of string | |
+| clothing | array of string | Array of globally unique identifiers for the referenced clothing |
 | likes | array of string | array of unique identifier of the users who likes the forum |
 | comments | array of Comment | Comment users make on the forum |
 
@@ -229,7 +229,7 @@ A clothing forum website that allows users to create new and search for existing
 | _id  | string | A globally unique identifier to represent the clothing |
 | url | string | A string url of where to scrape images and statistics for clothing. Also where to purchase item |
 | snapshot | string | A base64 encoding of the image for the clothing item |
-| label | string | a string of the label for the clothing type |
+| label | array of string | an array of string of the label for the clothing type |
 | clothingType | int | int value that maps the clothing type to a config file |
 | prices | array of Price | Price object for the clothing type |
 
