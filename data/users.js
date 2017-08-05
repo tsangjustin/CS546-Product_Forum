@@ -44,25 +44,42 @@ let user = exports = module.exports;
 user.createUser = (forumUser) => {
 	return new Promise((success, reject) => {
 		if ((forumUser === undefined) || (typeof(forumUser) !== 'object')) {
-			return reject("Expecting recipe object with keys: username and password");
+			return reject("Fail to create user. Please try again later...");
 		}
-		if (!isValidString(forumUser.username)) {
+		const username = forumUser.username;
+		const avatar = forumUser.avatar || '/public/image/avatar.png';
+		const email = forumUser.email;
+		let gender = forumUser.gender;
+		if (!isValidString(username)) {
 			return reject("Expect username for forum user");
 		}
 		if (!isMatchingPassword(forumUser.password)) {
 			return reject("Expect password for forum user");
 		}
-		const userName = forumUser.username;
-		const userPassword = bcrypt.hashSync(forumUser.password[0], 10);
+		if (!isValidString(email)) {
+			return reject("Expect email for forum user");
+		}
+		if (!isValidString(gender)) {
+			return reject("Expect gender for forum user");
+		}
+		gender = gender.toLowerCase();
+		if (gender === 'male') {
+			gender = true;
+		} else if (gender === 'female') {
+			gender = false;
+		} else {
+			return reject("Expect gender for forum user");
+		}
 		let _user = {
 			_id: uuidV4(),
-			userName,
-			userPassword,
-			userAvatar: forumUser.avatar || '/public/image/avatar.png',
+			username,
+			password: bcrypt.hashSync(forumUser.password[0], 10),
+			avatar,
+			email,
+			isMale: gender,
 	  	};
-		console.log('Setting up new user');
-		user.getUser(userName).then((existingUser) => {
-			console.log(`${userName} already exists`);
+		user.getUser(username).then((existingUser) => {
+			console.log(`${username} already exists`);
 			return reject('Username already exists');
 		}).catch((err) => {
 			UserCollection().then((userColl) => {
@@ -101,7 +118,7 @@ user.getUser = (username) => {
 		}
 		UserCollection().then((userColl) => {
 			userColl.findOne(
-				{userName: username},
+				{username: username},
 				(err, userItem) => {
 					if (err) {
 						console.log(err);

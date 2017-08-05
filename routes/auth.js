@@ -14,7 +14,7 @@ function isValidString(str) {
 }
 
 function isMatchingPassword(passwordList) {
-	if (passwordList && Array.isArray(passwordList) && (passwordList.length == 2)) {
+	if (passwordList && Array.isArray(passwordList) && (passwordList.length === 2)) {
 		for (let p = 0; p < 2; p++) {
 			if (!isValidString(passwordList[p])) {
 				return false;
@@ -67,6 +67,7 @@ router.get('/log_in/', (req, res) => {
 });
 
 router.post('/log_in/', (req, res, next) => {
+	console.log(req.body);
 	passport.authenticate('local', (err, user) => {
 	    if (err) {
 			res.cookie('loginError', err);

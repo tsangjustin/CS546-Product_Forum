@@ -24,7 +24,7 @@ module.exports = exports = (passport) => {
 				if (!user) {
 					return done('Incorrect username');
 				}
-				bcrypt.compare(password, user.userPassword, (err, isEqual) => {
+				bcrypt.compare(password, user.password, (err, isEqual) => {
 					if (err || !isEqual) {
 						// TODO: Increment attempt and create a lockout feature
 						return done('Invalid username and/or password');
