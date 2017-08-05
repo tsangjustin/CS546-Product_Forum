@@ -31,25 +31,20 @@ router.get('/sign_up/', (req, res) => {
 	if (req.user) {
 		return res.redirect('/');
 	}
-	let errorString = undefined;
-	if (req.cookies.loginError) {
-		errorString = req.cookies.loginError;
-		res.clearCookie('loginError');
-	}
-	return res.render('auth/sign_up', {error: errorString});
+	return res.render('auth/sign_up', {error: req.flash('error')});
 });
 
 router.post('/sign_up/', (req, res, next) => {
 	userData.createUser(req.body).then((user) => {
 		req.login(user, (loginErr) => {
 			if (loginErr) {
-				res.cookie('loginError', loginErr);
+				return req.flash('error', loginErr);
 				return res.redirect('/sign_up');
 			}
 			return res.redirect('/');
 		});
 	}).catch((err) => {
-		res.cookie('loginError', err);
+		req.flash('error', err);
 		return res.redirect('/sign_up');
 	});
 });
@@ -58,39 +53,11 @@ router.get('/log_in/', (req, res) => {
 	if (req.user) {
 		return res.redirect('/');
 	}
-	let errorString = undefined;
-	if (req.cookies.loginError) {
-		errorString = req.cookies.loginError;
-		res.clearCookie('loginError');
-	}
-	return res.render('auth/log_in', {error: errorString});
+	return res.render('auth/log_in', {error: req.flash('error') });
 });
 
-router.post('/log_in/', (req, res, next) => {
-	console.log(req.body);
-	passport.authenticate('local', (err, user) => {
-	    if (err) {
-			res.cookie('loginError', err);
-			return res.redirect('/log_in');
-	    }
-	    if (!user) {
-			res.cookie('loginError', 'Authentication failed');
-			return res.redirect('/log_in');
-	    }
-	    // ***********************************************************************
-	    // "Note that when using a custom callback, it becomes the application's
-	    // responsibility to establish a session (by calling req.login()) and send
-	    // a response."
-	    // Source: http://passportjs.org/docs
-	    // ***********************************************************************
-    	req.login(user, (loginErr) => {
-			if (loginErr) {
-				res.cookie('loginError', loginErr);
-				return res.redirect('/log_in');
-			}
-			return res.redirect('/');
-		});
-	})(req, res, next);
+router.post('/log_in/', passport.authenticate('local', { failureRedirect: '/log_in/', failureFlash: true }), (req, res, next) => {
+	res.redirect('/');
 });
 
 router.get('/log_out/', (req, res) => {

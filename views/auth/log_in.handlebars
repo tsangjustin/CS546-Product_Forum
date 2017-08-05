@@ -1,5 +1,8 @@
 <section id="Login-Container" class="row col-md-6 col-md-offset-3">
 	<h2>Login Form</h2>
+	{{#if error}}
+		<div class="alert alert-danger" role="alert">Error: {{ error }}</div>
+	{{/if}}
 	<form class="form-horizontal" action="/log_in" method="post">
 		<div class="form-group">
 			<label for="username" class="col-sm-2 control-label">
@@ -32,9 +35,6 @@
 			</div>
 		</div>
 	</form>
-	<p>
-		{{ error }}
-	</p>
 	<section>
 		<p>
 			Don't have an account? <a href="/sign_up">Sign up here</a>!
