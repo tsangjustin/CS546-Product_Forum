@@ -44,39 +44,38 @@ let user = exports = module.exports;
 user.createUser = (forumUser) => {
 	return new Promise((success, reject) => {
 		if ((forumUser === undefined) || (typeof(forumUser) !== 'object')) {
-			return reject("Fail to create user. Please try again later...");
+			return reject("Failed to create user. Please try again later...");
 		}
 		const username = forumUser.username;
 		const avatar = forumUser.avatar || '/public/image/avatar.png';
 		const email = forumUser.email;
-		let gender = forumUser.gender;
+		const gender = forumUser.gender;
 		if (!isValidString(username)) {
-			return reject("Expect username for forum user");
+			return reject("Please fill in a username");
+		}
+		if (!isValidString(forumUser.password[0]) || !isValidString(forumUser.password[1])) {
+			return reject("Please fill in a password");
 		}
 		if (!isMatchingPassword(forumUser.password)) {
-			return reject("Expect password for forum user");
+			return reject("Passwords don't match");
 		}
 		if (!isValidString(email)) {
-			return reject("Expect email for forum user");
+			return reject("Please fill in a email");
 		}
 		if (!isValidString(gender)) {
-			return reject("Expect gender for forum user");
+			return reject("Please fill in a gender");
 		}
-		gender = gender.toLowerCase();
-		if (gender === 'male') {
-			gender = true;
-		} else if (gender === 'female') {
-			gender = false;
-		} else {
-			return reject("Expect gender for forum user");
+		if (!['male', 'female'].includes(gender)) {
+			return reject("Gender must be male or female");
 		}
-		let _user = {
+		const isMale = gender.toLowerCase() === 'male';
+		const _user = {
 			_id: uuidV4(),
 			username,
 			password: bcrypt.hashSync(forumUser.password[0], 10),
 			avatar,
 			email,
-			isMale: gender,
+			isMale,
 	  	};
 		user.getUser(username).then((existingUser) => {
 			console.log(`${username} already exists`);

@@ -3,6 +3,7 @@ const bodyParser   = require('body-parser');
 const cookieParser = require('cookie-parser');
 const express	   = require('express');
 const session	   = require('express-session');
+const flash        = require("connect-flash");
 // Custom Middleware
 const passport	   = require('./auth/');
 const configRoutes = require('./routes');
@@ -20,7 +21,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 // Enable Cookie session
 app.use(session({
-	secret: 'keyboard cat',
+	secret: 'some complex secret',
 	resave: false,
 	saveUninitialized: false,
 	cookie: { maxAge : 3600000 },
@@ -28,6 +29,8 @@ app.use(session({
 // Enable Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+// Add flash support
+app.use(flash());
 // Serve static files
 exhbs(app, express.static(__dirname + '/public'));
 // API routing
