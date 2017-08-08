@@ -14,7 +14,7 @@ function isValidString(str) {
 	return true;
 }
 
-let user = exports = module.exports = {
+let clothing = exports = module.exports = {
     retrieveClothingInfo: (clothing_url) => {
         return new Promise((accept, reject) => {
             if (!isValidString(clothing_url)) {
@@ -30,7 +30,7 @@ let user = exports = module.exports = {
                 }
                 const price = body.match(/\$([\d.]+)/);
                 const image = body.match(/<meta[\S ]+og:image[\S ]+content="(\S+)"/);
-                
+
                 accept({
                     price: price && parseFloat(price[1]),
                     image: image && image[1],
