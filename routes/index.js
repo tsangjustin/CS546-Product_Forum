@@ -1,6 +1,7 @@
 const authRoutes = require('./auth');
 const landingPageRoute = require('./landingPage');
 const profileRoute = require('./profile');
+const forumsRoute = require('./forums');
 
 module.exports = exports = (app) => {
 	if (!app) {
@@ -9,6 +10,7 @@ module.exports = exports = (app) => {
 	app.use('/profile', profileRoute);
 	app.use('/', authRoutes);
 	app.use('/', landingPageRoute);
+	app.use('/forums', forumsRoute);
 	app.use('*', (req, res) => {
 		let userInfo = {};
 		if (req.user) {
