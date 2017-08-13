@@ -1,8 +1,12 @@
-<ol>
-{{#each this}}
-    <li>
-        {{this.title}}
-    </li>
-{{/each}}
-</ol>
+<section>
+    <ol>
+    {{#each this}}
+        {{#if this.title}}
+        <li>
+            <a href="forums/{{this._id}}">{{this.title}}</a>
+        </li>
+        {{/if}}
+    {{/each}}
+    </ol>
+</section>
 {{!-- TODO  --}}

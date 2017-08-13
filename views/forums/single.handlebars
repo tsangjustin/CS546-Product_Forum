@@ -1,6 +1,53 @@
-<article>
+{{!-- Post --}}
+<section>
+    {{!-- TODO user avatar --}}
     <h1> {{ title }} </h1>
-    <p> {{ contents }} </p>
+    <p> {{ content }} </p>
 
+    {{#if label}}
+        <h2> Labels </h2>
+        <p> {{ label }} </p>
+    {{/if}}
+    {{#if clothing}}
+        <h2> Clothing </h2>
+        <p> {{ clothing }} </p>
+    {{/if}}
     {{!-- TODO tags, clothing, likes, comments  --}}
-</article>
+    <p> Likes: {{ likes.length }}
+    {{!-- TODO ability to like + comment --}}
+</section>
+{{!-- Comments --}}
+<section>
+    {{!-- New Comment --}}
+    <form action="/forums/{{ _id }}/comments" method="POST">
+        <div class="form-group">
+            <label for="comment" class="col-sm-2 control-label">
+                New Comment
+            </label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="comment" name="comment" placeholder="New Comment" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">Comment</button>
+            </div>
+        </div>
+    </form>
+</section>
+<section>
+    <h2> Comments </h2>
+    {{!-- Existing Comments --}}
+    {{#each comments }}
+    <div>
+        {{!-- TODO user avatar of perason who commented --}}
+        {{!-- <p> {{ this.datePosted }} </p>z --}}
+        <p> {{ this.content }} </p>
+        <p> Likes: {{ this.likes.length }} </p> 
+        {{!-- TODO ability to like --}}
+        {{!-- TODO view subthreads  --}}
+    </div>
+    {{ else }}
+        <p> Sorry there are currently no comments to display.</p>
+    {{/each}}
+</section>

@@ -99,18 +99,18 @@ A clothing forum website that allows users to create new and search for existing
 ```javascript
 {
     _id: 'string',
-    createdBy: 'string', // id of user
-    createdOn: 'date',
+    user: 'string', // id of user
+    datePosted: 'date',
     title: 'string',
     label: ['string'],
-    contents: 'string',
+    content: 'string',
     clothing: ['string'], // ids of referenced clothing
     likes: ['string'], // ids of users that liked
     comments: [{
         _id: 'string',
         datePosted: 'date',
         contents: 'string',
-        user_id: 'string', // id of commenter
+        user: 'string', // id of commenter
         likes: ['string'], // ids of users that liked
         subthreads: [comments] // schema is identical to parent comment object
     }]
@@ -121,18 +121,18 @@ A clothing forum website that allows users to create new and search for existing
 ```javascript
 {
     _id: '9e4a1c14-9dd1-485b-87e8-047237020388',
-    createdBy: '7b7997a2-c0d2-4f8c-b27a-6a1d4b5b6310',
-    createdOn: '2017-05-30T09:00:00',
+    user: '7b7997a2-c0d2-4f8c-b27a-6a1d4b5b6310',
+    datePosted: '2017-05-30T09:00:00',
     title: 'The new Yeezy Zebra: Buy or wait?',
     label: ['Sneaker', 'Adidas', 'Yeezy'],
-    contents: 'With the release of the new Yeezy Zebra, do you think I should buy now or wait for resell value to drop?',
+    content: 'With the release of the new Yeezy Zebra, do you think I should buy now or wait for resell value to drop?',
     clothing: ['3bd10b1e-77d7-11e7-b5a5-be2e44b06b34','3bd10ed4-77d7-11e7-b5a5-be2e44b06b34'], // ids of referenced clothing
     likes: ['9e4a1c14-9dd1-485b-87e8-047237020422', '1b5d8bf6-d279-42b1-ba4e-a46b8ad55985'], // ids of users that liked
     comments: [{
         _id: '2c384c5b-a2fb-4ef3-a583-6103b025c986',
         datePosted: '2017-05-30T19:00:00',
-        contents: 'I think you should wait for resell to drop. The new version comes out in a month!',
-        user_id: '1b5d8bf6-d279-42b1-ba4e-a46b8ad55985', // id of commenter
+        content: 'I think you should wait for resell to drop. The new version comes out in a month!',
+        user: '1b5d8bf6-d279-42b1-ba4e-a46b8ad55985', // id of commenter
         likes: ['7b7997a2-c0d2-4f8c-b27a-6a1d4b5b6310'], // ids of users that liked
         subthreads: [comments] // schema is identical to parent comment object
     }]
@@ -159,8 +159,8 @@ A clothing forum website that allows users to create new and search for existing
 {
     _id: 'string',
     datePosted: 'date',
-    contents: 'string',
-    user_id: 'string', // id of commenter
+    content: 'string',
+    user: 'string', // id of commenter
     likes: ['string'], // ids of users that liked
     subthreads: [comments] // schema is identical to parent comment object
 }
@@ -172,8 +172,8 @@ A clothing forum website that allows users to create new and search for existing
 {
     _id: '2c384c5b-a2fb-4ef3-a583-6103b025c986',
     datePosted: '2017-05-30T19:00:00',
-    contents: 'I think you should wait for resell to drop. The new version comes out in a month!',
-    user_id: '1b5d8bf6-d279-42b1-ba4e-a46b8ad55985', // id of commenter
+    content: 'I think you should wait for resell to drop. The new version comes out in a month!',
+    user: '1b5d8bf6-d279-42b1-ba4e-a46b8ad55985', // id of commenter
     likes: ['7b7997a2-c0d2-4f8c-b27a-6a1d4b5b6310'], // ids of users that liked
     subthreads: [comments] // schema is identical to parent comment object
 }

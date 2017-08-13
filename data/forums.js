@@ -14,27 +14,57 @@ let exportedMethods = {
         return forums().then((forumCollection) => {
             return forumCollection.findOne({_id: id}).then((forum) => {
                 if (!forum) throw "Forum not found";
+                console.log(forum);
                 return forum;
             });
         });
     },
-    addForum(title, contents, label, clothing, userId) {
+    addForum(title, content, label, clothing, userId) {
         // TODO validate contents
         return forums().then((forumCollection) => {
-            newId = uuidV4();
+            let newId = uuidV4();
+            // TODO date
             let newForum = {
                 _id: newId,
+                user: userId,
+                // datePosted: curDate,
                 title: title,
-                contents: contents,
+                content: content,
                 label: label,
                 clothing: clothing,
                 likes: [],
-                comments: [],
-                user: userId // username or userId?
-            }
+                comments: []               
+            };
             return forumCollection.insertOne(newForum)
-            .then((forumInformation) => {
-                return exportedMethods.getForumById(newId);
+                .then((forumInformation) => {
+                    return exportedMethods.getForumById(newId);
+                });
+        });
+    },
+    addComment(forumId, userId, comment) {
+        console.log("ADDING COMMENT")
+        return forums().then((forumCollection) => {
+            let newId = uuidV4();
+            // TODO date
+            let newComment = {
+                _id: newId,
+                // datePosted: curDate,
+                content: comment,
+                user: userId,
+                likes: [],
+                subthreads: []
+            };
+            return forumCollection.update(
+                { _id: forumId },
+                { $push: { comments: newComment }}
+            ).then((forumInformation) => {
+                console.log("Added comment");
+                return exportedMethods.getForumById(forumId);
+            }).catch((err) => {
+                // err is unhandled promise rejection???????
+                console.log("Error");
+                console.log(err);
+                return reject("Could not add comment");
             });
         });
     }

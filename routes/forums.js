@@ -22,19 +22,31 @@ router.get('/', (req, res) => {
     });
 });
 
+// Form to create a new user
+router.get('/create', (req, res) => {
+    console.log("user", req.user);
+    // Must be authenticated to create forum
+    if (!req.user) {
+        // return res.status(403).send();
+        return res.redirect('/log_in');
+    }
+
+    return res.render('forums/create', {});
+});
+
 // Create a new forum
 router.post('/', (req, res) => {
     // let userId = '717fd940-6d56-42f3-a08e-4bf15de7ee0d'; // FOR TESTING
     let userId = null;
     if (req.user) {
         userId = req.user._id;
-    }    
+    }
     let title = req.body.title;
-    let contents = req.body.contents;
+    let content = req.body.content;
     let label = req.body.label;
     let clothing = req.body.clothing;
     
-    if (!title || !contents || !userId) {
+    if (!title || !content || !userId) {
         // Invalid request, required parameters missing
         return res.status(400).send();
     }
@@ -45,7 +57,7 @@ router.post('/', (req, res) => {
         clothing = []
     }
 
-    forumsData.addForum(title, contents, label, clothing, userId)
+    forumsData.addForum(title, content, label, clothing, userId)
         .then((newForum) => {
             return res.redirect(`/forums/${newForum._id}`);
         }).catch((err) => {
@@ -82,7 +94,26 @@ router.get('/:forum_id/comments', (req, res) => {
 
 // Add comment to forum
 router.post('/:forum_id/comments', (req, res) => {
+    // Must be signed in to submit comment
+    if (!req.user) {
+        // TODO what should this behavior be?
+        console.log("Not logged in!");
+        return res.redirect('/log_in');
+    }
+    forumId = req.params.forum_id;
+    userId = req.user._id;
+    comment = req.body.comment;
 
+    forumsData.addComment(forumId, userId, comment)
+        .then(() => {
+            console.log("Added in route");
+            return res.redirect(`/forums/${forumId}`);
+        }).catch((err) => {
+            console.log("Error in route");
+            console.log(err);
+            res.status(404).send();
+            return res.redirect(`/forums/${forumId}`);
+        });
 });
 
 // Get a comment by id for specific post
