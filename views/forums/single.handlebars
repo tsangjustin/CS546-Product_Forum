@@ -38,16 +38,20 @@
 <section>
     <h2> Comments </h2>
     {{!-- Existing Comments --}}
+    <ul classs="list-group">
     {{#each comments }}
-    <div>
-        {{!-- TODO user avatar of perason who commented --}}
-        {{!-- <p> {{ this.datePosted }} </p>z --}}
-        <p> {{ this.content }} </p>
-        <p> Likes: {{ this.likes.length }} </p> 
-        {{!-- TODO ability to like --}}
-        {{!-- TODO view subthreads  --}}
-    </div>
+        <li class="list-group-item">
+            {{!-- TODO user avatar of person who commented --}}
+            <p> {{ this.datePosted }} </p>
+            <p> {{ this.content }} </p>
+            <p> Likes: {{ this.likes.length }} </p> 
+            {{!-- TODO ability to like --}}
+            {{!-- TODO view subthreads  --}}
+        </li>
     {{ else }}
-        <p> Sorry there are currently no comments to display.</p>
+        <li class="text-center list-group-item">
+            <p> Sorry there are currently no comments to display.</p>
+        </li>
     {{/each}}
+    </ul>
 </section>

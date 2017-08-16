@@ -13,6 +13,7 @@
 		<ul class="list-group">
 			{{#each forum}}
 				<li class="list-group-item">
+					<a href="forums/{{this._id}}">{{ this.title }}</a>
 				</li>
 			{{else}}
 				<li class="text-center list-group-item">
@@ -31,7 +32,9 @@
 	<div class="col-md-8">
 		<header id="community-forum-panel-header" class="row">
 			<p class="col-md-6 col-md-offset-3">
+				<a href="forums">
 				Community Forums
+				</a>
 			</p>
 			<span class="col-md-3">
 				<i class="fa fa-sort landing-header-icon" aria-hidden="true"></i>
@@ -40,6 +43,7 @@
 		<ul class="list-group">
 			{{#each communityForum}}
 				<li class="list-group-item">
+					<a href="forums/{{this._id}}">{{ this.title }}</a>
 				</li>
 			{{else}}
 				<li class="text-center list-group-item">

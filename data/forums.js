@@ -19,6 +19,11 @@ let exportedMethods = {
             });
         });
     },
+    getForumByUser(userId) {
+        return forums().then((forumsCollection) => {
+            return forumsCollection.find({user: userId}).toArray();
+        });
+    },
     addForum(title, content, label, clothing, userId) {
         // TODO validate contents
         return forums().then((forumCollection) => {
