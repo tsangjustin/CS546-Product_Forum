@@ -11,6 +11,14 @@ router.get('/', (req, res) => {
     forumsData.getAllForums().then((forumList) => {
         console.log(forumList)
         info.forums = (forumList && (Array.isArray(forumList))) ? forumList : [];
+        switch (sort_by) {
+            case ('recent'):
+            default:
+                forumList.sort((f1, f2) => {
+                    return (f1.createdOn > f2.createdOn) ? 1 : -1
+                });
+                break;
+        }
         // TODO sort forumList by param
         return res.render('forums', info);
     }).catch((err) => {

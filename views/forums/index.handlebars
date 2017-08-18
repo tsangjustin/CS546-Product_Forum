@@ -3,7 +3,12 @@
     {{#each forums}}
         {{#if this.title}}
         <li  class="list-group-item">
-            <a href="forums/{{this._id}}">{{this.title}}</a>
+            <p>
+                {{ this.createdOn }}
+            </p>
+            <a href="forums/{{this._id}}">
+                {{this.title }}
+            </a>
         </li>
         {{/if}}
     {{/each}}
