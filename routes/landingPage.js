@@ -9,17 +9,14 @@ router.get('/', (req, res) => {
 		userInfo.avatar = req.user.avatar;
 		userId = req.user._id;
 	}
-	ret = {
-		userInfo: userInfo
-	}
 	forumsData.getForumByUser(userId)
 	.then((forum) => {
-		ret.forum = forum;
+		userInfo.forum = forum;
 		return forumsData.getAllForums();
 	})
 	.then((communityForum) => {
-		ret.communityForum  = communityForum
-		return res.render('landingPage', ret);
+		userInfo.communityForum  = communityForum
+		return res.render('landingPage', userInfo);
 	});
 });
 
