@@ -52,18 +52,16 @@ let exportedMethods = {
         }
         // TODO: Maybe check that id is valid first?
         return forums().then((forumCollection) => {
-            let newId = uuidV4();
-            // TODO date
-            let newForum = {
-                _id: newId,
+            const newForum = {
+                _id: uuidV4(),
                 user: userId,
-                // datePosted: curDate,
+                createdOn: new Date(),
                 title: title,
                 content: content,
                 label: label,
                 clothing: clothing,
                 likes: [],
-                comments: []
+                comments: [],
             };
             return forumCollection.insertOne(newForum)
                 .then((forumInformation) => {
@@ -74,15 +72,13 @@ let exportedMethods = {
     addComment(forumId, userId, comment) {
         console.log("ADDING COMMENT")
         return forums().then((forumCollection) => {
-            let newId = uuidV4();
-            // TODO date
-            let newComment = {
-                _id: newId,
-                // datePosted: curDate,
+            const newComment = {
+                _id: uuidV4(),
+                datePosted: new Date(),
                 content: comment,
                 user: userId,
                 likes: [],
-                subthreads: []
+                subthreads: [],
             };
             return forumCollection.update(
                 { _id: forumId },
