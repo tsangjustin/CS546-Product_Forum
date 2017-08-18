@@ -34,6 +34,13 @@ app.use(flash());
 // Serve static files
 exhbs(app, express.static(__dirname + '/public'));
 // API routing
+app.use((req, res, next) => {
+    req.locals = {};
+    if (req.user) {
+        req.locals.avatar = req.user.avatar;
+    }
+    next();
+})
 configRoutes(app);
 
 // Enable API Server

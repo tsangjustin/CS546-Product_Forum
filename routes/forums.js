@@ -4,6 +4,7 @@ const forumsData = data.forums;
 
 // View existing forums by most recent or most popular
 router.get('/', (req, res) => {
+    let info = req.locals || {};
     console.log("user", req.user);
     // Can view forums without being authenticated
     let sort_by = req.query.sort_by;
@@ -16,7 +17,8 @@ router.get('/', (req, res) => {
         // TODO ensure forumList is JSON
         // TODO sort forumList by param
         console.log(forumList)
-        return res.render('forums', forumList);
+        info.forums = forumList;
+        return res.render('forums', info);
     }).catch((err) => {
         return res.status(500).send();
     });
@@ -24,6 +26,7 @@ router.get('/', (req, res) => {
 
 // Form to create a new user
 router.get('/create', (req, res) => {
+    let userInfo = req.locals || {}
     console.log("user", req.user);
     // Must be authenticated to create forum
     if (!req.user) {
@@ -31,7 +34,7 @@ router.get('/create', (req, res) => {
         return res.redirect('/log_in');
     }
 
-    return res.render('forums/create', {});
+    return res.render('forums/create', userInfo);
 });
 
 // Create a new forum
@@ -45,7 +48,7 @@ router.post('/', (req, res) => {
     let content = req.body.content;
     let label = req.body.label;
     let clothing = req.body.clothing;
-    
+
     if (!title || !content || !userId) {
         // Invalid request, required parameters missing
         return res.status(400).send();
@@ -67,10 +70,12 @@ router.post('/', (req, res) => {
 
 // View specific forum post
 router.get('/:forum_id', (req, res) => {
+    let info = req.locals;
     forumsData.getForumById(req.params.forum_id)
         .then((forumData) => {
-            console.log(forumData);
-            return res.render('forums/single', forumData);
+            info.forum = forumData;
+            console.log(info);
+            return res.render('forums/single', info);
         }).catch((err) => {
             return res.status(404).send();
         });

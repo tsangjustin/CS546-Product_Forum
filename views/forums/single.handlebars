@@ -1,25 +1,25 @@
 {{!-- Post --}}
 <section>
     {{!-- TODO user avatar --}}
-    <h1> {{ title }} </h1>
-    <p> {{ content }} </p>
+    <h1> {{ forum.title }} </h1>
+    <p> {{ forum.content }} </p>
 
-    {{#if label}}
+    {{#if forum.label}}
         <h2> Labels </h2>
-        <p> {{ label }} </p>
+        <p> {{ forum.label }} </p>
     {{/if}}
-    {{#if clothing}}
+    {{#if forum.clothing}}
         <h2> Clothing </h2>
-        <p> {{ clothing }} </p>
+        <p> {{ forum.clothing }} </p>
     {{/if}}
     {{!-- TODO tags, clothing, likes, comments  --}}
-    <i class="fa fa-thumbs-up" aria-hidden="true"></i><p> {{ likes.length }}</p>
+    <i class="fa fa-thumbs-up" aria-hidden="true"></i><p> {{ forum.likes.length }}</p>
     {{!-- TODO ability to like + comment --}}
 </section>
 {{!-- Comments --}}
 <section>
     {{!-- New Comment --}}
-    <form action="/forums/{{ _id }}/comments" method="POST">
+    <form action="/forums/{{ forum._id }}/comments" method="POST">
         <div class="form-group">
             <label for="comment" class="col-sm-2 control-label">
                 New Comment
@@ -39,7 +39,7 @@
     <h2> Comments </h2>
     {{!-- Existing Comments --}}
     <ul classs="list-group">
-    {{#each comments }}
+    {{#each forum.comments }}
         <li class="list-group-item">
             {{!-- TODO user avatar of person who commented --}}
             <p> {{ this.datePosted }} </p>
