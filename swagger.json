@@ -603,9 +603,9 @@
                     "type": "string",
                     "description": "title of post"
                 },
-                "contents": {
+                "content": {
                     "type": "string",
-                    "desciption": "Contents of post"
+                    "desciption": "Content of post"
                 },
                 "clothing": {
                     "type": "array",

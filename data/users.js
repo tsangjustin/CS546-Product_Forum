@@ -168,7 +168,7 @@ user.getUserById = (id) => {
 }
 
 user.updateRecipe = (id, changeUser) => {
-	return new Promise((success, reject) => {
+	return new Promise((fulfill, reject) => {
 		if (!isValidString(id)) {
 			return reject("Invalid uuid to get recipe");
 		}
@@ -207,13 +207,13 @@ user.updateRecipe = (id, changeUser) => {
 				}
 				const result = updateInfo.result;
 				if (result.n === 0) {
-					return reject("Did not find recipe with matching id");
+					return reject("Did not find user with matching id");
 				}
 				if ((!result.ok) || (result.nModified < 1)) {
-					return reject('Failed to update recipe');
+					return reject('Failed to update user');
 				}
 				recipe.getRecipe(id).then((recipeItem) => {
-					return success(recipeItem);
+					return fulfill(recipeItem);
 				}).catch((err) => {
 					return reject(err);
 				});
@@ -225,22 +225,51 @@ user.updateRecipe = (id, changeUser) => {
 }
 
 user.deleteUser = (id, password) => {
-	return new Promise((success, reject) => {
+	return new Promise((fulfill, reject) => {
 		if (!isValidString(id)) {
-			return reject("Invalid id to get recipe");
+			return reject("Invalid id to get delete user");
 		}
-		foodRecipes().then((foodColl) => {
-			foodColl.removeOne({_id: id}, (err, deletedInfo) => {
+		UserCollection().then((userColl) => {
+			userColl.removeOne({_id: id}, (err, deletedInfo) => {
 				if (err) {
 					return reject(err);
 				}
 				if (deletedInfo.deletedCount < 1) {
-					return reject('Could not find recipe with matching id to delete');
+					return reject('Could not find user with matching id to delete');
 				}
-				return success(id);
+				return fulfill(id);
 			});
 		}).catch((err) => {
 			return reject(err);
-		})
+		});
 	});
+}
+
+/**
+ * Function returns the avatar for the given id
+ * @params {string} id of the user from the DB
+ * @returns string of the string for the avatar of the user; otherwise, return reject if invalid id or can't find user with given id
+ */
+user.getAvatar = (id) => {
+    return new Promise((fulfill, reject) => {
+        if (!isValidString(id)) {
+            return reject('Invalid id to get avatar');
+        }
+        UserCollection().then((userColl) => {
+			userColl.findOne(
+                {_id: id},
+                (err, userInfo) => {
+                    if (err) {
+                        return reject('Unable to get account. Please try again later...');
+                    }
+                    if (!userInfo || (!userInfo.hasOwnProperty('avatar'))) {
+                        return reject('Invalid id');
+                    }
+                    return fulfill(userInfo.avatar);
+                }
+            );
+		}).catch((err) => {
+			return reject(err);
+		});
+    });
 }

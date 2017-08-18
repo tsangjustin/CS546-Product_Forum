@@ -44,4 +44,5 @@ let getCollection = (collection) => {
 
 module.exports = exports = {
 	"users": getCollection("users"),
+	"forums": getCollection("forums")
 };

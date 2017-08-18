@@ -1,10 +1,13 @@
 const dbConnection = require("../config/mongoConnection");
 const data = require("../data/");
 const userData = require('../data/').user;
+const forumData = require('../data/').forums;
 
 let dbConn = undefined;
 dbConnection().then(db => {
 	dbConn = db;
+    return db.dropDatabase()
+}).then(() => {
     return userData.createUser({
 		username: "Phil",
 		password: ["password1", 'password1'],
@@ -25,6 +28,9 @@ dbConnection().then(db => {
 		email: 'steph@gmail.com',
 		gender: 'female',
 	});
+// Create forums
+}).then((user) => {
+    return forumData.addForum('Forum #1: Steph\'s Yeezy', 'Should I get the Zebra?', [], 'Shoes', user._id)
 }).then(() => {
     console.log("Done seeding database");
     dbConn.close();

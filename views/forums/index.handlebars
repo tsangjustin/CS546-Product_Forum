@@ -1,0 +1,17 @@
+<section>
+    <ol class="list-group">
+    {{#each forums}}
+        {{#if this.title}}
+        <li  class="list-group-item">
+            <p>
+                {{ this.createdOn }}
+            </p>
+            <a href="forums/{{this._id}}">
+                {{this.title }}
+            </a>
+        </li>
+        {{/if}}
+    {{/each}}
+    </ol>
+</section>
+{{!-- TODO  --}}
