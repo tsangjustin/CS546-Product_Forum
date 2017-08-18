@@ -47,6 +47,9 @@ let exportedMethods = {
         if (!isValidString(content)) {
             return Promise.reject('Invalid content for forum creation')
         }
+        if (!label || (!Array.isArray(label))) {
+            return Promise.reject('Invalid label(s) for forum creation')
+        }
         if (!isValidString(userId)) {
             return Promise.reject('Invalid id for forum creation')
         }
@@ -65,12 +68,11 @@ let exportedMethods = {
             };
             return forumCollection.insertOne(newForum)
                 .then((forumInformation) => {
-                    return exportedMethods.getForumById(newId);
+                    return exportedMethods.getForumById(newForum._id);
                 });
         });
     },
     addComment(forumId, userId, comment) {
-        console.log("ADDING COMMENT")
         return forums().then((forumCollection) => {
             const newComment = {
                 _id: uuidV4(),
