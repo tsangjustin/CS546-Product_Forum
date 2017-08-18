@@ -5,19 +5,13 @@ const forumsData = data.forums;
 // View existing forums by most recent or most popular
 router.get('/', (req, res) => {
     let info = req.locals || {};
-    console.log("user", req.user);
     // Can view forums without being authenticated
-    let sort_by = req.query.sort_by;
-    if (!sort_by) {
-        // Default
-        sort_by = "recent";
-    }
+    const sort_by = req.query.sort_by || 'recent';
 
     forumsData.getAllForums().then((forumList) => {
-        // TODO ensure forumList is JSON
-        // TODO sort forumList by param
         console.log(forumList)
-        info.forums = forumList;
+        info.forums = (forumList && (Array.isArray(forumList))) ? forumList : [];
+        // TODO sort forumList by param
         return res.render('forums', info);
     }).catch((err) => {
         return res.status(500).send();
