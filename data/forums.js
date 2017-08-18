@@ -1,8 +1,23 @@
+// Node Modules
+const uuidV4 = require("uuid/v4");
+// Custom Node Modules
 const mongoCollections = require("../config/mongoCollections");
 const forums = mongoCollections.forums;
 const usersData = require("./users");
 
-const uuidV4 = require("uuid/v4");
+/**
+ * Function checks that a string given is string with some number of
+ * characters
+ *
+ * @params  {string} str string value to check for validity
+ * @return  true if the string is valid; otherwise, return false
+ */
+function isValidString(str) {
+	if ((str === undefined) || (typeof(str) !== "string") || (str.length <= 0)) {
+		return false;
+	}
+	return true;
+}
 
 let exportedMethods = {
     getAllForums() {
@@ -26,6 +41,16 @@ let exportedMethods = {
     },
     addForum(title, content, label, clothing, userId) {
         // TODO validate contents
+        if (!isValidString(title)) {
+            return Promise.reject('Invalid title for forum creation')
+        }
+        if (!isValidString(content)) {
+            return Promise.reject('Invalid content for forum creation')
+        }
+        if (!isValidString(userId)) {
+            return Promise.reject('Invalid id for forum creation')
+        }
+        // TODO: Maybe check that id is valid first?
         return forums().then((forumCollection) => {
             let newId = uuidV4();
             // TODO date
@@ -38,7 +63,7 @@ let exportedMethods = {
                 label: label,
                 clothing: clothing,
                 likes: [],
-                comments: []               
+                comments: []
             };
             return forumCollection.insertOne(newForum)
                 .then((forumInformation) => {
