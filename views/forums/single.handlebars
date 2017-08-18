@@ -13,7 +13,7 @@
         <p> {{ clothing }} </p>
     {{/if}}
     {{!-- TODO tags, clothing, likes, comments  --}}
-    <p> Likes: {{ likes.length }}
+    <i class="fa fa-thumbs-up" aria-hidden="true"></i><p> {{ likes.length }}</p>
     {{!-- TODO ability to like + comment --}}
 </section>
 {{!-- Comments --}}
@@ -44,7 +44,7 @@
             {{!-- TODO user avatar of person who commented --}}
             <p> {{ this.datePosted }} </p>
             <p> {{ this.content }} </p>
-            <p> Likes: {{ this.likes.length }} </p> 
+            <i class="fa fa-thumbs-up" aria-hidden="true"></i><p> {{ this.likes.length }}</p>
             {{!-- TODO ability to like --}}
             {{!-- TODO view subthreads  --}}
         </li>
