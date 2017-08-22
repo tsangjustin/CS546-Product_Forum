@@ -70,7 +70,6 @@ let exportedMethods = {
         }
 
         // TODO: Maybe check that id is valid first?
-
         return getClothingInfo(content)
         .then(clothing => {
             return forums()
@@ -84,12 +83,13 @@ let exportedMethods = {
                     labels,
                     clothing,
                     likes: [],
+                    dislikes: [],
                     comments: [],
                 };
                 return forumCollection.insertOne(newForum)
                 .then(() => exportedMethods.getForumById(newForum._id));
             });
-        })
+        });
     },
     addComment(forumId, userId, comment) {
         return forums().then((forumCollection) => {
@@ -99,6 +99,7 @@ let exportedMethods = {
                 content: comment,
                 user: userId,
                 likes: [],
+                dislikes: [],
                 subthreads: [],
             };
             return forumCollection.update(
@@ -109,12 +110,112 @@ let exportedMethods = {
                 return exportedMethods.getForumById(forumId);
             }).catch((err) => {
                 // err is unhandled promise rejection???????
-                console.log("Error");
-                console.log(err);
-                return reject("Could not add comment");
+                return Promise.reject("Could not add comment");
             });
         });
-    }
+    },
+    likeComment(forumId, userId, commentId) {
+        return new Promise((fulfill, reject) => {
+            forums().then(forumColl => {
+                // let newComment = {};
+                // newComment[commentId] = {
+                //     likes: commentId
+                // };
+                forumColl.update(
+                    { _id: forumId, "comments._id": commentId },
+                    {'$addToSet': { "comments.$.likes": userId } },
+                    (err, updateInfo) => {
+                        if (err) {
+        					return reject(err);
+        				}
+        				const result = updateInfo.result;
+        				if (result.n < 1) {
+        					return reject('Unable find comment with matching comment id');
+        				}
+        				if (result.nModified < 1) {
+        					return reject('Fail to update likes for comment');
+        				}
+                        // newComment = {};
+                        // newComment[commentId] = {
+                        //     dislikes: commentId
+                        // };
+                        forumColl.update(
+                            {_id: forumId, "comments._id": commentId},
+                            {'$pull': { "comments.$.dislikes": userId }},
+                            (err, updateInfo) => {
+                                if (err) {
+                					return reject(err);
+                				}
+                				exportedMethods.getForumById(forumId).then((matchForum) => {
+                                    for (let c=0, lenComments=matchForum.comments.length; c < lenComments; ++c) {
+                                        const currComment = matchForum.comments[c];
+                                        if (currComment._id === commentId) {
+                                            return fulfill({
+                                                likes: currComment.likes,
+                                                dislikes: currComment.dislikes,
+                                            });
+                                        }
+                                    }
+                                    return reject('Fail to find matching comment id');
+                				}).catch((err) => {
+                					return reject(err);
+                				});
+                            }
+                        );
+                    }
+                );
+            }).catch((err) => {
+                return reject(err);
+            });
+        });
+    },
+    dislikeComment(forumId, userId, commentId) {
+        return new Promise((fulfill, reject) => {
+            forums().then(forumColl => {
+                forumColl.update(
+                    { _id: forumId, "comments._id": commentId },
+                    { '$addToSet': { "comments.$.dislikes": userId } },
+                    (err, updateInfo) => {
+                        if (err) {
+        					return reject(err);
+        				}
+        				const result = updateInfo.result;
+        				if (result.n < 1) {
+        					return reject('Unable find comment with matching comment id');
+        				}
+        				if (result.nModified < 1) {
+        					return reject('Fail to update dislikes for comment');
+        				}
+                        forumColl.update(
+                            { _id: forumId, "comments._id": commentId },
+                            { '$pull': { "comments.$.likes": userId } },
+                            (err, updateInfo) => {
+                                if (err) {
+                					return reject(err);
+                				}
+                				exportedMethods.getForumById(forumId).then((matchForum) => {
+                                    for (let c=0, lenComments=matchForum.comments.length; c < lenComments; ++c) {
+                                        const currComment = matchForum.comments[c];
+                                        if (currComment._id === commentId) {
+                                            return fulfill({
+                                                likes: currComment.likes,
+                                                dislikes: currComment.dislikes,
+                                            });
+                                        }
+                                    }
+                                    return reject('Fail to find matching comment id');
+                				}).catch((err) => {
+                					return reject(err);
+                				});
+                            }
+                        );
+                    }
+                );
+            }).catch((err) => {
+                return reject(err);
+            });
+        });
+    },
 }
 
 module.exports = exportedMethods;
