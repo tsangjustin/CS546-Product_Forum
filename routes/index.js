@@ -8,9 +8,9 @@ module.exports = exports = (app) => {
 		throw "Expecting Express application to app routing";
 	}
 	app.use('/profile', profileRoute);
+	app.use('/forums', forumsRoute);
 	app.use('/', authRoutes);
 	app.use('/', landingPageRoute);
-	app.use('/forums', forumsRoute);
 	app.use('*', (req, res) => {
 		let userInfo = {};
 		if (req.user) {
