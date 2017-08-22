@@ -48,18 +48,24 @@ router.post('/', (req, res) => {
     const userId = null;
     const title = req.body.title;
     const content = req.body.content;
-    const label = req.body.label || [];
+    let labels = req.body.labels;
     const clothing = req.body.clothing || [];
 
     if (!title || !content || !userId) {
         // Invalid request, required parameters missing
         return res.status(400).send();
     }
+    if (!labels) {
+        labels = []
+    } else {
+        labels = labels.split(",");
+    }
 
-    forumsData.addForum(title, content, label, clothing, userId)
+    forumsData.addForum(title, content, labels, userId)
         .then((newForum) => {
             return res.redirect(`/forums/${newForum._id}`);
         }).catch((err) => {
+        console.log("hi", err);
             return res.status(500).send();
         });
 });
@@ -67,15 +73,18 @@ router.post('/', (req, res) => {
 // View specific forum post
 router.get('/:forum_id/', (req, res) => {
     let info = req.locals;
-    forumsData.getForumById(req.params.forum_id).then((forumData) => {
-        console.log(forumData);
-        info.forum = forumData;
-        info.isOwner = (forumData.user === (req.user || {})._id);
-        console.log(info);
-        return res.render('forums/single', info);
-    }).catch((err) => {
-        return res.status(404).render('error/404.handlebars');
-    });
+    forumsData.getForumById(req.params.forum_id)
+        .then((forumData) => {
+            info.forum = forumData;
+            info.isOwner = (forumData.user === (req.user || {})._id);
+            console.log(info);
+            info.forum.contentHTML = forumData.content
+                .replace(/#([^\[]+)\[([^\]]+)\]/g, (match, name, url) => `<a target='_blank' alt='${name}' href='${url}'>${name}</a>`)
+                .replace(/@([\w-]+)/g, (match, username) => `<a target='_blank' alt='${username}' href='#'>${username}</a>`);
+            return res.render('forums/single', info);
+        }).catch((err) => {
+            return res.status(404).render('error/404.handlebars');
+        });
 });
 
 // Update specific fields of forum
