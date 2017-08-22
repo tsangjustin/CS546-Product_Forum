@@ -1,0 +1,30 @@
+.ldt, .ldt pre, .ldt textarea {
+    font-size: 13px !important;
+    padding: 10px;
+    height: 100px;
+}
+
+.ldt pre {
+    background: 0;
+    padding: 0;
+    border: 0;
+    display: inline-block;
+}
+
+.ldt textarea {
+    color: rgba(0,0,0,0) !important;
+    caret-color: #333;
+    padding: 5px;
+}
+
+.ldt .clothing {
+    color: #0db792;
+}
+
+.ldt .user {
+    color: #0d7bb7;
+}
+
+.ldt .comment {
+    color: silver;
+}
