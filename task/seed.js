@@ -30,7 +30,7 @@ dbConnection().then(db => {
 	});
 // Create forums
 }).then((user) => {
-    return forumData.addForum('Forum #1: Steph\'s Yeezy', 'Should I get the Zebra?', [], 'Shoes', user._id)
+    return forumData.addForum('Forum #1: Steph\'s Sneakers', 'Should I get these #Suede Sneakers[http://www.hm.com/us/product/72665]. Found it thanks to @Dillon', ['Shoes'], user._id)
 }).then(() => {
     console.log("Done seeding database");
     dbConn.close();
