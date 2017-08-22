@@ -27,3 +27,9 @@ html, body {
 	background-repeat: no-repeat;
 	background-size: contain;
 }
+
+
+.thumbnail img {
+	max-width: 100%;
+	max-height: 150px;
+}
