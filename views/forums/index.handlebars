@@ -1,21 +1,21 @@
 <section>
     <article>
         <i class="fa fa-search" aria-hidden="true"></i>
-        <input type="text" placeholder="Search" />
+        <input type="text" placeholder="Search by tag, title, brand" />
     </article>
     <ol class="list-group">
     {{#each forums}}
         {{#if this.title}}
-        <li  class="list-group-item">
+        <li class="list-group-item">
             <p>
                 {{ this.createdOn }}
             </p>
             <a href="forums/{{this._id}}">
-                {{this.title }}
+                {{ this.title }}
             </a>
         </li>
         {{/if}}
     {{/each}}
     </ol>
 </section>
-{{!-- TODO  --}}
+<script src="communityForums.js"></script>
