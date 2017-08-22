@@ -1,4 +1,4 @@
-function likeComment(event, forumId, commentId) {
+function likeComment(event, commentId) {
     console.log(forumId);
     console.log(commentId);
     $.ajax({
@@ -19,7 +19,9 @@ function likeComment(event, forumId, commentId) {
     })
 }
 
-function dislikeComment(event, forumId, commentId) {
+function dislikeComment(event, commentId) {
+    console.log(forumId);
+    console.log(commentId);
     $.ajax({
         'url': '/forums/' + forumId + '/comments/' + commentId + "/dislike",
         'type': 'PUT',

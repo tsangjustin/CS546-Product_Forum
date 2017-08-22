@@ -46,8 +46,8 @@
             <p> {{ this.datePosted }} </p>
             <p> {{ this.content }} </p>
             {{!-- TODO ability to like --}}
-            <i onclick="likeComment(event, '{{ ../forum._id }}', '{{ this._id }}')" class="fa fa-thumbs-up" aria-hidden="true"><p> {{ this.likes.length }}</p></i>
-            <i onclick="dislikeComment(event, '{{ ../forum._id }}', '{{ this._id }}')" class="fa fa-thumbs-down" aria-hidden="true"><p> {{ this.dislikes.length }}</p></i>
+            <i onclick="likeComment(event, '{{ this._id }}')" class="fa fa-thumbs-up" aria-hidden="true"><p> {{ this.likes.length }}</p></i>
+            <i onclick="dislikeComment(event, '{{ this._id }}')" class="fa fa-thumbs-down" aria-hidden="true"><p> {{ this.dislikes.length }}</p></i>
             {{!-- TODO view subthreads  --}}
             <i class="fa fa-comments" aria-hidden="true"></i>
         </li>
@@ -58,4 +58,7 @@
     {{/each}}
     </ul>
 </section>
+<script>
+    var forumId = "{{ forum._id }}";
+</script>
 <script src="/public/js/forum.js"></script>
