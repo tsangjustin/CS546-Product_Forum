@@ -36,3 +36,8 @@ function dislikeComment(event, forumId, commentId) {
         'dataType': 'json'
     })
 }
+
+function displayEdit() {
+    $("#editForum").toggle();
+    $("#viewForum").toggle();
+}
