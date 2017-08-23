@@ -1,0 +1,11 @@
+{{#each forums}}
+    <li class="list-group-item">
+        <p>
+            {{ this.createdOn }}
+        </p>
+        <a href="forums/{{this._id}}">
+            {{ this.title }}
+        </a>
+    </li>
+    {{/if}}
+{{/each}}
