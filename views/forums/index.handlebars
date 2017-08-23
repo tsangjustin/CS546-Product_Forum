@@ -1,11 +1,10 @@
 <section>
     <article>
         <i class="fa fa-search" aria-hidden="true"></i>
-        <input type="text" placeholder="Search by tag, title, brand" />
+        <input id="searchBox" type="text" placeholder="Search by tag, title, brand" />
     </article>
-    <ol class="list-group">
+    <ol id="community-forums" class="list-group">
     {{#each forums}}
-        {{#if this.title}}
         <li class="list-group-item">
             <p>
                 {{ this.createdOn }}
@@ -14,8 +13,7 @@
                 {{ this.title }}
             </a>
         </li>
-        {{/if}}
     {{/each}}
     </ol>
 </section>
-<script src="communityForums.js"></script>
+<script src="/public/js/communityForums.js"></script>
