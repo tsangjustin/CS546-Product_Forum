@@ -108,8 +108,11 @@ router.get('/search/', (req, res) => {
     forumsData.searchForums(text, prices, labels).then((forumsQuery) => {
         const forumsInfo = {
             forums: forumsQuery,
+            layout: false,
         };
-        return res.render("forums/communityForums", forumsInfo);
+        console.log(forumsInfo);
+        // return res.json(forumsInfo);
+        return res.render('forums/communityForums', forumsInfo);
     }).catch((err) => {
         return res.sendStatus(500);
     });

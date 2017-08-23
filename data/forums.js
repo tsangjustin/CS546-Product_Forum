@@ -206,6 +206,7 @@ let exportedMethods = {
             })
             searchQuery["$and"].push(priceFilter);
         }
+        console.log(searchQuery);
         if (searchQuery["$and"].length <= 0) {
             return Promise.reject("Nothing to search");
         }
@@ -223,13 +224,7 @@ let exportedMethods = {
             //     console.log(forums);
             //     return forums;
             // })
-            forumCollection.find(searchQuery).toArray((err, result) => {
-                if (err) {
-                    return Promise.reject(err);
-                }
-                console.log(result);
-                return result;
-            })
+            return forumCollection.find(searchQuery).toArray();
         });
     }
 }
