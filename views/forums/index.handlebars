@@ -1,5 +1,5 @@
 <section>
-    <article>
+    <form>
         <label for="searchBox"><i class="fa fa-search" aria-hidden="true"></i></label>
         <input id="searchBox" type="text" placeholder="Search by title, tag, or brand" />
         {{#if price}}
@@ -25,16 +25,12 @@
             </span>
         {{/if}}
         <button id="searhButton" type="submit">Search</button>
-    </article>
+    </form>
     <ol id="community-forums" class="list-group">
     {{#each forums}}
         <li class="list-group-item">
-            <p>
-                {{ this.createdOn }}
-            </p>
-            <a href="forums/{{this._id}}">
-                {{ this.title }}
-            </a>
+            <p>{{ this.createdOn }}</p>
+            <a href="forums/{{this._id}}">{{ this.title }}</a>
         </li>
     {{/each}}
     </ol>
