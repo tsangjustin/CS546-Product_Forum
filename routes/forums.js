@@ -70,6 +70,11 @@ router.post('/', (req, res) => {
         });
 });
 
+// Run search on community forums by filter
+router.get('/search/', (req, res) => {
+    console.log(req.query);
+});
+
 // View specific forum post
 router.get('/:forum_id', (req, res) => {
     let info = req.locals;
@@ -81,8 +86,8 @@ router.get('/:forum_id', (req, res) => {
         }).catch((err) => {
             return res.status(404).send();
         });
-
 });
+
 
 // Update specific fields of forum
 router.put('/:forum_id', (req, res) => {
