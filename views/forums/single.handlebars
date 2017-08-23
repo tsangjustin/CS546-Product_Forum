@@ -1,8 +1,14 @@
 {{!-- Post --}}
-<section class="row col-md-8 col-md-offset-2">
+<section class="row col-md-12">
     {{!-- TODO user avatar --}}
     <h1> {{ forum.title }} </h1>
     <p> {{{ contentToHtml forum.content }}} </p>
+    {{!-- TODO tags, clothing, likes, comments  --}}
+    <ul class="nav nav-pills">
+        <li><a href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i> <span class="badge">{{ forum.likes.length }}</span></a></li>
+        <li><a href="#"><i class="fa fa-thumbs-down" aria-hidden="true"></i> <span class="badge">{{ forum.likes.length }}</span></a></li>
+    </ul>
+    {{!-- TODO ability to like + comment --}}
 
     {{#if forum.label}}
         <h2> Labels </h2>
@@ -23,17 +29,16 @@
             </div>
         </div>
     {{ else }}
-        <li class="text-center list-group-item">
-            <p>No clothing was tagged.</p>
-        </li>
+        <div class="col-sm-12">
+            <li class="text-center list-group-item">
+                <p>No clothing was tagged.</p>
+            </li>
+        </div>
     {{/each}}
     </div>
-    {{!-- TODO tags, clothing, likes, comments  --}}
-    <i class="fa fa-thumbs-up" aria-hidden="true"></i><p> {{ forum.likes.length }}</p>
-    {{!-- TODO ability to like + comment --}}
 </section>
 {{!-- Comments --}}
-<section class="row col-md-8 col-md-offset-2">
+<section class="row col-md-12">
     <h2> Comments </h2>
     {{!-- Existing Comments --}}
     <ul class="list-group">
@@ -42,7 +47,10 @@
             {{!-- TODO user avatar of person who commented --}}
             <p> {{ this.datePosted }} </p>
             <p> {{{ contentToHtml this.content }}} </p>
-            <i class="fa fa-thumbs-up" aria-hidden="true"></i><p> {{ this.likes.length }}</p>
+            <ul class="nav nav-pills">
+                <li><a href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i> <span class="badge">{{ this.likes.length }}</span></a></li>
+                <li><a href="#"><i class="fa fa-thumbs-down" aria-hidden="true"></i> <span class="badge">{{ this.likes.length }}</span></a></li>
+            </ul>
             {{!-- TODO ability to like --}}
             {{!-- TODO view subthreads  --}}
         </li>

@@ -1,16 +1,11 @@
-#your-forum-panel {
-	background-color: lightgray;
-	padding: 15px;
-}
-
-#your-forum-panel-header > * {
-	font-size: 1.5em;
-}
-
 #community-forum-panel-header > * {
 	font-size: 1.5em;
 }
 
-.landing-header-icon {
-	float: right;
+.list-group-item.active .list-group-item-text.badge {
+	color: #337ab7;
+}
+
+.list-group-item.active .list-group-item-text.badge:hover {
+	color: #aaa;
 }
