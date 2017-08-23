@@ -14,7 +14,7 @@
         var url = "/forums/search?";
         var searchParams = {};
         var titleInput = searchInput.val().trim();
-        var checkedPrices = $('input[name="price[]"]:checked');
+        var checkedPrices = $('input[name="prices[]"]:checked');
         var checkedLabels = $('input[name="labels[]"]:checked');
         // Add title/content search in query
         if (titleInput.length > 0) {
@@ -29,9 +29,9 @@
         }
         // Add prices to query
         if (checkedPrices.length > 0) {
-            searchParams.price = [];
+            searchParams.prices = [];
             checkedPrices.each(function() {
-                searchParams.price.push(this.value);
+                searchParams.prices.push(this.value);
             });
         }
         console.log(searchParams);

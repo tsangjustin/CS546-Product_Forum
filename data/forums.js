@@ -95,6 +95,132 @@ let exportedMethods = {
                 return reject("Could not add comment");
             });
         });
+    },
+    searchForums(text, prices, labels) {
+        text = (text && (typeof(text) === 'string') && text.length > 0) ? text.trim().toLowerCase() : undefined;
+        let labelList = [];
+        if (labels && (Array.isArray(labels)) && (labels.length <= 0)) {
+            for (let l=0, lenLabels = labels.length; l < lenLabels; ++l) {
+                const currLabel = labels[l];
+                if (currLabel && (typeof(currLabel) === 'string')) {
+                    currLabel = currLabel.trim();
+                    if (currLabel.length > 0) {
+                        labelList.push(currLabel.toLowerCase())
+                    }
+                }
+            }
+        }
+        const priceRange = (prices && (Array.isArray(prices)) && (prices.length > 0)) ? prices.forEach((priceRange, index, prices) => {
+            switch (priceRange) {
+                case ('0-49'):
+                    prices[index] = [0, 49];
+                    break;
+                case ('50-99'):
+                    prices[index] = [50, 99];
+                    break;
+                case ('100-199'):
+                    prices[index] = [100, 199];
+                    break;
+                case ('200-499'):
+                    prices[index] = [200, 499];
+                    break;
+                case ('500-999'):
+                    prices[index] = [500, 999];
+                    break;
+                case ('1000+'):
+                    prices[index] = [1000, undefined];
+                    break;
+                default:
+                    break;
+            }
+        }) : undefined;
+        console.log(prices);
+        const searchQuery = {
+            "$or": [],
+        };
+        if (text && typeof(text) === 'string' && text.length > 0) {
+            searchQuery["$or"].push({
+                "title": new RegExp(text, "i"),
+                // title: {
+                //     "$regex": new RegExp("^" + text + "$", "i"),
+                //     // "$regex": "^" + text + "/",
+                //     // "$options": "i",
+                // },
+            },
+            {
+                "content": new RegExp(text, "i"),
+                // content: {
+                //     "$regex": new RegExp("^" + text + "$", "i"),
+                //     // "$regex": "^" + text + "$",
+                //     // "$options": "i",
+                // },
+            },
+            {
+                "clothing.$.name": new RegExp(text, "i"),
+                // "clothing.$.name": {
+                //     "$regex": new RegExp("^" + text + "$", "i"),
+                //     // "$regex": "^" + text + "/",
+                //     // "$options": "i",
+                // },
+            });
+        }
+        if (labelList && (Array.isArray(labelList)) && (labelList.length > 0)) {
+            searchQuery["$or"].push({
+                "labels": { "$in": labelList },
+            });
+        }
+        if (prices && (Array.isArray(prices)) && (prices.length > 0)) {
+            prices.forEach((priceRange) => {
+                if (priceRange.length > 1) {
+                    searchQuery["$or"].push({
+                        "clothing": {
+                            "$elemMatch": {
+                                "price": {
+                                    "$gte": priceRange[0],
+                                    "$lt": priceRange[1],
+                                }
+                            }
+                        },
+                    });
+                } else {
+                    searchQuery["$or"].push({
+                        "clothing": {
+                            "$elemMatch": {
+                                "price": {
+                                    "$gte": priceRange[0],
+                                }
+                            }
+                        },
+                    });
+                }
+            })
+        }
+        console.log(JSON.stringify(searchQuery));
+        if (searchQuery["$or"].length <= 0) {
+            return Promise.reject("Nothing to search");
+        }
+        return forums().then((forumCollection) => {
+            // forumCollection.find(searchQuery, (err, result) => {
+            //     if (err) {
+            //         return Promise.reject(err);
+            //     }
+            //     let forums = [];
+            //     result.each((err, forum) => {
+            //         console.log(err);
+            //         console.log(forum);
+            //         forums.push(forum);
+            //     });
+            //     console.log(forums);
+            //     return forums;
+            // })
+            forumCollection.find(searchQuery).toArray((err, result) => {
+                if (err) {
+                    return Promise.reject(err);
+                }
+                console.log(result);
+                return result;
+            })
+        });
     }
 }
 

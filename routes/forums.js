@@ -100,8 +100,19 @@ router.post('/', (req, res) => {
 
 // Run search on community forums by filter
 router.get('/search/', (req, res) => {
-    console.log(req.query);
+    console.log(req.query)
+    const text = req.query.title || undefined;
+    const prices = (req.query.prices || "").split(' ') || undefined;
+    const labels = (req.query.labels || "").split(' ') || undefined;
 
+    forumsData.searchForums(text, prices, labels).then((forumsQuery) => {
+        const forumsInfo = {
+            forums: forumsQuery,
+        };
+        return res.render("forums/communityForums", forumsInfo);
+    }).catch((err) => {
+        return res.sendStatus(500);
+    });
 });
 
 // View specific forum post

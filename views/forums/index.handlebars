@@ -7,7 +7,7 @@
                 <label>price</label>
                 <span class="inputitem">
                 {{#each price}}
-                    <input type="checkbox" name="price[]" id="price-{{ @key }}" value="{{ @key }}" />
+                    <input type="checkbox" name="prices[]" id="price-{{ @key }}" value="{{ @key }}" />
                     <label for="{{ @key }}">{{ @key }}</label><br />
                 {{/each}}
                 </span>
