@@ -2,7 +2,7 @@
 <section class="row col-md-8 col-md-offset-2">
     {{!-- TODO user avatar --}}
     <h1> {{ forum.title }} </h1>
-    <p> {{{ forum.contentHTML }}} </p>
+    <p> {{{ contentToHtml forum.content }}} </p>
 
     {{#if forum.label}}
         <h2> Labels </h2>
@@ -41,7 +41,7 @@
         <li class="list-group-item">
             {{!-- TODO user avatar of person who commented --}}
             <p> {{ this.datePosted }} </p>
-            <p> {{ this.content }} </p>
+            <p> {{{ contentToHtml this.content }}} </p>
             <i class="fa fa-thumbs-up" aria-hidden="true"></i><p> {{ this.likes.length }}</p>
             {{!-- TODO ability to like --}}
             {{!-- TODO view subthreads  --}}

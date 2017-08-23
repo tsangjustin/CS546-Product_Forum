@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const data = require("../data");
+const xss = require("xss");
 const forumsData = data.forums;
 
 // View existing forums by most recent or most popular
@@ -76,9 +77,13 @@ router.get('/:forum_id', (req, res) => {
         .then((forumData) => {
             info.forum = forumData;
             console.log(info);
-            info.forum.contentHTML = forumData.content
-                .replace(/#([^\[]+)\[([^\]]+)\]/g, (match, name, url) => `<a target='_blank' alt='${name}' href='${url}'>${name}</a>`)
-                .replace(/@([\w-]+)/g, (match, username) => `<a target='_blank' alt='${username}' href='#'>${username}</a>`);
+            info.helpers = {
+                contentToHtml: (content) => {
+                    return xss(content)
+                    .replace(/#([^\[]+)\[([^\]]+)\]/g, (match, name, url) => `<a target='_blank' alt='${name}' href='${url}'>${name}</a>`)
+                    .replace(/@([\w-]+)/g, (match, username) => `<a target='_blank' alt='${username}' href='#'>${username}</a>`);
+                }
+            }
             return res.render('forums/single', info);
         }).catch((err) => {
             return res.status(404).send();
