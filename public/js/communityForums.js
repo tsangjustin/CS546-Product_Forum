@@ -54,7 +54,7 @@
                     "dataType": 'html',
                     "success": function(res) {
                         console.log(res);
-                        communityForumsList.innerHTML(res);
+                        communityForumsList.html(res);
                     }
                 });
             }, 1500);
