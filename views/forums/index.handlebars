@@ -1,7 +1,30 @@
 <section>
     <article>
-        <i class="fa fa-search" aria-hidden="true"></i>
-        <input id="searchBox" type="text" placeholder="Search by tag, title, brand" />
+        <label for="searchBox"><i class="fa fa-search" aria-hidden="true"></i></label>
+        <input id="searchBox" type="text" placeholder="Search by title, tag, or brand" />
+        {{#if price}}
+            <span>
+                <label>price</label>
+                <span class="inputitem">
+                {{#each price}}
+                    <input type="checkbox" name="price[]" id="price-{{ @key }}" value="{{ @key }}" />
+                    <label for="{{ @key }}">{{ @key }}</label><br />
+                {{/each}}
+                </span>
+            </span>
+        {{/if}}
+        {{#if labels}}
+            <span>
+                <label>Labels</label>
+                <span class="inputitem">
+                {{#each labels}}
+                    <input type="checkbox" name="labels[]" id="labels-{{ @key }}" value="{{ @key }}" />
+                    <label for="{{ @key }}">{{ @key }}</label><br />
+                {{/each}}
+                </span>
+            </span>
+        {{/if}}
+        <button id="searhButton" type="submit">Search</button>
     </article>
     <ol id="community-forums" class="list-group">
     {{#each forums}}

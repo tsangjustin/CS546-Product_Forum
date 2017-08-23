@@ -5,21 +5,49 @@ const forumsData = data.forums;
 // View existing forums by most recent or most popular
 router.get('/', (req, res) => {
     let info = req.locals || {};
-    // Can view forums without being authenticated
-    const sort_by = req.query.sort_by || 'recent';
+    // const sort_by = req.query.sort_by || 'recent';
+    let searchFilters = {
+        price: {},
+        labels: {},
+    };
 
     forumsData.getAllForums().then((forumList) => {
-        console.log(forumList)
+        forumList.sort((f1, f2) => {
+            return (f1.createdOn > f2.createdOn) ? 1 : -1
+        });
         info.forums = (forumList && (Array.isArray(forumList))) ? forumList : [];
-        switch (sort_by) {
-            case ('recent'):
-            default:
-                forumList.sort((f1, f2) => {
-                    return (f1.createdOn > f2.createdOn) ? 1 : -1
-                });
-                break;
+        for (let f=0, lenForums = forumList.length; f < lenForums; ++f) {
+            const currForum = forumList[f];
+            // Check labels
+            for (let l=0, lenLabels=(currForum.labels || []).length; l < lenLabels; ++l) {
+                searchFilters.labels[currForum.labels[l]] = true;
+            }
+            // Check pricing filter
+            const clothings = (currForum.clothing || []);
+            for (let c=0, lenClothing=clothings.length; c < lenClothing; ++c) {
+                const clothingPrice = clothings[c].price || -1;
+                if (clothingPrice >= 0 && clothingPrice < 50) {
+                    searchFilters.price['0-49'] = true;
+                } else if (clothingPrice >= 50 && clothingPrice < 100) {
+                    searchFilters.price['50-99'] = true;
+                } else if (clothingPrice >= 100 && clothingPrice < 200) {
+                    searchFilters.price['100-199'] = true;
+                } else if (clothingPrice >= 200 && clothingPrice < 500) {
+                    searchFilters.price['200-499'] = true;
+                } else if (clothingPrice >= 500 && clothingPrice < 999) {
+                    searchFilters.price['500-999'] = true;
+                } else if (clothingPrice >= 1000) {
+                    searchFilters.price['1000+'] = true;
+                }
+            }
         }
-        // TODO sort forumList by param
+        if (Object.keys(searchFilters.price).length > 0) {
+            info.price = searchFilters.price;
+        }
+        if (Object.keys(searchFilters.labels).length > 0) {
+            info.labels = searchFilters.labels;
+        }
+        console.log(info);
         return res.render('forums', info);
     }).catch((err) => {
         return res.status(500).send();
@@ -73,6 +101,7 @@ router.post('/', (req, res) => {
 // Run search on community forums by filter
 router.get('/search/', (req, res) => {
     console.log(req.query);
+
 });
 
 // View specific forum post
@@ -109,7 +138,6 @@ router.post('/:forum_id/comments', (req, res) => {
     // Must be signed in to submit comment
     if (!req.user) {
         // TODO what should this behavior be?
-        console.log("Not logged in!");
         return res.redirect('/log_in');
     }
     forumId = req.params.forum_id;
@@ -118,10 +146,8 @@ router.post('/:forum_id/comments', (req, res) => {
 
     forumsData.addComment(forumId, userId, comment)
         .then(() => {
-            console.log("Added in route");
             return res.redirect(`/forums/${forumId}`);
         }).catch((err) => {
-            console.log("Error in route");
             console.log(err);
             res.status(404).send();
             return res.redirect(`/forums/${forumId}`);
