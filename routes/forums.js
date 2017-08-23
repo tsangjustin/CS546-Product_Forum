@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const data = require("../data");
+const xss = require("xss");
 const forumsData = data.forums;
 
 // View existing forums by most recent or most popular
@@ -76,24 +77,23 @@ router.post('/', (req, res) => {
     }
     let title = req.body.title;
     let content = req.body.content;
-    let label = req.body.label;
-    let clothing = req.body.clothing;
+    let labels = req.body.labels;
 
     if (!title || !content || !userId) {
         // Invalid request, required parameters missing
         return res.status(400).send();
     }
-    if (!label) {
-        label = []
-    }
-    if (!clothing) {
-        clothing = []
+    if (!labels) {
+        labels = []
+    } else {
+        labels = labels.split(",");
     }
 
-    forumsData.addForum(title, content, label, clothing, userId)
+    forumsData.addForum(title, content, labels, userId)
         .then((newForum) => {
             return res.redirect(`/forums/${newForum._id}`);
         }).catch((err) => {
+        console.log("hi", err);
             return res.status(500).send();
         });
 });
@@ -125,6 +125,13 @@ router.get('/:forum_id', (req, res) => {
         .then((forumData) => {
             info.forum = forumData;
             console.log(info);
+            info.helpers = {
+                contentToHtml: (content) => {
+                    return xss(content)
+                    .replace(/#([^\[]+)\[([^\]]+)\]/g, (match, name, url) => `<a target='_blank' alt='${name}' href='${url}'>${name}</a>`)
+                    .replace(/@([\w-]+)/g, (match, username) => `<a target='_blank' alt='${username}' href='#'>${username}</a>`);
+                }
+            }
             return res.render('forums/single', info);
         }).catch((err) => {
             return res.status(404).send();

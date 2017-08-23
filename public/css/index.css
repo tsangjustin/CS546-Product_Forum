@@ -4,12 +4,17 @@ html, body {
 }
 
 #main {
-	height: 85%;
-	width: 100%;
+	min-height: 100%;
+    padding-top: 52px;
+    margin-top: -52px;
+    padding-bottom: 60px;
+    margin-bottom: -60px;
 }
 
 .footer {
-	bottom: 0;
+	width: 100%;
+	line-height: 60px;
+	background-color: #f5f5f5;
 }
 
 .navbar {
@@ -26,4 +31,26 @@ html, body {
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: contain;
+}
+
+
+.thumbnail img {
+	max-width: 100%;
+	max-height: 150px;
+}
+
+img {
+	max-width: 100%;
+}
+
+.marginTop {
+	margin-top: 20px;
+}
+
+.marginBottom {
+	margin-bottom: 20px;
+}
+
+.textRight {
+	text-align: right;
 }

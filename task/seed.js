@@ -30,7 +30,9 @@ dbConnection().then(db => {
 	});
 // Create forums
 }).then((user) => {
-    return forumData.addForum('Forum #1: Steph\'s Yeezy', 'Should I get the Zebra?', [], 'Shoes', user._id)
+    return forumData.addForum('Forum #1: Steph\'s Sneakers', 'Should I get #Suede Sneakers[http://www.hm.com/us/product/72665] or #Flame Vans[https://www.vans.com/shop/mens-shoes-classics/flame-sk8-hi-reissue-black-black-true-white]? Found these thanks to @Dillon!', ['Shoes'], user._id)
+}).then(forum => {
+	return forumData.addComment(forum._id, forum.user, "I love #Flame Vans[https://www.vans.com/shop/mens-shoes-classics/flame-sk8-hi-reissue-black-black-true-white]")
 }).then(() => {
     console.log("Done seeding database");
     dbConn.close();
