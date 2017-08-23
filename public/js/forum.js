@@ -1,3 +1,7 @@
+function redirectLogin() {
+    window.location.href = '/log_in';
+}
+
 function likeComment(event, commentId) {
     console.log(forumId);
     console.log(commentId);
