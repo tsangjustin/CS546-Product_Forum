@@ -1,17 +1,38 @@
 <section class="marginTop">
-    <ol class="list-group">
-    {{#each forums}}
-        {{#if this.title}}
-        <li  class="list-group-item">
-            <p>
-                {{ this.createdOn }}
-            </p>
-            <a href="forums/{{this._id}}">
-                {{this.title }}
-            </a>
-        </li>
+    <form>
+        <label for="searchBox"><i class="fa fa-search" aria-hidden="true"></i></label>
+        <input id="searchBox" type="text" placeholder="Search by title, tag, or brand" />
+        {{#if price}}
+            <span>
+                <label>price</label>
+                <span class="inputitem">
+                {{#each price}}
+                    <input type="checkbox" name="prices[]" id="price-{{ @key }}" value="{{ @key }}" />
+                    <label for="{{ @key }}">{{ @key }}</label><br />
+                {{/each}}
+                </span>
+            </span>
         {{/if}}
+        {{#if labels}}
+            <span>
+                <label>Labels</label>
+                <span class="inputitem">
+                {{#each labels}}
+                    <input type="checkbox" name="labels[]" id="labels-{{ @key }}" value="{{ @key }}" />
+                    <label for="{{ @key }}">{{ @key }}</label><br />
+                {{/each}}
+                </span>
+            </span>
+        {{/if}}
+        <button id="searhButton" type="submit">Search</button>
+    </form>
+    <ol id="community-forums" class="list-group">
+    {{#each forums}}
+        <li class="list-group-item">
+            <p>{{ this.createdOn }}</p>
+            <a href="forums/{{this._id}}">{{ this.title }}</a>
+        </li>
     {{/each}}
     </ol>
 </section>
-{{!-- TODO  --}}
+<script src="/public/js/communityForums.js"></script>

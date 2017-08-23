@@ -24,15 +24,18 @@
 	<div class="col-md-8">
 		<header id="community-forum-panel-header" class="row">
 			<p class="col-md-6 col-md-offset-3">
-				<a href="forums">
-					Community Forums
+				<a href="/forums">
+          Community Forums
 				</a>
 			</p>
 			<span class="col-md-3">
-				<i class="fa fa-sort landing-header-icon" aria-hidden="true"></i>
+                <select id="forums-filter">
+                    <option value="recent">Most Recent</option>
+                    <option value="popular">Popular</option>
+                </select>
 			</span>
 		</header>
-		<ul class="list-group">
+		<ul id="community-forum-list" class="list-group">
 			{{#each communityForum}}
 				<li class="list-group-item">
 					<span class="badge">{{ this.comments.length }}</span>
@@ -48,3 +51,4 @@
 		</ul>
 	</div>
 </div>
+<script src="/public/js/landingPage.js"></script>
