@@ -29,9 +29,13 @@
     {{/each}}
     </div>
     {{!-- TODO tags, clothing, likes, comments  --}}
-    <i class="fa fa-thumbs-up" aria-hidden="true"></i><p> {{ forum.likes.length }}</p>
+    <i id="forum-like-button" class="fa fa-thumbs-up" aria-hidden="true">
+        <p> {{ forum.likes.length }}</p>
+    </i>
     {{!-- TODO ability to like + comment --}}
-    <i class="fa fa-thumbs-down" aria-hidden="true"></i><p> {{ forum.dislikes.length }}</p>
+    <i id="forum-dislike-button" class="fa fa-thumbs-down" aria-hidden="true">
+        <p> {{ forum.dislikes.length }}</p>
+    </i>
 </section>
 {{!-- Comments --}}
 <section class="row col-md-8 col-md-offset-2">

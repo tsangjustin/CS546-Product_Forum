@@ -1,3 +1,47 @@
+(function($) {
+    var likeForumButton = $('#forum-like-button');
+    var dislikeForumButton = $('#forum-dislike-button');
+    console.log(forumId);
+
+    likeForumButton.click(function(event) {
+        $.ajax({
+            'url': '/forums/' + forumId + '/like',
+            'type': 'PUT',
+            'success': function(res) {
+                console.log(res);
+                $(event.target).children('p').text(res.likes.length);
+                $(event.target).siblings('i').children('p').text(res.dislikes.length);
+            },
+            'error': function(err) {
+                if (err) {
+                    // window.location.href = '/log_in';
+                    console.log(err);
+                }
+            },
+            'dataType': 'json'
+        });
+    });
+
+    dislikeForumButton.click(function(event) {
+        $.ajax({
+            'url': '/forums/' + forumId + '/dislike',
+            'type': 'PUT',
+            'success': function(res) {
+                console.log(res);
+                $(event.target).children('p').text(res.dislikes.length);
+                $(event.target).siblings('i').children('p').text(res.likes.length);
+            },
+            'error': function(err) {
+                if (err) {
+                    // window.location.href = '/log_in';
+                    console.log(err);
+                }
+            },
+            'dataType': 'json'
+        });
+    });
+})(jQuery, forumId)
+
 function redirectLogin() {
     window.location.href = '/log_in';
 }
