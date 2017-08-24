@@ -71,10 +71,10 @@ router.get('/create', (req, res) => {
 // Create a new forum
 router.post('/', (req, res) => {
     // let userId = '717fd940-6d56-42f3-a08e-4bf15de7ee0d'; // FOR TESTING
-    let userId = null;
-    if (req.user) {
-        userId = req.user._id;
+    if (!req.user) {
+        return res.redirect('/log_in');
     }
+    let userId = req.user._id;
     let title = req.body.title;
     let content = req.body.content;
     let labels = req.body.labels;
@@ -87,6 +87,9 @@ router.post('/', (req, res) => {
         labels = []
     } else {
         labels = labels.split(",");
+    }
+    for (let l=0, lenLabels=labels.length; l < lenLabels; ++l) {
+        labels[l] = labels[l].trim();
     }
 
     forumsData.addForum(title, content, labels, userId)
