@@ -12,7 +12,6 @@ router.get('/', (req, res) => {
 		email: req.user.email,
 		gender: (req.user.isMale) ? "Male" : "Female",
 	};
-	console.log(userInfo);
 	return res.render('profile/profile', userInfo);
 });
 
@@ -27,7 +26,6 @@ router.get('/edit/', (req, res) => {
 		gender: (req.user.isMale),
         layout: false,
 	};
-    console.log(userInfo);
     return res.render('profile/editProfile.handlebars', userInfo);
 });
 
