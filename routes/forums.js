@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
     const sort_by = req.query.sort_by || 'recent';
 
     forumsData.getAllForums().then((forumList) => {
-        console.log(forumList)
+        // console.log(forumList)
         info.forums = (forumList && (Array.isArray(forumList))) ? forumList : [];
         switch (sort_by) {
             case ('recent'):
@@ -29,7 +29,7 @@ router.get('/', (req, res) => {
 // Form to create a new user
 router.get('/create', (req, res) => {
     let userInfo = req.locals || {}
-    console.log("user", req.user);
+    // console.log("user", req.user);
     // Must be authenticated to create forum
     if (!req.user) {
         // return res.status(403).send();
@@ -65,7 +65,7 @@ router.post('/', (req, res) => {
         .then((newForum) => {
             return res.redirect(`/forums/${newForum._id}`);
         }).catch((err) => {
-        console.log("hi", err);
+        // console.log("hi", err);
             return res.status(500).send();
         });
 });
@@ -77,7 +77,7 @@ router.get('/:forum_id/', (req, res) => {
         .then((forumData) => {
             info.forum = forumData;
             info.isOwner = (forumData.user === (req.user || {})._id);
-            console.log(info);
+            // console.log(info);
             info.forum.contentHTML = forumData.content
                 .replace(/#([^\[]+)\[([^\]]+)\]/g, (match, name, url) => `<a target='_blank' alt='${name}' href='${url}'>${name}</a>`)
                 .replace(/@([\w-]+)/g, (match, username) => `<a target='_blank' alt='${username}' href='#'>${username}</a>`);
@@ -89,12 +89,16 @@ router.get('/:forum_id/', (req, res) => {
 
 // Update specific fields of forum
 router.put('/:forum_id', (req, res) => {
+    //TODO 
+    console.log("\n\nUPDATE FORUM");
+    console.log(req.body);
 
 });
 
 // Delete a forum
 router.delete('/:forum_id', (req, res) => {
-
+    // TODO
+    console.log("DELETE FORUM");
 });
 
 // Get a list comments for forum id

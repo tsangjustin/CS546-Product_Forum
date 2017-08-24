@@ -41,3 +41,47 @@ function displayEdit() {
     $("#editForum").toggle();
     $("#viewForum").toggle();
 }
+
+function updateForum(event, forumId) {
+    displayEdit();
+    console.log("Update");
+    let title = $("#newForumTitle").value;
+    let content = $("#newForumContent").value;
+    $.ajax({
+        'url': '/forums/' + forumId,
+        'type': 'PUT',
+        'success': function(res) {
+            // TODO
+            console.log("success")
+        },
+        'error': function(err) {
+            if (err) {
+                console.log(err);
+            }
+        },
+        'data': {
+            "forumId": forumId,
+            "title": title,
+            "content": content
+            // TODO clothing, labels
+        },
+        'dataType': 'json'
+    });
+}
+
+function deleteForum(event, forumId) {
+    $.ajax({
+        'url': '/forums/' + forumId,
+        'type': 'DELETE',
+        'success': function(res) {
+            // TODO
+            console.log("success")
+        },
+        'error': function(err) {
+            if (err) {
+                console.log(err);
+            }
+        }
+    });
+}
+}

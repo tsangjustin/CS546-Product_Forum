@@ -4,7 +4,7 @@
 {{#if isOwner}}
 <section>
     <button onclick="displayEdit()">
-            <i title="Edit Forum" class="fa fa-gear"></i>
+        <i title="Edit Forum" class="fa fa-gear"></i>
     </button>
 </section>
 {{/if}}
@@ -48,7 +48,13 @@
 
     {{#if isOwner}}
     <div id="editForum" style="display:none">
-        <form class="form-horizontal" action="/forums/{{forum._id}}" method="put">
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-default" onclick="deleteForum(event, forum._id)">Delete Forum</button>
+            </div>
+        </div>
+
+        {{!-- <form class="form-horizontal"> --}}
             <div class="form-group">
                 <label for="title" class="col-sm-2 control-label">
                     Title
@@ -85,10 +91,10 @@
             </div> --}}
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" class="btn btn-default">Update Forum</button>
+                    <button class="btn btn-default" onclick="updateForum(event, forum._id)">Update Forum</button>
                 </div>
             </div>
-        </form>
+        {{!-- </form> --}}
     </div>
     {{/if}}
 
