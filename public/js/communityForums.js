@@ -39,7 +39,7 @@
         var queryKeys = Object.keys(searchParams);
         for (q=0, lenKeys=queryKeys.length; q < lenKeys; ++q) {
             var currKey = queryKeys[q];
-            queryString += currKey + "=" + ((Array.isArray(searchParams[currKey])) ? encodeURIComponent(searchParams[currKey].join(" ")) : searchParams[currKey]) + "&";
+            queryString += currKey + "=" + ((Array.isArray(searchParams[currKey])) ? encodeURIComponent(searchParams[currKey].join("||")) : searchParams[currKey]) + "&";
         }
         checkedPrices
         checkedPrices

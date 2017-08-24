@@ -86,10 +86,8 @@ router.post('/', (req, res) => {
     if (!labels) {
         labels = []
     } else {
-        labels = labels.split(",");
-    }
-    for (let l=0, lenLabels=labels.length; l < lenLabels; ++l) {
-        labels[l] = labels[l].trim();
+        // labels = labels.split(",").map(x=>x.trim());
+        labels = labels.split(",").map(label => label.trim());
     }
 
     forumsData.addForum(title, content, labels, userId)
@@ -105,8 +103,8 @@ router.post('/', (req, res) => {
 router.get('/search/', (req, res) => {
     console.log(req.query)
     const text = req.query.title || undefined;
-    const prices = (req.query.prices || "").split(' ') || undefined;
-    const labels = (req.query.labels || "").split(' ') || undefined;
+    const prices = (req.query.prices || "").split('||') || undefined;
+    const labels = (req.query.labels || "").split('||') || undefined;
 
     forumsData.searchForums(text, prices, labels).then((forumsQuery) => {
         const forumsInfo = {
