@@ -133,22 +133,22 @@ let exportedMethods = {
         const priceRange = (prices && (Array.isArray(prices)) && (prices.length > 0)) ? prices.forEach((priceRange) => {
             switch (priceRange) {
                 case ('0-49'):
-                    priceList.push([0, 49]);
+                    priceList.push([0, 49.5]);
                     break;
                 case ('50-99'):
-                    priceList.push([50, 99]);
+                    priceList.push([49.5, 99.5]);
                     break;
                 case ('100-199'):
-                    priceList.push([100, 199]);
+                    priceList.push([99.5, 199.5]);
                     break;
                 case ('200-499'):
-                    priceList.push([200, 499]);
+                    priceList.push([199.5, 499.5]);
                     break;
                 case ('500-999'):
-                    priceList.push([500, 999]);
+                    priceList.push([499.5, 999.5]);
                     break;
                 case ('1000+'):
-                    priceList.push([1000, undefined]);
+                    priceList.push([999.5, undefined]);
                     break;
                 default:
                     break;
@@ -225,7 +225,7 @@ let exportedMethods = {
             })
             searchQuery["$and"].push(priceFilter);
         }
-        console.log(searchQuery);
+        console.log(JSON.stringify(searchQuery));
         if (searchQuery["$and"].length <= 0) {
             return Promise.reject("Nothing to search");
         }

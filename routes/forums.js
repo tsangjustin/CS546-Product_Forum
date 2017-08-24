@@ -27,17 +27,17 @@ router.get('/', (req, res) => {
             const clothings = (currForum.clothing || []);
             for (let c=0, lenClothing=clothings.length; c < lenClothing; ++c) {
                 const clothingPrice = clothings[c].price || -1;
-                if (clothingPrice >= 0 && clothingPrice < 50) {
+                if (clothingPrice >= 0 && clothingPrice < 49.5) {
                     searchFilters.price['0-49'] = true;
-                } else if (clothingPrice >= 50 && clothingPrice < 100) {
+                } else if (clothingPrice >= 49.5 && clothingPrice < 99.5) {
                     searchFilters.price['50-99'] = true;
-                } else if (clothingPrice >= 100 && clothingPrice < 200) {
+                } else if (clothingPrice >= 99.5 && clothingPrice < 199.5) {
                     searchFilters.price['100-199'] = true;
-                } else if (clothingPrice >= 200 && clothingPrice < 500) {
+                } else if (clothingPrice >= 199.5 && clothingPrice < 499.5) {
                     searchFilters.price['200-499'] = true;
-                } else if (clothingPrice >= 500 && clothingPrice < 999) {
+                } else if (clothingPrice >= 499.5 && clothingPrice < 999.5) {
                     searchFilters.price['500-999'] = true;
-                } else if (clothingPrice >= 1000) {
+                } else if (clothingPrice >= 999.5) {
                     searchFilters.price['1000+'] = true;
                 }
             }
