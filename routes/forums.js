@@ -78,6 +78,7 @@ router.post('/', (req, res) => {
     let title = req.body.title;
     let content = req.body.content;
     let labels = req.body.labels;
+    const clothing = req.body.clothing || [];
 
     if (!title || !content || !userId) {
         // Invalid request, required parameters missing
@@ -120,11 +121,12 @@ router.get('/search/', (req, res) => {
 });
 
 // View specific forum post
-router.get('/:forum_id', (req, res) => {
+router.get('/:forum_id/', (req, res) => {
     let info = req.locals;
     forumsData.getForumById(req.params.forum_id)
         .then((forumData) => {
             info.forum = forumData;
+            info.isOwner = (forumData.user === (req.user || {})._id);
             console.log(info);
             info.helpers = {
                 contentToHtml: (content) => {
@@ -135,7 +137,7 @@ router.get('/:forum_id', (req, res) => {
             }
             return res.render('forums/single', info);
         }).catch((err) => {
-            return res.status(404).send();
+            return res.status(404).render('error/404.handlebars');
         });
 });
 
@@ -162,9 +164,9 @@ router.post('/:forum_id/comments', (req, res) => {
         // TODO what should this behavior be?
         return res.redirect('/log_in');
     }
-    forumId = req.params.forum_id;
-    userId = req.user._id;
-    comment = req.body.comment;
+    const forumId = req.params.forum_id;
+    const userId = req.user._id;
+    const comment = req.body.comment;
 
     forumsData.addComment(forumId, userId, comment)
         .then(() => {
@@ -196,8 +198,37 @@ router.post('/:clothing_type', (req, res) => {
 
 });
 
+// Update a comment by id for specific post
+router.put('/:forum_id/comments/:comment_id/like', (req, res) => {
+    if (!req.user) {
+        return res.status(401).json({error: "Invalid session"});
+    }
+    const forumId = req.params.forum_id;
+    const userId = req.user._id;
+    const commentId = req.params.comment_id;
 
+    forumsData.likeComment(forumId, userId, commentId).then((newCommentLike) => {
+        return res.json(newCommentLike);
+    }).catch((err) => {
+        console.log(err);
+        res.status(404).json({error: err});
+    });
+});
 
+router.put('/:forum_id/comments/:comment_id/dislike', (req, res) => {
+    if (!req.user) {
+        return res.status(401).json({error: "Invalid session"});
+    }
+    const forumId = req.params.forum_id;
+    const userId = req.user._id;
+    const commentId = req.params.comment_id;
 
+    forumsData.dislikeComment(forumId, userId, commentId).then((newCommentLike) => {
+        return res.json(newCommentLike);
+    }).catch((err) => {
+        console.log(err);
+        return res.status(404).json({error: err});
+    });
+});
 
 module.exports = exports = router;

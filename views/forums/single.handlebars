@@ -36,6 +36,10 @@
         </div>
     {{/each}}
     </div>
+    {{!-- TODO tags, clothing, likes, comments  --}}
+    <i class="fa fa-thumbs-up" aria-hidden="true"></i><p> {{ forum.likes.length }}</p>
+    {{!-- TODO ability to like + comment --}}
+    <i class="fa fa-thumbs-down" aria-hidden="true"></i><p> {{ forum.dislikes.length }}</p>
 </section>
 {{!-- Comments --}}
 <section class="row col-md-12">
@@ -43,7 +47,7 @@
     {{!-- Existing Comments --}}
     <ul class="list-group">
     {{#each forum.comments }}
-        <li class="list-group-item">
+        <li id="{{ this._id }}" class="list-group-item">
             {{!-- TODO user avatar of person who commented --}}
             <p> {{ this.datePosted }} </p>
             <p> {{{ contentToHtml this.content }}} </p>
@@ -52,7 +56,10 @@
                 <li><a href="#"><i class="fa fa-thumbs-down" aria-hidden="true"></i> <span class="badge">{{ this.likes.length }}</span></a></li>
             </ul>
             {{!-- TODO ability to like --}}
+            <i onclick="likeComment(event, '{{ ../forum._id }}', '{{ this._id }}')" class="fa fa-thumbs-up" aria-hidden="true"><p> {{ this.likes.length }}</p></i>
+            <i onclick="dislikeComment(event, '{{ ../forum._id }}', '{{ this._id }}')" class="fa fa-thumbs-down" aria-hidden="true"><p> {{ this.dislikes.length }}</p></i>
             {{!-- TODO view subthreads  --}}
+            <i class="fa fa-comments" aria-hidden="true"></i>
         </li>
     {{ else }}
         <li class="text-center list-group-item">
@@ -84,3 +91,4 @@
         </div>
     </form>
 </section>
+<script src="/public/js/forum.js"></script>
