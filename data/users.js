@@ -167,26 +167,26 @@ user.getUserById = (id) => {
 	});
 }
 
-user.updateRecipe = (id, changeUser) => {
+user.updateUser = (id, changeUser) => {
 	return new Promise((fulfill, reject) => {
 		if (!isValidString(id)) {
-			return reject("Invalid uuid to get recipe");
+			return reject("Invalid user id to update");
 		}
 		if ((changeUser === undefined) || (typeof(changeUser) !== "object")) {
-			return reject("Nothing to change for recipe");
+			return reject("Nothing to change for user");
 		}
-		const newRecipe = {};
-		if (isValidString(changeUser.title)) {
-			newRecipe.title = changeUser.title;
+		let newUser = {};
+		if (isValidString(changeUser.avatar)) {
+			newUser.avatar = changeUser.avatar;
 		}
-		if (checkValidArray(changeUser.ingredients) && isValidIngredientsList(changeUser.ingredients)) {
-			newRecipe.ingredients = changeUser.ingredients;
+        if (isValidString(changeUser.email)) {
+			newUser.email = changeUser.email;
 		}
-		if (checkValidArray(changeUser.steps) && isValidStepsList(changeUser.steps)) {
-			newRecipe.steps = changeUser.steps;
+        if ((isValidString(changeUser.gender)) && (['male', 'female'].includes(changeUser.gender))) {
+			newUser.isMale = changeUser.gender.toLowerCase() === 'male';
 		}
-		if ((Object.keys(newRecipe).length === 0) && (typeof(newRecipe) === 'object')) {
-			return reject("Found nothing to update for recipe");
+		if ((Object.keys(newUser).length <= 0) || (typeof(newUser) !== 'object')) {
+			return reject("Found nothing to update for user");
 		}
 		UserCollection().then((userColl) => {
 			// foodColl.findAndModify(
@@ -201,23 +201,27 @@ user.updateRecipe = (id, changeUser) => {
 			// 		return success(result.value);
 			// 	}
 			// );
-			userColl.update({_id: id}, {$set: newRecipe}, (err, updateInfo) => {
-				if (err) {
-					return reject(err);
-				}
-				const result = updateInfo.result;
-				if (result.n === 0) {
-					return reject("Did not find user with matching id");
-				}
-				if ((!result.ok) || (result.nModified < 1)) {
-					return reject('Failed to update user');
-				}
-				recipe.getRecipe(id).then((recipeItem) => {
-					return fulfill(recipeItem);
-				}).catch((err) => {
-					return reject(err);
-				});
-			});
+			userColl.update(
+                {_id: id},
+                {$set: newUser},
+                (err, updateInfo) => {
+    				if (err) {
+    					return reject(err);
+    				}
+    				const result = updateInfo.result;
+    				if (result.n === 0) {
+    					return reject("Did not find user with matching id");
+    				}
+    				if ((!result.ok) || (result.nModified < 1)) {
+    					return reject('Failed to update user');
+    				}
+    				user.getUserById(id).then((userItem) => {
+    					return fulfill(userItem);
+    				}).catch((err) => {
+    					return reject(err);
+    				});
+    			}
+            );
 		}).catch((err) => {
 			return reject(err);
 		})
