@@ -4,6 +4,7 @@ const userData = require('../data/').user;
 const forumData = require('../data/').forums;
 
 let dbConn = undefined;
+let firstUser = undefined;
 dbConnection().then(db => {
 	dbConn = db;
     return db.dropDatabase()
@@ -30,7 +31,12 @@ dbConnection().then(db => {
 	});
 // Create forums
 }).then((user) => {
-    return forumData.addForum('Forum #1: Steph\'s Sneakers', 'Should I get these #Suede Sneakers[http://www.hm.com/us/product/72665]. Found it thanks to @Dillon', ['Shoes'], user._id)
+    firstUser = user;
+    return forumData.addForum('Forum #1: Steph\'s Sneakers', 'Should I get #Suede Sneakers[http://www.hm.com/us/product/72665] or #Flame Vans[https://www.vans.com/shop/mens-shoes-classics/flame-sk8-hi-reissue-black-black-true-white]? Found these thanks to @Dillon!', ['Shoes'], user._id)
+}).then(forum => {
+	return forumData.addComment(forum._id, forum.user, "I love #Flame Vans[https://www.vans.com/shop/mens-shoes-classics/flame-sk8-hi-reissue-black-black-true-white]")
+}).then(() => {
+    return forumData.addForum('Need a winter shirt quick!!!', 'Is this a good vest #JCrew wool vest[https://www.jcrew.com/p/mens_category/sweaters/merino/italian-merino-wool-sweater-vest/G8239]?', ['wool', 'vest', 'JCrew'], firstUser._id)
 }).then(() => {
     console.log("Done seeding database");
     dbConn.close();
