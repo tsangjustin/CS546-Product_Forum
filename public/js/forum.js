@@ -9,8 +9,8 @@
             'type': 'PUT',
             'success': function(res) {
                 console.log(res);
-                $(event.target).children('p').text(res.likes.length);
-                $(event.target).siblings('i').children('p').text(res.dislikes.length);
+                likeForumButton.siblings('span').text(res.likes.length);
+                dislikeForumButton.siblings('span').text(res.dislikes.length);
             },
             'error': function(err) {
                 if (err) {
@@ -28,8 +28,8 @@
             'type': 'PUT',
             'success': function(res) {
                 console.log(res);
-                $(event.target).children('p').text(res.dislikes.length);
-                $(event.target).siblings('i').children('p').text(res.likes.length);
+                likeForumButton.siblings('span').text(res.likes.length);
+                dislikeForumButton.siblings('span').text(res.dislikes.length);
             },
             'error': function(err) {
                 if (err) {
