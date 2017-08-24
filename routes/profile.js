@@ -6,13 +6,18 @@ router.get('/', (req, res) => {
 	if (!req.user) {
 		return res.redirect('/log_in');
 	}
-	const userInfo = {
+    console.log(req.query.layout)
+	let userInfo = {
 		avatar: req.user.avatar,
 		username: req.user.username,
 		email: req.user.email,
 		gender: (req.user.isMale) ? "Male" : "Female",
 	};
-	return res.render('profile/profile', userInfo);
+    if (req.query.layout && (req.query.layout === 'false')) {
+        userInfo.layout = false;
+    }
+    console.log(userInfo);
+	return res.render('profile/profile.handlebars', userInfo);
 });
 
 router.get('/edit/', (req, res) => {

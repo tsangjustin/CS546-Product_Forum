@@ -69,6 +69,14 @@
     });
 
     cancelEditIcon.click(function() {
-
+        console.log('Canceling');
+        $.ajax({
+            "url": "/profile/?layout=false",
+            type: "GET",
+            "dataType": "html",
+            "success": function(res) {
+                mainWrapper.html(res);
+            }
+        });
     });
 })(jQuery)
