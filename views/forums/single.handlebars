@@ -62,12 +62,18 @@
             <p> {{ this.datePosted }} </p>
             <p> {{{ contentToHtml this.content }}} </p>
             <ul class="nav nav-pills">
-                <li><a href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i> <span class="badge">{{ this.likes.length }}</span></a></li>
-                <li><a href="#"><i class="fa fa-thumbs-down" aria-hidden="true"></i> <span class="badge">{{ this.likes.length }}</span></a></li>
+                <li>
+                    <i onclick="likeComment(event, '{{ this._id }}')" class="fa fa-thumbs-up" aria-hidden="true"></i>
+                    <span class="badge">{{ this.likes.length }}</span>
+                </li>
+                <li>
+                    <i onclick="dislikeComment(event, '{{ this._id }}')" class="fa fa-thumbs-down" aria-hidden="true"></i>
+                    <span class="badge">{{ this.dislikes.length }}</span>
+                </li>
             </ul>
             {{!-- TODO ability to like --}}
-            <i onclick="likeComment(event, '{{ this._id }}')" class="fa fa-thumbs-up" aria-hidden="true"><p> {{ this.likes.length }}</p></i>
-            <i onclick="dislikeComment(event, '{{ this._id }}')" class="fa fa-thumbs-down" aria-hidden="true"><p> {{ this.dislikes.length }}</p></i>
+            <!-- <i onclick="likeComment(event, '{{ this._id }}')" class="fa fa-thumbs-up" aria-hidden="true"><p> {{ this.likes.length }}</p></i>
+            <i onclick="dislikeComment(event, '{{ this._id }}')" class="fa fa-thumbs-down" aria-hidden="true"><p> {{ this.dislikes.length }}</p></i> -->
             {{!-- TODO view subthreads  --}}
             <i class="fa fa-comments" aria-hidden="true"></i>
         </li>
