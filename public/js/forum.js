@@ -84,4 +84,3 @@ function deleteForum(event, forumId) {
         }
     });
 }
-}

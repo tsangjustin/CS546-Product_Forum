@@ -89,16 +89,29 @@ router.get('/:forum_id/', (req, res) => {
 
 // Update specific fields of forum
 router.put('/:forum_id', (req, res) => {
-    //TODO 
-    console.log("\n\nUPDATE FORUM");
-    console.log(req.body);
-
+    // TODO Confirm user
+    let forumId = req.params.forum_id;
+    let title = req.body.title;
+    let content = req.body.content;
+    let labels = req.body.labels;
+    forumsData.updateForum(forumId, title, content, labels)
+        .then((forumData) => {
+            return res.redirect(`/forums/${forumId}`);
+        }).catch((err) => {
+            return res.status(404).render('error/404.handlebars');
+        });
 });
 
 // Delete a forum
 router.delete('/:forum_id', (req, res) => {
-    // TODO
-    console.log("DELETE FORUM");
+    // TODO Confirm User
+    let forumId = req.params.forum_id;
+    forumsData.deleteForum(forumId)
+        .then((forumData) => {
+            return res.redirect(`/forums`);
+        }).catch((err) => {
+            return res.status(404).render('error/404.handlebars');
+        });
 });
 
 // Get a list comments for forum id
