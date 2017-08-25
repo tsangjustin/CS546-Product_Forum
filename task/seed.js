@@ -36,6 +36,9 @@ dbConnection().then(db => {
 }).then(forum => {
 	return forumData.addComment(forum._id, forum.user, "I love #Flame Vans[https://www.vans.com/shop/mens-shoes-classics/flame-sk8-hi-reissue-black-black-true-white]")
 }).then(() => {
+    // Test multiple links and labels with spaces
+    return forumData.addForum('Jogger for winter. Which color?', 'Does this jogger look better in #blue[https://www.ae.com/men-aeo-hybrid-jogger-blue/web/s-prod/1122_3842_020?icid=AE:SectionImage:Mens:Joggers:ShopImage] or #gray[https://www.ae.com/men-aeo-hybrid-jogger-gray/web/s-prod/1122_3842_020?icid=AE:SectionImage:Mens:Joggers:ShopImage]?', ['jogger', 'American Eagle', 'blue', 'gray'], firstUser._id)
+}).then(() => {
     return forumData.addForum('Need a winter shirt quick!!!', 'Is this a good vest #JCrew wool vest[https://www.jcrew.com/p/mens_category/sweaters/merino/italian-merino-wool-sweater-vest/G8239]?', ['wool', 'vest', 'JCrew'], firstUser._id)
 }).then(() => {
     console.log("Done seeding database");

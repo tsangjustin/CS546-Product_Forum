@@ -54,8 +54,8 @@ function likeComment(event, commentId) {
         'type': 'PUT',
         'success': function(res) {
             console.log(res);
-            $(event.target).children('p').text(res.likes.length);
-            $(event.target).siblings('i').children('p').text(res.dislikes.length);
+            $(event.target).siblings('span').text(res.likes.length);
+            $(event.target).closest('li').siblings('li').children('span').text(res.dislikes.length);
         },
         'error': function(err) {
             if (err) {
@@ -74,8 +74,9 @@ function dislikeComment(event, commentId) {
         'url': '/forums/' + forumId + '/comments/' + commentId + "/dislike",
         'type': 'PUT',
         'success': function(res) {
-            $(event.target).children('p').text(res.dislikes.length);
-            $(event.target).siblings('i').children('p').text(res.likes.length);
+            console.log($(event.target).siblings('span'));
+            $(event.target).siblings('span').text(res.dislikes.length);
+            $(event.target).closest('li').siblings('li').children('span').text(res.likes.length);
         },
         'error': function(err) {
             if (err) {
