@@ -151,9 +151,9 @@ router.put('/:forum_id', (req, res) => {
     let labels = req.body.labels;
     forumsData.updateForum(forumId, title, content, labels)
         .then((forumData) => {
-            return res.redirect(`/forums/${forumId}`);
+            return res.json({});
         }).catch((err) => {
-            return res.redirect(`/forums/${forumId}`);
+            return res.status(500).json({ error: err });
         });
 });
 
@@ -163,7 +163,7 @@ router.delete('/:forum_id', (req, res) => {
     let forumId = req.params.forum_id;
     forumsData.deleteForum(forumId)
         .then((forumData) => {
-            return res.redirect(`/forums`);
+            return res.json({'redirect': '/forums'});
         }).catch((err) => {
             return res.status(404).render('error/404.handlebars');
         });

@@ -104,7 +104,9 @@ $(document).ready(function() {
             'url': '/forums/' + forumId,
             'type': 'PUT',
             'success': function (res) {
-                // TODO How to make the info update without refresh?
+                console.log("Successfully updated forum " + forumId);
+                $("#forumTitle").text(title);
+                $("#forumContent").text(content);
             },
             'error': function (err) {
                 if (err) {
@@ -125,8 +127,8 @@ $(document).ready(function() {
             'url': '/forums/' + forumId,
             'type': 'DELETE',
             'success': function (res) {
-                // TODO
-                console.log("success")
+                console.log("Successfully deleted forum " + forumId);
+                window.location = res.redirect;
             },
             'error': function (err) {
                 if (err) {
