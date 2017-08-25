@@ -1,4 +1,4 @@
-<script src="/public/js/forum.js"></script>
+{{!-- <script src="/public/js/forum.js"></script> --}}
 
 {{!-- Editing and deleting --}}
 {{#if isOwner}}
@@ -10,11 +10,23 @@
 {{/if}}
 
 {{!-- Post --}}
-<section class="row col-md-8 col-md-offset-2">
+<section class="row col-md-12">
     {{!-- TODO user avatar --}}
     <div id="viewForum">
         <h1> {{ forum.title }} </h1>
-        <p> {{{ forum.contentHTML }}} </p>
+        {{!-- <p> {{{ forum.contentHTML }}} </p> --}}
+        <p> {{ forum.content }} </p>
+ 
+        <ul class="nav nav-pills">
+            <li>
+                <i id="forum-like-button" class="fa fa-thumbs-up" aria-hidden="true"></i>
+                <span class="badge">{{ forum.likes.length }}</span>
+            </li>
+            <li>
+                <i id="forum-dislike-button" class="fa fa-thumbs-down" aria-hidden="true"></i>
+                <span class="badge">{{ forum.dislikes.length }}</span>
+            </li>
+        </ul>
 
         {{#if forum.label}}
             <h2> Labels </h2>
@@ -35,9 +47,11 @@
                 </div>
             </div>
         {{ else }}
-            <li class="text-center list-group-item">
-                <p>No clothing was tagged.</p>
-            </li>
+            <div class="col-sm-12">
+                <li class="text-center list-group-item">
+                    <p>No clothing was tagged.</p>
+                </li>
+            </div>
         {{/each}}
         </div>
         {{!-- TODO tags, clothing, likes, comments  --}}
@@ -76,7 +90,7 @@
                     <p>Tag clothing items with <strong>#clothing_name[clothing_url]</strong></p>
                     <p>Tag user with <strong>@user</strong></p>
                 </div>
-                <textarea id="newForumContent" class="form-control ldt" name="content" required>{{forum.contentHTML}}</textarea>
+                <textarea id="newForumContent" class="form-control ldt" name="content" required>{{forum.content}}</textarea>
             </div>
         </div>
 
@@ -102,7 +116,7 @@
 </section>
 
 {{!-- Comments --}}
-<section class="row col-md-8 col-md-offset-2">
+<section class="row col-md-12">
     <h2> Comments </h2>
     {{!-- Existing Comments --}}
     <ul class="list-group">
@@ -110,10 +124,14 @@
         <li id="{{ this._id }}" class="list-group-item">
             {{!-- TODO user avatar of person who commented --}}
             <p> {{ this.datePosted }} </p>
-            <p> {{ this.content }} </p>
+            <p> {{{ contentToHtml this.content }}} </p>
+            <ul class="nav nav-pills">
+                <li><a href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i> <span class="badge">{{ this.likes.length }}</span></a></li>
+                <li><a href="#"><i class="fa fa-thumbs-down" aria-hidden="true"></i> <span class="badge">{{ this.likes.length }}</span></a></li>
+            </ul>
             {{!-- TODO ability to like --}}
-            <i onclick="likeComment(event, '{{ ../forum._id }}', '{{ this._id }}')" class="fa fa-thumbs-up" aria-hidden="true"><p> {{ this.likes.length }}</p></i>
-            <i onclick="dislikeComment(event, '{{ ../forum._id }}', '{{ this._id }}')" class="fa fa-thumbs-down" aria-hidden="true"><p> {{ this.dislikes.length }}</p></i>
+            <i onclick="likeComment(event, '{{ this._id }}')" class="fa fa-thumbs-up" aria-hidden="true"><p> {{ this.likes.length }}</p></i>
+            <i onclick="dislikeComment(event, '{{ this._id }}')" class="fa fa-thumbs-down" aria-hidden="true"><p> {{ this.dislikes.length }}</p></i>
             {{!-- TODO view subthreads  --}}
             <i class="fa fa-comments" aria-hidden="true"></i>
         </li>
@@ -147,4 +165,7 @@
         </div>
     </form>
 </section>
-
+<script>
+    var forumId = "{{ forum._id }}";
+</script>
+<script src="/public/js/forum.js"></script>

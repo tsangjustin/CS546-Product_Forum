@@ -25,15 +25,15 @@ let clothing = exports = module.exports = {
             }
             request(clothing_url, options, function (error, response, body) {
                 if (error || !response || response.statusCode !== 200) {
-                    console.log(body);
                     return reject("Invalid clothing_url");
                 }
+                const priceMeta = body.match(/<meta[\S ]+"og:price:amount"[\S ]+content="(\S+)"/);
                 const price = body.match(/\$([\d.]+)/);
-                const image = body.match(/<meta[\S ]+og:image[\S ]+content="(\S+)"/);
+                const imageMeta = body.match(/<meta[\S ]+"og:image"[\S ]+content="(\S+)"/);
 
                 accept({
-                    price: price && parseFloat(price[1]),
-                    image: image && image[1],
+                    price: (priceMeta && parseFloat(priceMeta[1])) || price && parseFloat(price[1]),
+                    image: imageMeta && imageMeta[1],
                 });
             });
         });
