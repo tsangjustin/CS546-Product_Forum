@@ -136,7 +136,10 @@ let exportedMethods = {
     deleteForum(forumId, userId) {
         return forums().then((forumCollection) => {
             forumCollection
-                .deleteOne({_id: forumId})
+                .deleteOne(
+                    {_id: forumId,
+                    user: userId}
+                )
                 .then(() => {
                     console.log("Deleted forum");
                     return;
