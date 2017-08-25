@@ -15,7 +15,7 @@
     <div id="viewForum">
         <h1 id="forumTitle"> {{ forum.title }} </h1>
         <p id="forumContent"> {{{ contentToHtml forum.content }}} </p>
- 
+
         <ul class="nav nav-pills">
             <li>
                 <i id="forum-like-button" class="fa fa-thumbs-up" aria-hidden="true"></i>
@@ -54,9 +54,9 @@
         {{/each}}
         </div>
         {{!-- TODO tags, clothing, likes, comments  --}}
-        <i class="fa fa-thumbs-up" aria-hidden="true"></i><p> {{ forum.likes.length }}</p>
+        <!-- <i class="fa fa-thumbs-up" aria-hidden="true"></i><p> {{ forum.likes.length }}</p> -->
         {{!-- TODO ability to like + comment --}}
-        <i class="fa fa-thumbs-down" aria-hidden="true"></i><p> {{ forum.dislikes.length }}</p>
+        <!-- <i class="fa fa-thumbs-down" aria-hidden="true"></i><p> {{ forum.dislikes.length }}</p> -->
     </div>
 
     {{#if isOwner}}
@@ -68,7 +68,7 @@
             <div class="col-sm-offset-2 col-sm-10">
                 <button id="deleteForum" class="btn btn-default">Delete Forum</button>
             </div>
-        </div> 
+        </div>
 
         <div class="form-group">
             <label for="newForumTitle" class="col-sm-2 control-label">
@@ -103,7 +103,7 @@
                 </div>
                 <input id="newForumLabels" type="text" class="form-control" name="labels" placeholder="label1,label2,label3" value={{forum.labels}} />
             </div>
-        </div> 
+        </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <button id="updateForum" class="btn btn-default">Update Forum</button>
