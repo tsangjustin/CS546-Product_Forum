@@ -14,8 +14,7 @@
     {{!-- TODO user avatar --}}
     <div id="viewForum">
         <h1 id="forumTitle"> {{ forum.title }} </h1>
-        {{!-- <p> {{{ forum.contentHTML }}} </p> --}}
-        <p id="forumContent"> {{ forum.content }} </p>
+        <p id="forumContent"> {{{ contentToHtml forum.content }}} </p>
  
         <ul class="nav nav-pills">
             <li>
