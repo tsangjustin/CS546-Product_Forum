@@ -144,12 +144,15 @@ router.get('/:forum_id/', (req, res) => {
 
 // Update specific fields of forum
 router.put('/:forum_id', (req, res) => {
-    // TODO Confirm user, confirm changes
+    if (!req.user) {
+        return res.status(401).json({ error: "Invalid session" });
+    }
+    let userId = req.user._id;
     let forumId = req.params.forum_id;
     let title = req.body.title;
     let content = req.body.content;
     let labels = req.body.labels;
-    forumsData.updateForum(forumId, title, content, labels)
+    forumsData.updateForum(forumId, userId, title, content, labels)
         .then((forumData) => {
             return res.json({});
         }).catch((err) => {
@@ -159,9 +162,12 @@ router.put('/:forum_id', (req, res) => {
 
 // Delete a forum
 router.delete('/:forum_id', (req, res) => {
-    // TODO Confirm User
+    if (!req.user) {
+        return res.status(401).json({ error: "Invalid session" });
+    }
+    let userId = req.user._id;
     let forumId = req.params.forum_id;
-    forumsData.deleteForum(forumId)
+    forumsData.deleteForum(forumId, userId)
         .then((forumData) => {
             return res.json({'redirect': '/forums'});
         }).catch((err) => {

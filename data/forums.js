@@ -91,7 +91,7 @@ let exportedMethods = {
             });
         });
     },
-    updateForum(forumId, title, content, labels) {
+    updateForum(forumId, userId, title, content, labels) {
         // Validate contents
         if (title && !isValidString(title)) {
             return Promise.reject('Invalid title for forum creation')
@@ -117,7 +117,8 @@ let exportedMethods = {
         return forums().then((forumCollection) => {
             forumCollection
                 .update(
-                    {_id: forumId}, 
+                    {_id: forumId,
+                    user: userId}, 
                     { $set: updateParam}
                 ).then((forumInformation) => {
                     console.log("Updated forum");
@@ -127,7 +128,7 @@ let exportedMethods = {
                 });
         });
     },
-    deleteForum(forumId) {
+    deleteForum(forumId, userId) {
         return forums().then((forumCollection) => {
             forumCollection
                 .deleteOne({_id: forumId})
