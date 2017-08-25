@@ -179,7 +179,7 @@ router.delete('/:forum_id', (req, res) => {
     let forumId = req.params.forum_id;
     forumsData.deleteForum(forumId, userId)
         .then((forumData) => {
-            return res.json({'redirect': '/forums'});
+            return res.json({'redirect': '/'});
         }).catch((err) => {
             return res.status(404).render('error/404.handlebars');
         });

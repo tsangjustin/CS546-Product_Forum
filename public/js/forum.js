@@ -99,7 +99,7 @@ $(document).ready(function() {
         let forumId = $("#forumId").val();
         let title = $("#newForumTitle").val();
         let content = $("#newForumContent").val();
-        let labels = null;
+        let labels = $("#newForumLabels").val();
         $.ajax({
             'url': '/forums/' + forumId,
             'type': 'PUT',
