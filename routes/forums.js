@@ -157,6 +157,36 @@ router.get('/:forum_id/comments', (req, res) => {
 
 });
 
+router.put('/:forum_id/like', (req, res) => {
+    if (!req.user) {
+        return res.status(401).json({error: "Invalid session"});
+    }
+    const forumId = req.params.forum_id;
+    const userId = req.user._id;
+    forumsData.likeForum(forumId, userId).then((updatedLikeDislike) => {
+        console.log(updatedLikeDislike);
+        return res.json(updatedLikeDislike);
+    }).catch((err) => {
+        console.log(err);
+        return res.status(500).json({error: err});
+    });
+});
+
+router.put('/:forum_id/dislike', (req, res) => {
+    if (!req.user) {
+        return res.status(401).json({error: "Invalid session"});
+    }
+    const forumId = req.params.forum_id;
+    const userId = req.user._id;
+    forumsData.dislikeForum(forumId, userId).then((updatedLikeDislike) => {
+        console.log(updatedLikeDislike);
+        return res.json(updatedLikeDislike);
+    }).catch((err) => {
+        console.log(err);
+        return res.status(500).json({error: err});
+    });
+});
+
 // Add comment to forum
 router.post('/:forum_id/comments', (req, res) => {
     // Must be signed in to submit comment

@@ -216,6 +216,88 @@ let exportedMethods = {
             });
         });
     },
+    likeForum(forumId, userId) {
+        return new Promise((fulfill, reject) => {
+            forums().then(forumColl => {
+                forumColl.update(
+                    { _id: forumId },
+                    {'$addToSet': { "likes": userId } },
+                    (err, updateInfo) => {
+                        if (err) {
+        					return reject(err);
+        				}
+        				const result = updateInfo.result;
+        				if (result.n < 1) {
+        					return reject('Unable find forum to like');
+        				}
+        				if (result.nModified < 1) {
+        					return reject('Fail to update likes for forum');
+        				}
+                        forumColl.update(
+                            {_id: forumId},
+                            {'$pull': { "dislikes": userId }},
+                            (err, updateInfo) => {
+                                if (err) {
+                					return reject(err);
+                				}
+                				exportedMethods.getForumById(forumId).then((matchForum) => {
+                                    return fulfill({
+                                        likes: matchForum.likes,
+                                        dislikes: matchForum.dislikes,
+                                    });
+                				}).catch((err) => {
+                					return reject(err);
+                				});
+                            }
+                        );
+                    }
+                );
+            }).catch((err) => {
+                return reject(err);
+            });
+        });
+    },
+    dislikeForum(forumId, userId) {
+        return new Promise((fulfill, reject) => {
+            forums().then(forumColl => {
+                forumColl.update(
+                    { _id: forumId },
+                    {'$addToSet': { "dislikes": userId } },
+                    (err, updateInfo) => {
+                        if (err) {
+        					return reject(err);
+        				}
+        				const result = updateInfo.result;
+        				if (result.n < 1) {
+        					return reject('Unable find forum to like');
+        				}
+        				if (result.nModified < 1) {
+        					return reject('Fail to update likes for forum');
+        				}
+                        forumColl.update(
+                            {_id: forumId},
+                            {'$pull': { "likes": userId }},
+                            (err, updateInfo) => {
+                                if (err) {
+                					return reject(err);
+                				}
+                				exportedMethods.getForumById(forumId).then((matchForum) => {
+                                    return fulfill({
+                                        likes: matchForum.likes,
+                                        dislikes: matchForum.dislikes,
+                                    });
+                				}).catch((err) => {
+                					return reject(err);
+                				});
+                            }
+                        );
+                    }
+                );
+            }).catch((err) => {
+                return reject(err);
+            });
+        });
+    },
     searchForums(text, prices, labels) {
         text = (text && (typeof(text) === 'string') && text.length > 0) ? text.trim().toLowerCase() : undefined;
         let labelList = [];

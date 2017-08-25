@@ -5,8 +5,14 @@
     <p> {{{ contentToHtml forum.content }}} </p>
     {{!-- TODO tags, clothing, likes, comments  --}}
     <ul class="nav nav-pills">
-        <li><a href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i> <span class="badge">{{ forum.likes.length }}</span></a></li>
-        <li><a href="#"><i class="fa fa-thumbs-down" aria-hidden="true"></i> <span class="badge">{{ forum.likes.length }}</span></a></li>
+        <li>
+            <i id="forum-like-button" class="fa fa-thumbs-up" aria-hidden="true"></i>
+            <span class="badge">{{ forum.likes.length }}</span>
+        </li>
+        <li>
+            <i id="forum-dislike-button" class="fa fa-thumbs-down" aria-hidden="true"></i>
+            <span class="badge">{{ forum.dislikes.length }}</span>
+        </li>
     </ul>
     {{!-- TODO ability to like + comment --}}
 
@@ -37,9 +43,13 @@
     {{/each}}
     </div>
     {{!-- TODO tags, clothing, likes, comments  --}}
-    <i class="fa fa-thumbs-up" aria-hidden="true"></i><p> {{ forum.likes.length }}</p>
+    <!-- <i id="forum-like-button" class="fa fa-thumbs-up" aria-hidden="true">
+        <p> {{ forum.likes.length }}</p>
+    </i> -->
     {{!-- TODO ability to like + comment --}}
-    <i class="fa fa-thumbs-down" aria-hidden="true"></i><p> {{ forum.dislikes.length }}</p>
+    <!-- <i id="forum-dislike-button" class="fa fa-thumbs-down" aria-hidden="true">
+        <p> {{ forum.dislikes.length }}</p>
+    </i> -->
 </section>
 {{!-- Comments --}}
 <section class="row col-md-12">
@@ -52,12 +62,18 @@
             <p> {{ this.datePosted }} </p>
             <p> {{{ contentToHtml this.content }}} </p>
             <ul class="nav nav-pills">
-                <li><a href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i> <span class="badge">{{ this.likes.length }}</span></a></li>
-                <li><a href="#"><i class="fa fa-thumbs-down" aria-hidden="true"></i> <span class="badge">{{ this.likes.length }}</span></a></li>
+                <li>
+                    <i onclick="likeComment(event, '{{ this._id }}')" class="fa fa-thumbs-up" aria-hidden="true"></i>
+                    <span class="badge">{{ this.likes.length }}</span>
+                </li>
+                <li>
+                    <i onclick="dislikeComment(event, '{{ this._id }}')" class="fa fa-thumbs-down" aria-hidden="true"></i>
+                    <span class="badge">{{ this.dislikes.length }}</span>
+                </li>
             </ul>
             {{!-- TODO ability to like --}}
-            <i onclick="likeComment(event, '{{ ../forum._id }}', '{{ this._id }}')" class="fa fa-thumbs-up" aria-hidden="true"><p> {{ this.likes.length }}</p></i>
-            <i onclick="dislikeComment(event, '{{ ../forum._id }}', '{{ this._id }}')" class="fa fa-thumbs-down" aria-hidden="true"><p> {{ this.dislikes.length }}</p></i>
+            <!-- <i onclick="likeComment(event, '{{ this._id }}')" class="fa fa-thumbs-up" aria-hidden="true"><p> {{ this.likes.length }}</p></i>
+            <i onclick="dislikeComment(event, '{{ this._id }}')" class="fa fa-thumbs-down" aria-hidden="true"><p> {{ this.dislikes.length }}</p></i> -->
             {{!-- TODO view subthreads  --}}
             <i class="fa fa-comments" aria-hidden="true"></i>
         </li>
@@ -91,4 +107,7 @@
         </div>
     </form>
 </section>
+<script>
+    var forumId = "{{ forum._id }}";
+</script>
 <script src="/public/js/forum.js"></script>
