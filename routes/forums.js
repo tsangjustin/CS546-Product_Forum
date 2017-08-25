@@ -58,7 +58,7 @@ router.get('/', (req, res) => {
 // Form to create a new user
 router.get('/create', (req, res) => {
     let userInfo = req.locals || {}
-    console.log("user", req.user);
+    // console.log("user", req.user);
     // Must be authenticated to create forum
     if (!req.user) {
         // return res.status(403).send();
@@ -95,7 +95,7 @@ router.post('/', (req, res) => {
         .then((newForum) => {
             return res.redirect(`/forums/${newForum._id}`);
         }).catch((err) => {
-        console.log("hi", err);
+        // console.log("hi", err);
             return res.status(500).send();
         });
 });
@@ -144,12 +144,45 @@ router.get('/:forum_id/', (req, res) => {
 
 // Update specific fields of forum
 router.put('/:forum_id', (req, res) => {
+    if (!req.user) {
+        return res.status(401).json({ error: "Invalid session" });
+    }
+    let userId = req.user._id;
+    let forumId = req.params.forum_id;
+    let title = req.body.title;
+    if (title && title == "") {
+        title = null;
+    }
+    let content = req.body.content;
+    if (content && content == "") {
+        content = null;
+    }
+    let labels = req.body.labels;
+    if (labels) {
+        labels = labels.split(",").map(label => label.trim());
+    }
 
+    forumsData.updateForum(forumId, userId, title, content, labels)
+        .then((forumData) => {
+            return res.json({'title': title, 'content': content, 'labels': labels});
+        }).catch((err) => {
+            return res.status(500).json({ error: err });
+        });
 });
 
 // Delete a forum
 router.delete('/:forum_id', (req, res) => {
-
+    if (!req.user) {
+        return res.status(401).json({ error: "Invalid session" });
+    }
+    let userId = req.user._id;
+    let forumId = req.params.forum_id;
+    forumsData.deleteForum(forumId, userId)
+        .then((forumData) => {
+            return res.json({'redirect': '/'});
+        }).catch((err) => {
+            return res.status(404).render('error/404.handlebars');
+        });
 });
 
 // Get a list comments for forum id
@@ -215,7 +248,7 @@ router.get('/:forum_id/comments/:comment_id', (req, res) => {
 
 // Update a comment by id for specific post
 router.put('/:forum_id/comments/:comment_id', (req, res) => {
-
+    // TODO
 });
 
 // Shows all forum posts under specified clothing type

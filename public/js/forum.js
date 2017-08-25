@@ -87,3 +87,60 @@ function dislikeComment(event, commentId) {
         'dataType': 'json'
     })
 }
+
+// This works...
+function displayEdit() {
+    $("#editForum").toggle();
+    $("#viewForum").toggle();
+}
+
+$(document).ready(function() {
+    $("#updateForum").click(function (event) {
+        displayEdit();
+        let forumId = $("#forumId").val();
+        let title = $("#newForumTitle").val();
+        let content = $("#newForumContent").val();
+        let labels = $("#newForumLabels").val();
+        $.ajax({
+            'url': '/forums/' + forumId,
+            'type': 'PUT',
+            'success': function (res) {
+                console.log("Successfully updated forum " + forumId);
+                if (res.title) {
+                    $("#forumTitle").text(res.title);
+                }
+                if (res.content) {
+                    $("#forumContent").text(res.content);
+                }
+            },
+            'error': function (err) {
+                if (err) {
+                    console.log(err);
+                }
+            },
+            'data': {
+                "title": title,
+                "content": content,
+                "labels": labels
+            },
+            'dataType': 'json'
+        });
+    });
+    $("#deleteForum").click(function (event) {
+        let forumId = $("#forumId").val();
+        $.ajax({
+            'url': '/forums/' + forumId,
+            'type': 'DELETE',
+            'success': function (res) {
+                console.log("Successfully deleted forum " + forumId);
+                window.location = res.redirect;
+            },
+            'error': function (err) {
+                if (err) {
+                    console.log(err);
+                }
+            }
+        });
+    });
+
+});

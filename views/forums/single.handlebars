@@ -1,56 +1,119 @@
+{{!-- <script src="/public/js/forum.js"></script> --}}
+
+{{!-- Editing and deleting --}}
+{{#if isOwner}}
+<section>
+    <button onclick="displayEdit()" class="btn btn-default">
+        <i title="Edit Forum" class="fa fa-gear"></i>
+    </button>
+</section>
+{{/if}}
+
 {{!-- Post --}}
 <section class="row col-md-12">
     {{!-- TODO user avatar --}}
-    <h1> {{ forum.title }} </h1>
-    <p> {{{ contentToHtml forum.content }}} </p>
-    {{!-- TODO tags, clothing, likes, comments  --}}
-    <ul class="nav nav-pills">
-        <li>
-            <i id="forum-like-button" class="fa fa-thumbs-up" aria-hidden="true"></i>
-            <span class="badge">{{ forum.likes.length }}</span>
-        </li>
-        <li>
-            <i id="forum-dislike-button" class="fa fa-thumbs-down" aria-hidden="true"></i>
-            <span class="badge">{{ forum.dislikes.length }}</span>
-        </li>
-    </ul>
-    {{!-- TODO ability to like + comment --}}
+    <div id="viewForum">
+        <h1 id="forumTitle"> {{ forum.title }} </h1>
+        <p id="forumContent"> {{{ contentToHtml forum.content }}} </p>
+ 
+        <ul class="nav nav-pills">
+            <li>
+                <i id="forum-like-button" class="fa fa-thumbs-up" aria-hidden="true"></i>
+                <span class="badge">{{ forum.likes.length }}</span>
+            </li>
+            <li>
+                <i id="forum-dislike-button" class="fa fa-thumbs-down" aria-hidden="true"></i>
+                <span class="badge">{{ forum.dislikes.length }}</span>
+            </li>
+        </ul>
 
-    {{#if forum.label}}
-        <h2> Labels </h2>
-        <p> {{ forum.label }} </p>
-    {{/if}}
-    <h2> Clothing </h2>
-    <div class="row">
-    {{#each forum.clothing }}
-        <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
-                <a href="{{ this.url }}" target="_blank" alt="{{ this.name }}">
-                    <img src="{{ this.image }}" alt="{{ this.name }}" />
-                </a>
-                <div class="caption">
-                    <h3>{{ this.name }}</h3>
-                    <p>${{ this.price }} </p>
+        {{#if forum.label}}
+            <h2> Labels </h2>
+            <p> {{ forum.label }} </p>
+        {{/if}}
+        <h2> Clothing </h2>
+        <div class="row">
+        {{#each forum.clothing }}
+            <div class="col-sm-6 col-md-4">
+                <div class="thumbnail">
+                    <a href="{{ this.url }}" target="_blank" alt="{{ this.name }}">
+                        <img src="{{ this.image }}" alt="{{ this.name }}" />
+                    </a>
+                    <div class="caption">
+                        <h3>{{ this.name }}</h3>
+                        <p>${{ this.price }} </p>
+                    </div>
                 </div>
             </div>
+        {{ else }}
+            <div class="col-sm-12">
+                <li class="text-center list-group-item">
+                    <p>No clothing was tagged.</p>
+                </li>
+            </div>
+        {{/each}}
         </div>
-    {{ else }}
-        <div class="col-sm-12">
-            <li class="text-center list-group-item">
-                <p>No clothing was tagged.</p>
-            </li>
-        </div>
-    {{/each}}
+        {{!-- TODO tags, clothing, likes, comments  --}}
+        <i class="fa fa-thumbs-up" aria-hidden="true"></i><p> {{ forum.likes.length }}</p>
+        {{!-- TODO ability to like + comment --}}
+        <i class="fa fa-thumbs-down" aria-hidden="true"></i><p> {{ forum.dislikes.length }}</p>
     </div>
-    {{!-- TODO tags, clothing, likes, comments  --}}
-    <!-- <i id="forum-like-button" class="fa fa-thumbs-up" aria-hidden="true">
-        <p> {{ forum.likes.length }}</p>
-    </i> -->
-    {{!-- TODO ability to like + comment --}}
-    <!-- <i id="forum-dislike-button" class="fa fa-thumbs-down" aria-hidden="true">
-        <p> {{ forum.dislikes.length }}</p>
-    </i> -->
+
+    {{#if isOwner}}
+    <div id="editForum" style="display:none">
+
+        <input id="forumId" style="display:none" value="{{ forum._id }}"/>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button id="deleteForum" class="btn btn-default">Delete Forum</button>
+            </div>
+        </div> 
+
+        <div class="form-group">
+            <label for="newForumTitle" class="col-sm-2 control-label">
+                Title
+            </label>
+            <div class="col-sm-10">
+                <input id="newForumTitle" type="text" class="form-control" name="title" value="{{forum.title}}" required />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="newForumContent" class="col-sm-2 control-label">
+                Content
+            </label>
+            <div class="col-sm-10">
+                <div class="alert alert-info" role="alert">
+                    <p><strong>Supported features:</strong></p>
+                    <p>Tag clothing items with <strong>#clothing_name[clothing_url]</strong></p>
+                    <p>Tag user with <strong>@user</strong></p>
+                </div>
+                <textarea id="newForumContent" class="form-control ldt" name="content" required>{{forum.content}}</textarea>
+            </div>
+        </div>
+
+         <div class="form-group">
+            <label for="newForumLabels" class="col-sm-2 control-label">
+                labels
+            </label>
+            <div class="col-sm-10">
+                <div class="alert alert-info" role="alert">
+                    <p>Seperate labels by commas</p>
+                </div>
+                <input id="newForumLabels" type="text" class="form-control" name="labels" placeholder="label1,label2,label3" value={{forum.labels}} />
+            </div>
+        </div> 
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button id="updateForum" class="btn btn-default">Update Forum</button>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+
 </section>
+
 {{!-- Comments --}}
 <section class="row col-md-12">
     <h2> Comments </h2>
