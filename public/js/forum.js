@@ -37,50 +37,53 @@ function dislikeComment(event, forumId, commentId) {
     })
 }
 
+// This works...
 function displayEdit() {
     $("#editForum").toggle();
     $("#viewForum").toggle();
 }
 
-function updateForum(event, forumId) {
-    displayEdit();
-    console.log("Update");
-    let title = $("#newForumTitle").value;
-    let content = $("#newForumContent").value;
-    $.ajax({
-        'url': '/forums/' + forumId,
-        'type': 'PUT',
-        'success': function(res) {
-            // TODO
-            console.log("success")
-        },
-        'error': function(err) {
-            if (err) {
-                console.log(err);
-            }
-        },
-        'data': {
-            "forumId": forumId,
-            "title": title,
-            "content": content
-            // TODO clothing, labels
-        },
-        'dataType': 'json'
+$(document).ready(function() {
+    $("#updateForum").click(function (event) {
+        displayEdit();
+        let forumId = $("#forumId").val();
+        let title = $("#newForumTitle").val();
+        let content = $("#newForumContent").val();
+        let labels = null;
+        $.ajax({
+            'url': '/forums/' + forumId,
+            'type': 'PUT',
+            'success': function (res) {
+                // TODO How to make the info update without refresh?
+            },
+            'error': function (err) {
+                if (err) {
+                    console.log(err);
+                }
+            },
+            'data': {
+                "title": title,
+                "content": content,
+                "labels": labels
+            },
+            'dataType': 'json'
+        });
     });
-}
+    $("#deleteForum").click(function (event) {
+        let forumId = $("#forumId").val();
+        $.ajax({
+            'url': '/forums/' + forumId,
+            'type': 'DELETE',
+            'success': function (res) {
+                // TODO
+                console.log("success")
+            },
+            'error': function (err) {
+                if (err) {
+                    console.log(err);
+                }
+            }
+        });
+    });
 
-function deleteForum(event, forumId) {
-    $.ajax({
-        'url': '/forums/' + forumId,
-        'type': 'DELETE',
-        'success': function(res) {
-            // TODO
-            console.log("success")
-        },
-        'error': function(err) {
-            if (err) {
-                console.log(err);
-            }
-        }
-    });
-}
+});

@@ -89,7 +89,7 @@ router.get('/:forum_id/', (req, res) => {
 
 // Update specific fields of forum
 router.put('/:forum_id', (req, res) => {
-    // TODO Confirm user
+    // TODO Confirm user, confirm changes
     let forumId = req.params.forum_id;
     let title = req.body.title;
     let content = req.body.content;
@@ -98,7 +98,7 @@ router.put('/:forum_id', (req, res) => {
         .then((forumData) => {
             return res.redirect(`/forums/${forumId}`);
         }).catch((err) => {
-            return res.status(404).render('error/404.handlebars');
+            return res.redirect(`/forums/${forumId}`);
         });
 });
 
@@ -150,7 +150,7 @@ router.get('/:forum_id/comments/:comment_id', (req, res) => {
 
 // Update a comment by id for specific post
 router.put('/:forum_id/comments/:comment_id', (req, res) => {
-
+    // TODO
 });
 
 // Shows all forum posts under specified clothing type

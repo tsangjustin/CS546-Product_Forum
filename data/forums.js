@@ -132,10 +132,10 @@ let exportedMethods = {
             forumCollection
                 .deleteOne({_id: forumId})
                 .then(() => {
-                    console.log("Delete forum");
+                    console.log("Deleted forum");
                     return;
                 }).catch((err) => {
-                    return Promise.reject("Could not update forum");
+                    return Promise.reject("Could not delete forum");
                 });
         });
     },
