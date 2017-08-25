@@ -150,11 +150,21 @@ router.put('/:forum_id', (req, res) => {
     let userId = req.user._id;
     let forumId = req.params.forum_id;
     let title = req.body.title;
+    if (title && title == "") {
+        title = null;
+    }
     let content = req.body.content;
+    if (content && content == "") {
+        content = null;
+    }
     let labels = req.body.labels;
+    if (labels) {
+        labels = labels.split(",").map(label => label.trim());
+    }
+
     forumsData.updateForum(forumId, userId, title, content, labels)
         .then((forumData) => {
-            return res.json({});
+            return res.json({'title': title, 'content': content, 'labels': labels});
         }).catch((err) => {
             return res.status(500).json({ error: err });
         });

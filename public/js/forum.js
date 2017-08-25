@@ -105,8 +105,12 @@ $(document).ready(function() {
             'type': 'PUT',
             'success': function (res) {
                 console.log("Successfully updated forum " + forumId);
-                $("#forumTitle").text(title);
-                $("#forumContent").text(content);
+                if (res.title) {
+                    $("#forumTitle").text(res.title);
+                }
+                if (res.content) {
+                    $("#forumContent").text(res.content);
+                }
             },
             'error': function (err) {
                 if (err) {

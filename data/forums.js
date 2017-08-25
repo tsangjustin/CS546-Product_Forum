@@ -103,6 +103,14 @@ let exportedMethods = {
             return Promise.reject('Invalid label(s) for forum creation')
         }
 
+        console.log("DATA UPDATE FORUM")
+        console.log(title, content, labels)
+        // Check that some change was made
+        if (!title && !content && !labels) {
+            console.log("Nothing to change")
+            return Promise.reject('No updates made.');
+        }
+
         // Only update parameters that have been changed
         updateParam = {}
         if (title) {
@@ -114,6 +122,7 @@ let exportedMethods = {
         if (labels) {
             updateParam["labels"] = labels;
         }
+        console.log(updateParam)
         return forums().then((forumCollection) => {
             forumCollection
                 .update(
