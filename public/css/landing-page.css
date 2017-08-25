@@ -9,3 +9,7 @@
 .list-group-item.active .list-group-item-text.badge:hover {
 	color: #aaa;
 }
+
+.navbar-text {
+    color: #727272;
+}
