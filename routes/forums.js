@@ -55,7 +55,7 @@ router.get('/', (req, res) => {
     });
 });
 
-// Form to create a new user
+// Form to create a new forum
 router.get('/create', (req, res) => {
     let userInfo = req.locals || {}
     // console.log("user", req.user);
@@ -63,6 +63,10 @@ router.get('/create', (req, res) => {
     if (!req.user) {
         // return res.status(403).send();
         return res.redirect('/log_in');
+    }
+
+    if (req.query.c_name && req.query.c_url) {
+        userInfo.defaultText = `#${req.query.c_name}[${req.query.c_url}]`;
     }
 
     return res.render('forums/create', userInfo);

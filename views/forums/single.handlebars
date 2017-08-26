@@ -36,6 +36,9 @@
         {{#each forum.clothing }}
             <div class="col-sm-6 col-md-4">
                 <div class="thumbnail">
+                    <a href="/forums/create?c_name={{ this.name }}&c_url={{ this.url }}" class="badge">
+						New <i class="fa fa-plus landing-header-icon" aria-hidden="true"></i>
+					</a>
                     <a href="{{ this.url }}" target="_blank" alt="{{ this.name }}">
                         <img src="{{ this.image }}" alt="{{ this.name }}" />
                     </a>
