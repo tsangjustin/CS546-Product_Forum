@@ -75,8 +75,8 @@ router.post('/', (req, res) => {
         return res.redirect('/log_in');
     }
     let userId = req.user._id;
-    let title = req.body.title;
-    let content = req.body.content;
+    let title = xss(req.body.title);
+    let content = xss(req.body.content);
     let labels = req.body.labels;
     const clothing = req.body.clothing || [];
 
@@ -143,7 +143,7 @@ router.get('/:forum_id/', (req, res) => {
 
 
 // Update specific fields of forum
-router.put('/:forum_id', (req, res) => {
+router.put('/:forum_id/', (req, res) => {
     if (!req.user) {
         return res.status(401).json({ error: "Invalid session" });
     }
@@ -171,7 +171,7 @@ router.put('/:forum_id', (req, res) => {
 });
 
 // Delete a forum
-router.delete('/:forum_id', (req, res) => {
+router.delete('/:forum_id/', (req, res) => {
     if (!req.user) {
         return res.status(401).json({ error: "Invalid session" });
     }
@@ -190,7 +190,7 @@ router.get('/:forum_id/comments', (req, res) => {
 
 });
 
-router.put('/:forum_id/like', (req, res) => {
+router.put('/:forum_id/like/', (req, res) => {
     if (!req.user) {
         return res.status(401).json({error: "Invalid session"});
     }
@@ -205,7 +205,7 @@ router.put('/:forum_id/like', (req, res) => {
     });
 });
 
-router.put('/:forum_id/dislike', (req, res) => {
+router.put('/:forum_id/dislike/', (req, res) => {
     if (!req.user) {
         return res.status(401).json({error: "Invalid session"});
     }
@@ -221,7 +221,7 @@ router.put('/:forum_id/dislike', (req, res) => {
 });
 
 // Add comment to forum
-router.post('/:forum_id/comments', (req, res) => {
+router.post('/:forum_id/comments/', (req, res) => {
     // Must be signed in to submit comment
     if (!req.user) {
         // TODO what should this behavior be?
@@ -229,7 +229,7 @@ router.post('/:forum_id/comments', (req, res) => {
     }
     const forumId = req.params.forum_id;
     const userId = req.user._id;
-    const comment = req.body.comment;
+    const comment = xss(req.body.comment);
 
     forumsData.addComment(forumId, userId, comment)
         .then(() => {
@@ -262,7 +262,7 @@ router.post('/:clothing_type', (req, res) => {
 });
 
 // Update a comment by id for specific post
-router.put('/:forum_id/comments/:comment_id/like', (req, res) => {
+router.put('/:forum_id/comments/:comment_id/like/', (req, res) => {
     if (!req.user) {
         return res.status(401).json({error: "Invalid session"});
     }
@@ -278,7 +278,7 @@ router.put('/:forum_id/comments/:comment_id/like', (req, res) => {
     });
 });
 
-router.put('/:forum_id/comments/:comment_id/dislike', (req, res) => {
+router.put('/:forum_id/comments/:comment_id/dislike/', (req, res) => {
     if (!req.user) {
         return res.status(401).json({error: "Invalid session"});
     }
