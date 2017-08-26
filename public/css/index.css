@@ -51,6 +51,19 @@ img {
 	margin-bottom: 20px;
 }
 
+.marginLeft {
+	margin-left: 10px;
+}
+
 .textRight {
 	text-align: right;
+}
+
+.floatRight {
+	float: right;
+}
+
+.hoverLink:hover {
+	color: #337ab7;
+	cursor: pointer;
 }

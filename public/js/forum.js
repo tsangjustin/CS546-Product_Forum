@@ -85,32 +85,24 @@ function dislikeComment(event, commentId) {
 }
 
 function editComment(commentId) {
-    console.log(commentId)
-    $.ajax({
-        'url': '/forums/' + forumId + '/comments/' + commentId + "/edit",
-        'type': 'GET',
-        'success': function(res) {
-            $("#" + commentId).html(res);
-        },
-        'error': function(err) {
-            if (err) {
-                // window.location.href = '/log_in';
-                console.log(err);
-            }
-        },
-        'dataType': 'html'
-    });
+    $("#" + commentId + " .view").hide();
+    $("#" + commentId + " form").show();
 }
 
 function submitEditComment(commentId) {
-    console.log(commentId)
-    var editedText = $('#edit-' + commentId).val();
+    console.log(commentId);
+    $('#' + commentId + " input").attr("disabled", "disabled");
+    
+    var editedText = $('#' + commentId + " textarea").val();
     var queryString = "comment=" + encodeURIComponent(editedText);
     $.ajax({
         'url': '/forums/' + forumId + '/comments/' + commentId + '?'  + queryString,
         'type': 'PUT',
         'success': function(res) {
-            $("#" + commentId).html(res);
+            $('#' + commentId + " .content").html(res.content);
+            $("#" + commentId + " .view").show();
+            $("#" + commentId + " form").hide();
+            $('#' + commentId + " input").removeAttr("disabled");
         },
         'error': function(err) {
             if (err) {
@@ -118,25 +110,13 @@ function submitEditComment(commentId) {
                 console.log(err);
             }
         },
-        'dataType': 'html'
+        'dataType': 'json'
     });
 }
 
 function cancelEditComment(commentId) {
-    $.ajax({
-        'url': '/forums/' + forumId + '/comments/' + commentId,
-        'type': 'GET',
-        'success': function(res) {
-            $("#" + commentId).html(res);
-        },
-        'error': function(err) {
-            if (err) {
-                // window.location.href = '/log_in';
-                console.log(err);
-            }
-        },
-        'dataType': 'html'
-    });
+    $("#" + commentId + " .view").show();
+    $("#" + commentId + " form").hide();
 }
 
 function deleteComment(commentId) {
@@ -158,13 +138,29 @@ function deleteComment(commentId) {
 
 // This works...
 function displayEdit() {
-    $("#editForum").toggle();
-    $("#viewForum").toggle();
+    $("#editForum").show();
+    $("#viewForum").hide();
+    $("#loadingForum").hide();
+}
+function hideEdit() {
+    $("#editForum").hide();
+    $("#viewForum").show();
+    $("#loadingForum").hide();
+}
+function displayLoading() {
+    $("#editForum").hide();
+    $("#viewForum").hide();
+    $("#loadingForum").show();
 }
 
 $(document).ready(function() {
+    $("#cancelUpdateForum").click(function (event) {
+        event.preventDefault();
+        hideEdit();
+    });
     $("#updateForum").click(function (event) {
-        displayEdit();
+        event.preventDefault();
+        displayLoading();
         let forumId = $("#forumId").val();
         let title = $("#newForumTitle").val();
         let content = $("#newForumContent").val();
@@ -173,12 +169,33 @@ $(document).ready(function() {
             'url': '/forums/' + forumId,
             'type': 'PUT',
             'success': function (res) {
+                hideEdit();
                 console.log("Successfully updated forum " + forumId);
-                if (res.title) {
-                    $("#forumTitle").text(res.title);
-                }
-                if (res.content) {
-                    $("#forumContent").text(res.content);
+                $("#forumTitle").text(res.title);
+                $("#forumContent").html(res.content);
+                $("#forumClothing").html(
+                    res.clothing.length ? '' : (
+                        '<div class="col-sm-12">\
+                            <li class="text-center list-group-item">\
+                                <p>No clothing was tagged.</p>\
+                            </li>\
+                        </div>'
+                    )
+                );
+                for (cloth of res.clothing) {
+                    $("#forumClothing").append(
+                        '<div class="col-sm-6 col-md-4">\
+                            <div class="thumbnail">\
+                                <a href="' + cloth.url + '" target="_blank" alt="' + cloth.name + '">\
+                                    <img src="' + cloth.image + '" alt="' + cloth.name + '" />\
+                                </a>\
+                                <div class="caption">\
+                                    <h3>' + cloth.name + '</h3>\
+                                    <p>$' + cloth.price + '</p>\
+                                </div>\
+                            </div>\
+                        </div>'
+                    )
                 }
             },
             'error': function (err) {
@@ -195,6 +212,7 @@ $(document).ready(function() {
         });
     });
     $("#deleteForum").click(function (event) {
+        event.preventDefault();
         let forumId = $("#forumId").val();
         $.ajax({
             'url': '/forums/' + forumId,
