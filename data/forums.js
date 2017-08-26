@@ -486,6 +486,59 @@ let exportedMethods = {
             return forumCollection.find(searchQuery).toArray();
         });
     },
+    editComment(forumId, commentId, userId, newText) {
+        return new Promise((fulfill, reject) => {
+            if (!isValidString(forumId)) {
+                return reject('Invalid forum id');
+            }
+            if (!isValidString(commentId)) {
+                return reject('Invalid comment id');
+            }
+            if (!isValidString(userId)) {
+                return reject('Invalid user id');
+            }
+            if (!isValidString(newText)) {
+                return reject('Invalid comment');
+            }
+            forums().then((forumColl) => {
+                forumColl.update(
+                    {
+                        _id: forumId,
+                        "comments._id": commentId,
+                        "comments.user": userId,
+                    },
+                    {
+                        "$set": {
+                            "comments.$.content": newText,
+                        },
+                    },
+                    (err, updateInfo) => {
+                        if (err) {
+                            return reject(err);
+                        }
+                        const result = updateInfo.result;
+        				if (result.n < 1) {
+        					return reject('Unable find comment with matching comment id');
+        				}
+        				if (result.nModified < 1) {
+        					return reject('Fail to update comment');
+        				}
+                        exportedMethods.getForumById(forumId).then((forumInfo) => {
+                            for (let c=0,lenComments=forumInfo.comments.length; c < lenComments; ++c) {
+                                const currComment = forumInfo.comments[c];
+                                if ((currComment._id === commentId) && (currComment.user === userId)) {
+                                    return fulfill(currComment);
+                                }
+                            }
+                            return reject('Fail to find updated comment')
+                        }).catch((err) => {
+                            return reject(err);
+                        })
+                    }
+                );
+            });
+        });
+    },
     deleteComment(forumId, commentId, userId) {
         return new Promise((fulfill, reject) => {
             if (!isValidString(forumId)) {
