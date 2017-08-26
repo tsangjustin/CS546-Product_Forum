@@ -301,8 +301,31 @@ router.get('/:forum_id/comments/:comment_id/edit/', (req, res) => {
 });
 
 // Update a comment by id for specific post
-router.put('/:forum_id/comments/:comment_id', (req, res) => {
-    // TODO
+router.put('/:forum_id/comments/:comment_id/', (req, res) => {
+    if (!req.user) {
+        return res.sendStatus(401);
+    }
+    const forumId = req.params.forum_id;
+    const commentId = req.params.comment_id;
+    const userId = req.user._id;
+    const newText = xss(req.query.comment);
+    console.log(req.query);
+    forumsData.editComment(forumId, commentId, userId, newText).then((updatedComment) => {
+        updatedComment.isOwner = true;
+        updatedComment.layout = false;
+        console.log(updatedComment)
+        updatedComment.helpers = {
+            contentToHtml: (content) => {
+                return xss(content)
+                .replace(/#([^\[]+)\[([^\]]+)\]/g, (match, name, url) => `<a target='_blank' alt='${name}' href='${url}'>${name}</a>`)
+                .replace(/@([\w-]+)/g, (match, username) => `<a target='_blank' alt='${username}' href='#'>${username}</a>`);
+            }
+        }
+        return res.render('comments/index.handlebars', updatedComment);
+    }).catch((err) => {
+        console.log(err);
+        return res.sendStatus(500);
+    });
 });
 
 // Shows all forum posts under specified clothing type
