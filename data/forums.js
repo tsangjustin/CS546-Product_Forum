@@ -44,7 +44,7 @@ let exportedMethods = {
         return forums().then((forumCollection) => {
             return forumCollection.findOne({_id: id}).then((forum) => {
                 if (!forum) throw "Forum not found";
-                console.log(forum);
+                // console.log(forum);
                 return forum;
             });
         });

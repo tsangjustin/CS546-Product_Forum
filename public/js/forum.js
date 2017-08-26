@@ -85,6 +85,7 @@ function dislikeComment(event, commentId) {
 }
 
 function editComment(commentId) {
+    console.log(commentId)
     $.ajax({
         'url': '/forums/' + forumId + '/comments/' + commentId + "/edit",
         'type': 'GET',
@@ -102,6 +103,7 @@ function editComment(commentId) {
 }
 
 function submitEditComment(commentId) {
+    console.log(commentId)
     var editedText = $('#edit-' + commentId).val();
     var queryString = "comment=" + encodeURIComponent(editedText);
     $.ajax({
