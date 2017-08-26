@@ -28,9 +28,15 @@ function getClothingInfo(content) {
             url: match[2]
         }));
     return Promise.all(
-        matches.map(match => clothingData.retrieveClothingInfo(match.url))
+        matches.map(match => 
+            clothingData.retrieveClothingInfo(match.url)
+            .catch(e => {
+                console.log(e);
+                return undefined;
+            })
+        )
     ).then(clothing => {
-        return clothing.map((cloth, index) => Object.assign(cloth, matches[index]));
+        return clothing.filter(x => x).map((cloth, index) => Object.assign(cloth, matches[index]));
     });
 }
 
@@ -119,18 +125,24 @@ let exportedMethods = {
         if (labels) {
             updateParam["labels"] = labels;
         }
-        return forums().then((forumCollection) => {
-            forumCollection
-                .update(
-                    {_id: forumId,
-                    user: userId},
-                    { $set: updateParam}
-                ).then((forumInformation) => {
-                    console.log("Updated forum");
-                    return exportedMethods.getForumById(forumId);
-                }).catch((err) => {
-                    return Promise.reject("Could not update forum");
-                });
+        return getClothingInfo(content || "")
+        .then(clothing => {
+            if (content) {
+                updateParam["clothing"] = clothing;
+            }
+            return forums().then((forumCollection) => {
+                return forumCollection
+                    .update(
+                        {_id: forumId,
+                        user: userId},
+                        { $set: updateParam}
+                    ).then((forumInformation) => {
+                        console.log("Updated forum");
+                        return exportedMethods.getForumById(forumId);
+                    }).catch((err) => {
+                        return Promise.reject("Could not update forum");
+                    });
+            });
         });
     },
     deleteForum(forumId, userId) {

@@ -1,28 +1,27 @@
 {{!-- <script src="/public/js/forum.js"></script> --}}
 
-{{!-- Editing and deleting --}}
-{{#if isOwner}}
-<section>
-    <button onclick="displayEdit()" class="btn btn-default">
-        <i title="Edit Forum" class="fa fa-gear"></i>
-    </button>
-</section>
-{{/if}}
-
 {{!-- Post --}}
-<section class="row col-md-12">
+<section class="row">
     {{!-- TODO user avatar --}}
     <div id="viewForum">
-        <h1 id="forumTitle"> {{ forum.title }} </h1>
+        <h1>
+            {{!-- Editing and deleting --}}
+            {{#if isOwner}}
+                <button onclick="displayEdit()" class="btn btn-default">
+                    <i title="Edit Forum" class="fa fa-gear"></i>
+                </button>
+            {{/if}}
+            <span id="forumTitle">{{ forum.title }}</span>
+        </h1>
         <p id="forumContent"> {{{ contentToHtml forum.content }}} </p>
 
         <ul class="nav nav-pills">
             <li>
-                <i id="forum-like-button" class="fa fa-thumbs-up" aria-hidden="true"></i>
+                <i id="forum-like-button" class="fa fa-thumbs-up hoverLink" aria-hidden="true"></i>
                 <span class="badge">{{ forum.likes.length }}</span>
             </li>
             <li>
-                <i id="forum-dislike-button" class="fa fa-thumbs-down" aria-hidden="true"></i>
+                <i id="forum-dislike-button" class="fa fa-thumbs-down marginLeft hoverLink" aria-hidden="true"></i>
                 <span class="badge">{{ forum.dislikes.length }}</span>
             </li>
         </ul>
@@ -32,7 +31,7 @@
             <p> {{ forum.label }} </p>
         {{/if}}
         <h2> Clothing </h2>
-        <div class="row">
+        <div class="row" id="forumClothing">
         {{#each forum.clothing }}
             <div class="col-sm-6 col-md-4">
                 <div class="thumbnail">
@@ -60,55 +59,57 @@
     </div>
 
     {{#if isOwner}}
-    <div id="editForum" style="display:none">
+    <div id="loadingForum" style="display: none" class="col-md-12">
+        <div class="alert alert-warning" role="alert">Updating...</div>
+    </div>
+    <div id="editForum" style="display: none" class="col-md-10">
+        <form class="form-horizontal">
 
-        <input id="forumId" style="display:none" value="{{ forum._id }}"/>
+            <input id="forumId" type="hidden" value="{{ forum._id }}"/>
 
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button id="deleteForum" class="btn btn-default">Delete Forum</button>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="newForumTitle" class="col-sm-2 control-label">
-                Title
-            </label>
-            <div class="col-sm-10">
-                <input id="newForumTitle" type="text" class="form-control" name="title" value="{{forum.title}}" required />
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="newForumContent" class="col-sm-2 control-label">
-                Content
-            </label>
-            <div class="col-sm-10">
-                <div class="alert alert-info" role="alert">
-                    <p><strong>Supported features:</strong></p>
-                    <p>Tag clothing items with <strong>#clothing_name[clothing_url]</strong></p>
-                    <p>Tag user with <strong>@user</strong></p>
+            <div class="form-group">
+                <label for="newForumTitle" class="col-sm-2 control-label">
+                    Title
+                </label>
+                <div class="col-sm-10">
+                    <input id="newForumTitle" type="text" class="form-control" name="title" value="{{forum.title}}" required />
                 </div>
-                <textarea id="newForumContent" class="form-control ldt" name="content" required>{{forum.content}}</textarea>
             </div>
-        </div>
 
-         <div class="form-group">
-            <label for="newForumLabels" class="col-sm-2 control-label">
-                labels
-            </label>
-            <div class="col-sm-10">
-                <div class="alert alert-info" role="alert">
-                    <p>Seperate labels by commas</p>
+            <div class="form-group">
+                <label for="newForumContent" class="col-sm-2 control-label">
+                    Content
+                </label>
+                <div class="col-sm-10">
+                    <div class="alert alert-info" role="alert">
+                        <p><strong>Supported features:</strong></p>
+                        <p>Tag clothing items with <strong>#clothing_name[clothing_url]</strong></p>
+                        <p>Tag user with <strong>@user</strong></p>
+                    </div>
+                    <textarea id="newForumContent" class="form-control ldt" name="content" required>{{forum.content}}</textarea>
                 </div>
-                <input id="newForumLabels" type="text" class="form-control" name="labels" placeholder="label1,label2,label3" value={{forum.labels}} />
             </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button id="updateForum" class="btn btn-default">Update Forum</button>
+
+            <div class="form-group">
+                <label for="newForumLabels" class="col-sm-2 control-label">
+                    labels
+                </label>
+                <div class="col-sm-10">
+                    <div class="alert alert-info" role="alert">
+                        <p>Seperate labels by commas</p>
+                    </div>
+                    <input id="newForumLabels" type="text" class="form-control" name="labels" placeholder="label1,label2,label3" value={{forum.labels}} />
+                </div>
             </div>
-        </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button id="updateForum" class="btn btn-default">Update Forum</button>
+                    <button id="cancelUpdateForum" class="btn btn-default">Cancel</button>
+                    <button id="deleteForum" class="btn btn-danger floatRight">Delete Forum</button>
+                </div>
+            </div>
+        </form>
     </div>
     {{/if}}
 
@@ -121,30 +122,50 @@
     <ul class="list-group">
     {{#each forum.comments }}
         <li id="{{ this._id }}" class="list-group-item">
-            {{!-- TODO user avatar of person who commented --}}
-            <p> {{ this.datePosted }} </p>
-            <p> {{{ contentToHtml this.content }}} </p>
-            <ul class="nav nav-pills">
-                <li>
-                    <i onclick="likeComment(event, '{{ this._id }}')" class="fa fa-thumbs-up" aria-hidden="true"></i>
-                    <span class="badge">{{ this.likes.length }}</span>
-                </li>
-                <li>
-                    <i onclick="dislikeComment(event, '{{ this._id }}')" class="fa fa-thumbs-down" aria-hidden="true"></i>
-                    <span class="badge">{{ this.dislikes.length }}</span>
-                </li>
-            </ul>
-            {{#if this.isOwner}}
-            <span>
-                <i onclick="editComment('{{ this._id }}')" class="fa fa-pencil" aria-hidden="true"></i>
-                <i onclick="deleteComment('{{ this._id }}')" class="fa fa-trash-o" aria-hidden="true"></i>
+            <span class="view">
+                <span class="floatRight">
+                    {{#if this.isOwner}}
+                    <span>
+                        <i onclick="editComment('{{ this._id }}')" class="fa fa-pencil hoverLink" aria-hidden="true"></i>
+                        <i onclick="deleteComment('{{ this._id }}')" class="fa fa-trash-o marginLeft hoverLink" aria-hidden="true"></i>
+                    </span>
+                    {{/if}}
+                    <i class="fa fa-comments marginLeft hoverLink" aria-hidden="true"></i>
+                </span>
+                {{!-- TODO user avatar of person who commented --}}
+                <p> {{ this.datePosted }} </p>
+                <p class="content"> {{{ contentToHtml this.content }}} </p>
+                <ul class="nav nav-pills">
+                    <li>
+                        <i onclick="likeComment(event, '{{ this._id }}')" class="fa fa-thumbs-up hoverLink" aria-hidden="true"></i>
+                        <span class="badge">{{ this.likes.length }}</span>
+                    </li>
+                    <li>
+                        <i onclick="dislikeComment(event, '{{ this._id }}')" class="fa fa-thumbs-down marginLeft hoverLink" aria-hidden="true"></i>
+                        <span class="badge">{{ this.dislikes.length }}</span>
+                    </li>
+                </ul>
             </span>
+            {{#if this.isOwner}}
+                <form class="form-horizontal" style="display:none;" onSubmit="return false;">
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <textarea class="form-control ldt"
+                                aria-label="New Comment"
+                                name="comment"
+                                placeholder="Checkout these #Suede Sneakers[http://www.hm.com/us/product/72665]&#10;Credit: @Dillon"
+                                required>{{ content }}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <input type="button" onclick="submitEditComment('{{ _id }}')" class="btn btn-default" value="Update" />
+                            <input type="button" onclick="cancelEditComment('{{ _id }}')" class="btn btn-default" value="Cancel" />
+                        </div>
+                    </div>
+                </form>
             {{/if}}
-            {{!-- TODO ability to like --}}
-            <!-- <i onclick="likeComment(event, '{{ this._id }}')" class="fa fa-thumbs-up" aria-hidden="true"><p> {{ this.likes.length }}</p></i>
-            <i onclick="dislikeComment(event, '{{ this._id }}')" class="fa fa-thumbs-down" aria-hidden="true"><p> {{ this.dislikes.length }}</p></i> -->
             {{!-- TODO view subthreads  --}}
-            <i class="fa fa-comments" aria-hidden="true"></i>
         </li>
     {{ else }}
         <li class="text-center list-group-item">
