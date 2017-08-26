@@ -102,7 +102,22 @@ function editComment(commentId) {
 }
 
 function submitEditComment(commentId) {
-
+    var editedText = $('#edit-' + commentId).val();
+    var queryString = "comment=" + encodeURIComponent(editedText);
+    $.ajax({
+        'url': '/forums/' + forumId + '/comments/' + commentId + '?'  + queryString,
+        'type': 'PUT',
+        'success': function(res) {
+            $("#" + commentId).html(res);
+        },
+        'error': function(err) {
+            if (err) {
+                // window.location.href = '/log_in';
+                console.log(err);
+            }
+        },
+        'dataType': 'html'
+    });
 }
 
 function cancelEditComment(commentId) {
