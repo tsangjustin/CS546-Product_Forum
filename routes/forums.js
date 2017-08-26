@@ -125,9 +125,13 @@ router.get('/:forum_id/', (req, res) => {
     let info = req.locals;
     forumsData.getForumById(req.params.forum_id)
         .then((forumData) => {
+            forumData.comments.map((comment) => {
+                comment.isOwner = (comment.user === (req.user || {})._id);
+                return comment;
+            });
             info.forum = forumData;
             info.isOwner = (forumData.user === (req.user || {})._id);
-            console.log(info);
+            console.log(JSON.stringify(info));
             info.helpers = {
                 contentToHtml: (content) => {
                     return xss(content)
@@ -137,6 +141,7 @@ router.get('/:forum_id/', (req, res) => {
             }
             return res.render('forums/single', info);
         }).catch((err) => {
+            console.log(err)
             return res.status(404).render('error/404.handlebars');
         });
 });
@@ -259,6 +264,20 @@ router.get('/:clothing_type', (req, res) => {
 // Create a new forum under specific clothing type
 router.post('/:clothing_type', (req, res) => {
 
+});
+
+router.delete('/:forum_id/comments/:comment_id/', (req, res) => {
+    if (!req.user) {
+        return res.status(401).json({error: "Invalid session"});
+    }
+    const userId = req.user._id;
+    const forumId = req.params.forum_id;
+    const commentId = req.params.comment_id;
+    forumsData.deleteComment(forumId, commentId, userId).then((deletedComment) => {
+        return res.json({commentId: commentId});
+    }).catch((err) => {
+        return res.status(500).json({error: err});
+    });
 });
 
 // Update a comment by id for specific post
