@@ -84,14 +84,12 @@ function dislikeComment(event, commentId) {
     })
 }
 
-function editComment(event, commentId) {
+function editComment(commentId) {
     $.ajax({
-        'url': '/forums/' + forumId + '/comments/' + commentId + "/dislike",
-        'type': 'PUT',
+        'url': '/forums/' + forumId + '/comments/' + commentId + "/edit",
+        'type': 'GET',
         'success': function(res) {
-            console.log($(event.target).siblings('span'));
-            $(event.target).siblings('span').text(res.dislikes.length);
-            $(event.target).closest('li').siblings('li').children('span').text(res.likes.length);
+            $("#" + commentId).html(res);
         },
         'error': function(err) {
             if (err) {
@@ -99,7 +97,28 @@ function editComment(event, commentId) {
                 console.log(err);
             }
         },
-        'dataType': 'json'
+        'dataType': 'html'
+    });
+}
+
+function submitEditComment(commentId) {
+
+}
+
+function cancelEditComment(commentId) {
+    $.ajax({
+        'url': '/forums/' + forumId + '/comments/' + commentId,
+        'type': 'GET',
+        'success': function(res) {
+            $("#" + commentId).html(res);
+        },
+        'error': function(err) {
+            if (err) {
+                // window.location.href = '/log_in';
+                console.log(err);
+            }
+        },
+        'dataType': 'html'
     });
 }
 

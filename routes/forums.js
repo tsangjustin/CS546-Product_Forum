@@ -247,8 +247,57 @@ router.post('/:forum_id/comments', (req, res) => {
 });
 
 // Get a comment by id for specific post
-router.get('/:forum_id/comments/:comment_id', (req, res) => {
+router.get('/:forum_id/comments/:comment_id/', (req, res) => {
+    if (!req.user) {
+        return res.sendStatus(401);
+    }
+    const forumId = req.params.forum_id;
+    const commentId = req.params.comment_id;
+    forumsData.getForumById(forumId).then((forumData) => {
+        for (let c=0, lenComments=forumData.comments.length; c < lenComments; ++c) {
+            const currComment = forumData.comments[c];
+            if ((currComment._id === commentId) && (currComment.user === req.user._id)) {
+                currComment.isOwner = true;
+                currComment.layout = false;
+                currComment.helpers = {
+                    contentToHtml: (content) => {
+                        return xss(content)
+                        .replace(/#([^\[]+)\[([^\]]+)\]/g, (match, name, url) => `<a target='_blank' alt='${name}' href='${url}'>${name}</a>`)
+                        .replace(/@([\w-]+)/g, (match, username) => `<a target='_blank' alt='${username}' href='#'>${username}</a>`);
+                    }
+                }
+                console.log(currComment);
+                return res.render('comments/index.handlebars', currComment);
+            }
+        }
+        return res.sendStatus(500);
+    }).catch((err) => {
+        console.log(err);
+        return res.sendStatus(500);
+    });
+});
 
+// Get a comment by id for specific post
+router.get('/:forum_id/comments/:comment_id/edit/', (req, res) => {
+    if (!req.user) {
+        return res.sendStatus(401);
+    }
+    const forumId = req.params.forum_id;
+    const commentId = req.params.comment_id;
+    forumsData.getForumById(forumId).then((forumData) => {
+        for (let c=0, lenComments=forumData.comments.length; c < lenComments; ++c) {
+            const currComment = forumData.comments[c];
+            if ((currComment._id === commentId) && (currComment.user === req.user._id)) {
+                console.log(currComment);
+                currComment.layout = false;
+                return res.render('comments/editComment.handlebars', currComment);
+            }
+        }
+        return res.sendStatus(500);
+    }).catch((err) => {
+        console.log(err);
+        return res.sendStatus(500);
+    });
 });
 
 // Update a comment by id for specific post
