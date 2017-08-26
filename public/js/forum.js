@@ -47,8 +47,6 @@ function redirectLogin() {
 }
 
 function likeComment(event, commentId) {
-    console.log(forumId);
-    console.log(commentId);
     $.ajax({
         'url': '/forums/' + forumId + '/comments/' + commentId + "/like",
         'type': 'PUT',
@@ -68,8 +66,6 @@ function likeComment(event, commentId) {
 }
 
 function dislikeComment(event, commentId) {
-    console.log(forumId);
-    console.log(commentId);
     $.ajax({
         'url': '/forums/' + forumId + '/comments/' + commentId + "/dislike",
         'type': 'PUT',
@@ -86,6 +82,42 @@ function dislikeComment(event, commentId) {
         },
         'dataType': 'json'
     })
+}
+
+function editComment(event, commentId) {
+    $.ajax({
+        'url': '/forums/' + forumId + '/comments/' + commentId + "/dislike",
+        'type': 'PUT',
+        'success': function(res) {
+            console.log($(event.target).siblings('span'));
+            $(event.target).siblings('span').text(res.dislikes.length);
+            $(event.target).closest('li').siblings('li').children('span').text(res.likes.length);
+        },
+        'error': function(err) {
+            if (err) {
+                // window.location.href = '/log_in';
+                console.log(err);
+            }
+        },
+        'dataType': 'json'
+    });
+}
+
+function deleteComment(commentId) {
+    $.ajax({
+        'url': '/forums/' + forumId + '/comments/' + commentId,
+        'type': 'DELETE',
+        'success': function(res) {
+            $("#" + commentId).remove();
+        },
+        'error': function(err) {
+            if (err) {
+                // window.location.href = '/log_in';
+                console.log(err);
+            }
+        },
+        'dataType': 'json'
+    });
 }
 
 // This works...

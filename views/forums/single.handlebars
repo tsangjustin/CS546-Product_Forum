@@ -134,6 +134,12 @@
                     <span class="badge">{{ this.dislikes.length }}</span>
                 </li>
             </ul>
+            {{#if this.isOwner}}
+            <span>
+                <i onclick="editComment('{{ this._id }}')" class="fa fa-pencil" aria-hidden="true"></i>
+                <i onclick="deleteComment('{{ this._id }}')" class="fa fa-trash-o" aria-hidden="true"></i>
+            </span>
+            {{/if}}
             {{!-- TODO ability to like --}}
             <!-- <i onclick="likeComment(event, '{{ this._id }}')" class="fa fa-thumbs-up" aria-hidden="true"><p> {{ this.likes.length }}</p></i>
             <i onclick="dislikeComment(event, '{{ this._id }}')" class="fa fa-thumbs-down" aria-hidden="true"><p> {{ this.dislikes.length }}</p></i> -->
