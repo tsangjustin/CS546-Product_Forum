@@ -1,30 +1,38 @@
 <section class="marginTop">
-    <form>
-        <label for="searchBox"><i class="fa fa-search" aria-hidden="true"></i></label>
-        <input id="searchBox" type="text" placeholder="Search by title, tag, or brand" />
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-1 control-label" for="searchBox"><i class="fa fa-search" aria-hidden="true"></i></label>
+            <div class="col-sm-10">
+                <input class="form-control" id="searchBox" type="text" placeholder="Search by title, tag, or brand" />
+            </div>
+        </div>
         {{#if price}}
-            <span>
-                <label for="prices">price</label>
-                <span id="prices" class="inputitem">
-                {{#each price}}
-                    <input type="checkbox" name="prices[]" id="price-{{ @key }}" value="{{ @key }}" />
-                    <label for="price-{{ @key }}">{{ @key }}</label><br />
-                {{/each}}
-                </span>
-            </span>
+            <div class="form-group">
+                <label class="col-sm-1 control-label" for="prices">Prices</label>
+                <div class="col-sm-10 inputitem" id="prices">
+                    {{#each price}}
+                        <input type="checkbox" name="prices[]" id="price-{{ @key }}" value="{{ @key }}" />
+                        <label for="price-{{ @key }}">{{ @key }}</label><br />
+                    {{/each}}
+                </div>
+            </div>
         {{/if}}
         {{#if labels}}
-            <span>
-                <label for="labels">Labels</label>
-                <span id="labels" class="inputitem">
-                {{#each labels}}
-                    <input type="checkbox" name="labels[]" id="labels-{{ @key }}" value="{{ @key }}" />
-                    <label for="labels-{{ @key }}">{{ @key }}</label><br />
-                {{/each}}
-                </span>
-            </span>
+            <div class="form-group">
+                <label class="col-sm-1 control-label" for="labels">Labels</label>
+                <div class="col-sm-10 inputitem" id="labels">
+                    {{#each labels}}
+                        <input type="checkbox" name="labels[]" id="labels-{{ @key }}" value="{{ @key }}" />
+                        <label for="labels-{{ @key }}">{{ @key }}</label><br />
+                    {{/each}}
+                </div>
+            </div>
         {{/if}}
-        <button id="searhButton" type="submit">Search</button>
+        <div class="form-group">
+            <div class="col-sm-offset-1 col-sm-10">
+                <button class="btn btn-default" id="searhButton" type="submit">Search</button>
+            </div>
+        </div>
     </form>
     <ol id="community-forums" class="list-group">
     {{#each forums}}

@@ -99,7 +99,7 @@ router.post('/', (req, res) => {
         .then((newForum) => {
             return res.redirect(`/forums/${newForum._id}`);
         }).catch((err) => {
-        // console.log("hi", err);
+            // console.log("hi", err);
             return res.status(500).send();
         });
 });
@@ -124,6 +124,12 @@ router.get('/search/', (req, res) => {
     });
 });
 
+const contentToHtml = (content) => {
+    return xss(content)
+    .replace(/#([^\[]+)\[([^\]]+)\]/g, (match, name, url) => `<a target='_blank' alt='${name}' href='${url}'>${name}</a>`)
+    .replace(/@([\w-]+)/g, (match, username) => `<a target='_blank' alt='${username}' href='#'>${username}</a>`);
+}
+
 // View specific forum post
 router.get('/:forum_id/', (req, res) => {
     let info = req.locals;
@@ -136,13 +142,7 @@ router.get('/:forum_id/', (req, res) => {
             info.forum = forumData;
             info.isOwner = (forumData.user === (req.user || {})._id);
             // console.log(JSON.stringify(info));
-            info.helpers = {
-                contentToHtml: (content) => {
-                    return xss(content)
-                    .replace(/#([^\[]+)\[([^\]]+)\]/g, (match, name, url) => `<a target='_blank' alt='${name}' href='${url}'>${name}</a>`)
-                    .replace(/@([\w-]+)/g, (match, username) => `<a target='_blank' alt='${username}' href='#'>${username}</a>`);
-                }
-            }
+            info.helpers = { contentToHtml }
             return res.render('forums/single', info);
         }).catch((err) => {
             console.log(err)
@@ -173,7 +173,7 @@ router.put('/:forum_id', (req, res) => {
 
     forumsData.updateForum(forumId, userId, title, content, labels)
         .then((forumData) => {
-            return res.json({'title': title, 'content': content, 'labels': labels});
+            return res.json(Object.assign(forumData, {content: contentToHtml(content)}));
         }).catch((err) => {
             return res.status(500).json({ error: err });
         });
@@ -250,60 +250,6 @@ router.post('/:forum_id/comments', (req, res) => {
         });
 });
 
-// Get a comment by id for specific post
-router.get('/:forum_id/comments/:comment_id/', (req, res) => {
-    if (!req.user) {
-        return res.sendStatus(401);
-    }
-    const forumId = req.params.forum_id;
-    const commentId = req.params.comment_id;
-    forumsData.getForumById(forumId).then((forumData) => {
-        for (let c=0, lenComments=forumData.comments.length; c < lenComments; ++c) {
-            const currComment = forumData.comments[c];
-            if ((currComment._id === commentId) && (currComment.user === req.user._id)) {
-                currComment.isOwner = true;
-                currComment.layout = false;
-                currComment.helpers = {
-                    contentToHtml: (content) => {
-                        return xss(content)
-                        .replace(/#([^\[]+)\[([^\]]+)\]/g, (match, name, url) => `<a target='_blank' alt='${name}' href='${url}'>${name}</a>`)
-                        .replace(/@([\w-]+)/g, (match, username) => `<a target='_blank' alt='${username}' href='#'>${username}</a>`);
-                    }
-                }
-                console.log(currComment);
-                return res.render('comments/index.handlebars', currComment);
-            }
-        }
-        return res.sendStatus(500);
-    }).catch((err) => {
-        console.log(err);
-        return res.sendStatus(500);
-    });
-});
-
-// Get a comment by id for specific post
-router.get('/:forum_id/comments/:comment_id/edit/', (req, res) => {
-    if (!req.user) {
-        return res.sendStatus(401);
-    }
-    const forumId = req.params.forum_id;
-    const commentId = req.params.comment_id;
-    forumsData.getForumById(forumId).then((forumData) => {
-        for (let c=0, lenComments=forumData.comments.length; c < lenComments; ++c) {
-            const currComment = forumData.comments[c];
-            if ((currComment._id === commentId) && (currComment.user === req.user._id)) {
-                console.log(currComment);
-                currComment.layout = false;
-                return res.render('comments/editComment.handlebars', currComment);
-            }
-        }
-        return res.sendStatus(500);
-    }).catch((err) => {
-        console.log(err);
-        return res.sendStatus(500);
-    });
-});
-
 // Update a comment by id for specific post
 router.put('/:forum_id/comments/:comment_id/', (req, res) => {
     if (!req.user) {
@@ -315,17 +261,7 @@ router.put('/:forum_id/comments/:comment_id/', (req, res) => {
     const newText = xss(req.query.comment);
     console.log(req.query);
     forumsData.editComment(forumId, commentId, userId, newText).then((updatedComment) => {
-        updatedComment.isOwner = true;
-        updatedComment.layout = false;
-        console.log(updatedComment)
-        updatedComment.helpers = {
-            contentToHtml: (content) => {
-                return xss(content)
-                .replace(/#([^\[]+)\[([^\]]+)\]/g, (match, name, url) => `<a target='_blank' alt='${name}' href='${url}'>${name}</a>`)
-                .replace(/@([\w-]+)/g, (match, username) => `<a target='_blank' alt='${username}' href='#'>${username}</a>`);
-            }
-        }
-        return res.render('comments/index.handlebars', updatedComment);
+        return res.json(Object.assign(updatedComment, {content: contentToHtml(newText)}));
     }).catch((err) => {
         console.log(err);
         return res.sendStatus(500);

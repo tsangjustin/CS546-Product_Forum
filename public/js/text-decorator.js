@@ -3,7 +3,7 @@ var parser = new Parser(
     clothing: /#([^\[]+)\[([^\]]+)\]/,
     user: /@[\w-]+/,
     other: /\S+/ } );
-var textArea = document.getElementById("content");
-if (textArea) {
-    new TextareaDecorator( textArea, parser );
+var textAreas = document.getElementsByTagName("textarea");
+for(el of textAreas) {
+    new TextareaDecorator( el, parser );
 }
