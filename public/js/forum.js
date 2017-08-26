@@ -47,8 +47,6 @@ function redirectLogin() {
 }
 
 function likeComment(event, commentId) {
-    console.log(forumId);
-    console.log(commentId);
     $.ajax({
         'url': '/forums/' + forumId + '/comments/' + commentId + "/like",
         'type': 'PUT',
@@ -68,8 +66,6 @@ function likeComment(event, commentId) {
 }
 
 function dislikeComment(event, commentId) {
-    console.log(forumId);
-    console.log(commentId);
     $.ajax({
         'url': '/forums/' + forumId + '/comments/' + commentId + "/dislike",
         'type': 'PUT',
@@ -86,6 +82,78 @@ function dislikeComment(event, commentId) {
         },
         'dataType': 'json'
     })
+}
+
+function editComment(commentId) {
+    console.log(commentId)
+    $.ajax({
+        'url': '/forums/' + forumId + '/comments/' + commentId + "/edit",
+        'type': 'GET',
+        'success': function(res) {
+            $("#" + commentId).html(res);
+        },
+        'error': function(err) {
+            if (err) {
+                // window.location.href = '/log_in';
+                console.log(err);
+            }
+        },
+        'dataType': 'html'
+    });
+}
+
+function submitEditComment(commentId) {
+    console.log(commentId)
+    var editedText = $('#edit-' + commentId).val();
+    var queryString = "comment=" + encodeURIComponent(editedText);
+    $.ajax({
+        'url': '/forums/' + forumId + '/comments/' + commentId + '?'  + queryString,
+        'type': 'PUT',
+        'success': function(res) {
+            $("#" + commentId).html(res);
+        },
+        'error': function(err) {
+            if (err) {
+                // window.location.href = '/log_in';
+                console.log(err);
+            }
+        },
+        'dataType': 'html'
+    });
+}
+
+function cancelEditComment(commentId) {
+    $.ajax({
+        'url': '/forums/' + forumId + '/comments/' + commentId,
+        'type': 'GET',
+        'success': function(res) {
+            $("#" + commentId).html(res);
+        },
+        'error': function(err) {
+            if (err) {
+                // window.location.href = '/log_in';
+                console.log(err);
+            }
+        },
+        'dataType': 'html'
+    });
+}
+
+function deleteComment(commentId) {
+    $.ajax({
+        'url': '/forums/' + forumId + '/comments/' + commentId,
+        'type': 'DELETE',
+        'success': function(res) {
+            $("#" + commentId).remove();
+        },
+        'error': function(err) {
+            if (err) {
+                // window.location.href = '/log_in';
+                console.log(err);
+            }
+        },
+        'dataType': 'json'
+    });
 }
 
 // This works...
