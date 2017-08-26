@@ -123,7 +123,7 @@ let exportedMethods = {
             forumCollection
                 .update(
                     {_id: forumId,
-                    user: userId}, 
+                    user: userId},
                     { $set: updateParam}
                 ).then((forumInformation) => {
                     console.log("Updated forum");
@@ -484,6 +484,47 @@ let exportedMethods = {
             //     return forums;
             // })
             return forumCollection.find(searchQuery).toArray();
+        });
+    },
+    deleteComment(forumId, commentId, userId) {
+        return new Promise((fulfill, reject) => {
+            if (!isValidString(forumId)) {
+                return reject('Invalid forum id');
+            }
+            if (!isValidString(commentId)) {
+                return reject('Invalid comment id');
+            }
+            if (!isValidString(userId)) {
+                return reject('Invalid user id');
+            }
+            forums().then((forumColl) => {
+                forumColl.update(
+                    { _id: forumId },
+                    {
+                        $pull: {
+                            comments: {
+                                _id: commentId,
+                                user: userId,
+                            },
+                        },
+                    },
+                    (err, updateInfo) => {
+                        if (err) {
+                            return reject(err);
+                        }
+                        const result = updateInfo.result;
+        				if (result.n < 1) {
+        					return reject('Unable find comment with matching comment id');
+        				}
+        				if (result.nModified < 1) {
+        					return reject('Fail to remove comment');
+        				}
+                        return fulfill(commentId);
+                    }
+                );
+            }).catch((err) => {
+                return reject(err);
+            });
         });
     }
 }
