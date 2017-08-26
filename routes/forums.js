@@ -48,7 +48,7 @@ router.get('/', (req, res) => {
         if (Object.keys(searchFilters.labels).length > 0) {
             info.labels = searchFilters.labels;
         }
-        console.log(info);
+        // console.log(info);
         return res.render('forums', info);
     }).catch((err) => {
         return res.status(500).send();
@@ -112,7 +112,7 @@ router.get('/search/', (req, res) => {
             forums: forumsQuery,
             layout: false,
         };
-        console.log(forumsInfo);
+        // console.log(forumsInfo);
         // return res.json(forumsInfo);
         return res.render('forums/communityForums', forumsInfo);
     }).catch((err) => {
@@ -131,7 +131,7 @@ router.get('/:forum_id/', (req, res) => {
             });
             info.forum = forumData;
             info.isOwner = (forumData.user === (req.user || {})._id);
-            console.log(JSON.stringify(info));
+            // console.log(JSON.stringify(info));
             info.helpers = {
                 contentToHtml: (content) => {
                     return xss(content)

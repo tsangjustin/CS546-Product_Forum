@@ -500,12 +500,16 @@ let exportedMethods = {
             if (!isValidString(newText)) {
                 return reject('Invalid comment');
             }
+            console.log(forumId)
+            console.log(commentId)
+            console.log(userId)
+            console.log(newText)
             forums().then((forumColl) => {
                 forumColl.update(
                     {
                         _id: forumId,
                         "comments._id": commentId,
-                        "comments.user": userId,
+                        // "comments.user": userId,
                     },
                     {
                         "$set": {
