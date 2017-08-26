@@ -74,9 +74,9 @@ router.post('/', (req, res) => {
     if (!req.user) {
         return res.redirect('/log_in');
     }
-    let userId = req.user._id;
-    let title = xss(req.body.title);
-    let content = xss(req.body.content);
+    const userId = req.user._id;
+    const title = xss(req.body.title);
+    const content = xss(req.body.content);
     let labels = req.body.labels;
     const clothing = req.body.clothing || [];
 

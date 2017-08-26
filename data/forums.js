@@ -1,5 +1,6 @@
 // Node Modules
 const uuidV4 = require("uuid/v4");
+const xss = require('xss');
 // Custom Node Modules
 const mongoCollections = require("../config/mongoCollections");
 const forums = mongoCollections.forums;
@@ -65,6 +66,7 @@ let exportedMethods = {
         if (!labels || (!Array.isArray(labels))) {
             return Promise.reject('Invalid label(s) for forum creation')
         }
+        labels = labels.map(label => xss(label.trim()))
         if (!isValidString(userId)) {
             return Promise.reject('Invalid id for forum creation')
         }
@@ -78,8 +80,8 @@ let exportedMethods = {
                     _id: uuidV4(),
                     user: userId,
                     createdOn: new Date(),
-                    title,
-                    content,
+                    title: xss(title),
+                    content: xss(content),
                     labels,
                     clothing,
                     likes: [],
@@ -111,19 +113,19 @@ let exportedMethods = {
         // Only update parameters that have been changed
         updateParam = {}
         if (title) {
-            updateParam["title"] = title;
+            updateParam["title"] = xss(title);
         }
         if (content) {
-            updateParam["content"] = content;
+            updateParam["content"] = xss(content);
         }
         if (labels) {
-            updateParam["labels"] = labels;
+            updateParam["labels"] = labels.map(label => xss(label.trim()));
         }
         return forums().then((forumCollection) => {
             forumCollection
                 .update(
                     {_id: forumId,
-                    user: userId}, 
+                    user: userId},
                     { $set: updateParam}
                 ).then((forumInformation) => {
                     console.log("Updated forum");
@@ -142,7 +144,7 @@ let exportedMethods = {
                 )
                 .then(() => {
                     console.log("Deleted forum");
-                    return;
+                    return forumId;
                 }).catch((err) => {
                     return Promise.reject("Could not delete forum");
                 });
@@ -153,7 +155,7 @@ let exportedMethods = {
             const newComment = {
                 _id: uuidV4(),
                 datePosted: new Date(),
-                content: comment,
+                content: xss(comment),
                 user: userId,
                 likes: [],
                 dislikes: [],
