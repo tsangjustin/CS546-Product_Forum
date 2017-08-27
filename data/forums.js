@@ -5,6 +5,7 @@ const mongoCollections = require("../config/mongoCollections");
 const forums = mongoCollections.forums;
 const usersData = require("./users");
 const clothingData = require("./clothing");
+const commentsData = require("./comment");
 
 /**
  * Function checks that a string given is string with some number of
@@ -521,46 +522,49 @@ let exportedMethods = {
             if (!isValidString(newText)) {
                 return reject('Invalid comment');
             }
-            console.log(forumId)
-            console.log(commentId)
-            console.log(userId)
-            console.log(newText)
-            forums().then((forumColl) => {
-                forumColl.update(
-                    {
-                        _id: forumId,
-                        "comments._id": commentId,
-                        // "comments.user": userId,
-                    },
-                    {
-                        "$set": {
-                            "comments.$.content": newText,
+            commentsData.getCommentById(forumId, commentId).then((comment) => {
+                if (comment.user !== userId) {
+                    return reject('Fail to find comment with matching comment id and user id');
+                }
+                forums().then((forumColl) => {
+                    forumColl.update(
+                        {
+                            _id: forumId,
+                            "comments._id": commentId,
+                            // "comments.user": userId,
                         },
-                    },
-                    (err, updateInfo) => {
-                        if (err) {
-                            return reject(err);
-                        }
-                        const result = updateInfo.result;
-        				if (result.n < 1) {
-        					return reject('Unable find comment with matching comment id');
-        				}
-        				if (result.nModified < 1) {
-        					return reject('Fail to update comment');
-        				}
-                        exportedMethods.getForumById(forumId).then((forumInfo) => {
-                            for (let c=0,lenComments=forumInfo.comments.length; c < lenComments; ++c) {
-                                const currComment = forumInfo.comments[c];
-                                if ((currComment._id === commentId) && (currComment.user === userId)) {
-                                    return fulfill(currComment);
-                                }
+                        {
+                            "$set": {
+                                "comments.$.content": newText,
+                            },
+                        },
+                        (err, updateInfo) => {
+                            if (err) {
+                                return reject(err);
                             }
-                            return reject('Fail to find updated comment')
-                        }).catch((err) => {
-                            return reject(err);
-                        })
-                    }
-                );
+                            const result = updateInfo.result;
+                            if (result.n < 1) {
+                                return reject('Unable find comment with matching comment id');
+                            }
+                            if (result.nModified < 1) {
+                                return reject('Fail to update comment');
+                            }
+                            exportedMethods.getForumById(forumId).then((forumInfo) => {
+                                for (let c=0,lenComments=forumInfo.comments.length; c < lenComments; ++c) {
+                                    const currComment = forumInfo.comments[c];
+                                    if ((currComment._id === commentId) && (currComment.user === userId)) {
+                                        return fulfill(currComment);
+                                    }
+                                }
+                                return reject('Fail to find updated comment')
+                            }).catch((err) => {
+                                return reject(err);
+                            });
+                        }
+                    );
+                });
+            }).catch((err) => {
+                return reject(err);
             });
         });
     },
