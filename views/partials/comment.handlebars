@@ -11,6 +11,7 @@
         </span>
         {{!-- TODO user avatar of person who commented --}}
         <p> {{ this.datePosted }} </p>
+        <img src="{{ this.avatar }}" class="avatar" />
         <p class="content" data-original="{{ this.content }}"> {{{ contentToHtml this.content }}} </p>
         <ul class="nav nav-pills">
             <li>
