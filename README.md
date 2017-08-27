@@ -19,6 +19,32 @@ Style With Me
 3. Run `npm start` to start the Express server
 4. On open browser, enter `localhost:3000` to access the webpage
 
+## How to Use Our Product
+- Demo of how to use our product is included in the video presentation
+- It showcases all the features of our product as well as how to navigate the webpage
+- Logic:
+  1. Landing Page
+    - Create forums
+    - View own forums
+    - View community forums
+  2. Community forums
+    - Search for forums based on criteria: text in title, content, or clothing name, price range, and label(s)
+  3. Forum
+    - View title, content, and like and dislike of forum
+    - View all comments for that comment and like and dislike for each comments
+    - If owner of forum, able update and delete forum
+    - If owner of comment, able to update and delete comment
+  3. Profile
+    - View general info and avatar of user
+    - Edit profile fields such as avatar, email, and gender
+  4. Login
+    - Login to webpage with credentials
+  5. Sign Up
+    - Able to sign up for account on webpage
+  6. Create Forum
+    - Able to give pending creation forum title, content, and labels
+    - Supports URL markdown, so if provide a URL of specific company product, our scraper will extract images and pricing for product and display on forum page 
+
 ## Project Proposal
 A clothing forum website that allows users to create new and search for existing forum threads that focus on certain clothing brand, type, or outfit. The forum thread provides a platform for users to converse about that brand, type, or outfit and each forum can link sources to purchase those item(s) as well as provide general statistic information regarding those item(s).  
 
