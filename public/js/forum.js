@@ -93,7 +93,7 @@ function subComment(commentId) {
 }
 
 function editComment(commentId) {
-    $('#' + commentId + " > form textarea").val($('#' + commentId + " .content").data("original").trim());
+    $('#' + commentId + " > form textarea").val($('#' + commentId + " .content").data("original").toString().trim());
     $('#' + commentId + " > form textarea").data("editing", "true");
     window["comment-" + commentId].update();
     $('#' + commentId + " > form textarea").val();
