@@ -6,6 +6,9 @@ const userData = data.user;
 // Get avatars for each community forum
 function getAllAvatars(forumList) {
     return new Promise((resolve, reject) => {
+        if (forumList.length == 0) {
+            return resolve();
+        }
         let numAvatars = 0;
         forumList.forEach((element) => {
             userData.getAvatar(element.user)

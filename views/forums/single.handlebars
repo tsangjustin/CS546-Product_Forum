@@ -4,6 +4,7 @@
 <section class="row">
     {{!-- TODO user avatar --}}
     <div id="viewForum">
+        <img src={{ forum.avatar }} class="avatar"/>
         <h1>
             {{!-- Editing and deleting --}}
             {{#if isOwner}}
@@ -135,8 +136,9 @@
                     {{/if}}
                     <i class="fa fa-comments marginLeft hoverLink" aria-hidden="true"></i>
                 </span>
-                {{!-- TODO user avatar of person who commented --}}
                 <p> {{ this.datePosted }} </p>
+                <img src="{{ this.avatar }}" class="avatar" />
+
                 <p class="content"> {{{ contentToHtml this.content }}} </p>
                 <ul class="nav nav-pills">
                     <li>

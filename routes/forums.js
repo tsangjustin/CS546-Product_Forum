@@ -7,9 +7,11 @@ const userData = data.user;
 // Get avatars for each community forum
 function getAllAvatars(forumList) {
     return new Promise((resolve, reject) => {
+        if (forumList.length == 0) {
+            return resolve();
+        }
         let numAvatars = 0;
         forumList.forEach((element) => {
-            console.log("elem", element);
             userData.getAvatar(element.user)
                 .then((avatar) => {
                     element.avatar = avatar;
@@ -71,7 +73,6 @@ router.get('/', (req, res) => {
         if (Object.keys(searchFilters.labels).length > 0) {
             info.labels = searchFilters.labels;
         }
-        console.log(info.forums);
         return getAllAvatars(info.forums);
     })
     .then(() => {
@@ -170,6 +171,14 @@ router.get('/:forum_id/', (req, res) => {
             info.isOwner = (forumData.user === (req.user || {})._id);
             // console.log(JSON.stringify(info));
             info.helpers = { contentToHtml }
+            
+            // get user avatar
+            return userData.getAvatar(info.forum.user);
+        }).then((userAvatar) => {
+            info.forum.avatar = userAvatar;
+            // get all other avatars
+            return getAllAvatars(info.forum.comments);
+        }).then(() => {
             return res.render('forums/single', info);
         }).catch((err) => {
             console.log(err)
