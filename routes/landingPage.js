@@ -1,6 +1,28 @@
 const router = require('express').Router();
 const data = require("../data");
 const forumsData = data.forums;
+const userData = data.user;
+
+// Get avatars for each community forum
+function getAllAvatars(forumList) {
+    return new Promise((resolve, reject) => {
+        let numAvatars = 0;
+        forumList.forEach((element) => {
+            userData.getAvatar(element.user)
+                .then((avatar) => {
+                    element.avatar = avatar;
+                    numAvatars++;
+                    if (numAvatars == forumList.length) {
+                        //we have seen all the avatars and can return 
+                        return resolve();
+                    }
+                })
+                .catch((err) => {
+                    return reject();
+                });
+        });
+    });
+}
 
 router.get('/', (req, res) => {
 	let userInfo = req.locals || {};
@@ -17,8 +39,11 @@ router.get('/', (req, res) => {
 		userInfo.communityForum = communityForum.sort((f1, f2) => {
             return (f1.createdOn < f2.createdOn) ? 1 : -1
         });
-		return res.render('landingPage', userInfo);
-	});
+        return getAllAvatars(userInfo.communityForum);
+    })
+    .then(() => {
+        return res.render('landingPage', userInfo);
+    });
 });
 
 
