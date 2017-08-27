@@ -5,7 +5,7 @@
 + Weronika Zamlynny
 
 ## Project Name
-Style With Me?  
+Style With Me
 
 ## Setup
 
