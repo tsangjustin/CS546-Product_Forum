@@ -102,13 +102,13 @@ function editComment(commentId) {
 }
 
 function submitEditComment(commentId) {
-    if ($('#' + commentId + " > form textarea").data("editing") === "false") {
-        return $("#" + commentId + " > form").submit();
-    }
-    
     var editedText = $('#' + commentId + " textarea").val();
     if (editedText === "") {
         return;
+    }
+
+    if ($('#' + commentId + " > form textarea").data("editing") === "false") {
+        return $("#" + commentId + " > form").submit();
     }
     var queryString = "comment=" + encodeURIComponent(editedText);
 
