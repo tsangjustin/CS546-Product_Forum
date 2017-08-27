@@ -84,39 +84,63 @@ function dislikeComment(event, commentId) {
     })
 }
 
+function subComment(commentId) {
+    $('#' + commentId + " > form textarea").val("");
+    $('#' + commentId + " > form textarea").data("editing", "false");
+    window["comment-" + commentId].update();
+    $('#' + commentId + " > form textarea").val();
+    $("#" + commentId + " > form").show();
+}
+
 function editComment(commentId) {
-    $("#" + commentId + " .view").hide();
-    $("#" + commentId + " form").show();
+    $('#' + commentId + " > form textarea").val($('#' + commentId + " .content").data("original").trim());
+    $('#' + commentId + " > form textarea").data("editing", "true");
+    window["comment-" + commentId].update();
+    $('#' + commentId + " > form textarea").val();
+    $("#" + commentId + " > .view").hide();
+    $("#" + commentId + " > form").show();
 }
 
 function submitEditComment(commentId) {
-    console.log(commentId);
-    $('#' + commentId + " input").attr("disabled", "disabled");
-    
     var editedText = $('#' + commentId + " textarea").val();
+    if (editedText === "") {
+        return;
+    }
+
+    if ($('#' + commentId + " > form textarea").data("editing") === "false") {
+        return $("#" + commentId + " > form").submit();
+    }
     var queryString = "comment=" + encodeURIComponent(editedText);
+
+    $('#' + commentId + " > form input").attr("disabled", "disabled");
     $.ajax({
         'url': '/forums/' + forumId + '/comments/' + commentId + '?'  + queryString,
         'type': 'PUT',
         'success': function(res) {
-            $('#' + commentId + " .content").html(res.content);
-            $("#" + commentId + " .view").show();
-            $("#" + commentId + " form").hide();
-            $('#' + commentId + " input").removeAttr("disabled");
+            $('#' + commentId + " > .view .content").html(res.content);
+            $('#' + commentId + " > .view .content").data("original", editedText);
+            $("#" + commentId + " > .view").show();
+            $("#" + commentId + " > form").hide();
+            $('#' + commentId + " > form input").removeAttr("disabled");
         },
         'error': function(err) {
             if (err) {
+                $("#" + commentId + " > .view").show();
+                $("#" + commentId + " > form").hide();
+                $('#' + commentId + " > form input").removeAttr("disabled");
                 // window.location.href = '/log_in';
                 console.log(err);
             }
         },
         'dataType': 'json'
     });
+    return false;
 }
 
 function cancelEditComment(commentId) {
-    $("#" + commentId + " .view").show();
-    $("#" + commentId + " form").hide();
+    $("#" + commentId + " > .view").show();
+    $("#" + commentId + " > form").hide();
+    return false;
 }
 
 function deleteComment(commentId) {
@@ -134,6 +158,7 @@ function deleteComment(commentId) {
         },
         'dataType': 'json'
     });
+    return false;
 }
 
 // This works...

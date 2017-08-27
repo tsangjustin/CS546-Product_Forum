@@ -163,15 +163,38 @@ router.get('/:forum_id/', (req, res) => {
     let info = req.locals;
     forumsData.getForumById(req.params.forum_id)
         .then((forumData) => {
+            // Use an object for the comments thread for O(1) lookup and then convert to array
+            commentsThread = {}
             forumData.comments.map((comment) => {
                 comment.isOwner = (comment.user === (req.user || {})._id);
+                comment.subthreads = [];
                 return comment;
             });
+            forumData.comments.sort((x, y) => x.datePosted - y.datePosted).forEach(comment => {
+                if (comment.parentComment) {
+                    if (!commentsThread[comment.parentComment]) {
+                        commentsThread[comment.parentComment] = {
+                            _id: comment.parentComment,
+                            datePosted: undefined,
+                            content: "Comment deleted",
+                            user: undefined,
+                            parentComment: undefined,
+                            likes: [],
+                            dislikes: [],
+                            subthreads: [],
+                        }
+                    }
+                    commentsThread[comment.parentComment].subthreads.push(comment);
+                }
+                commentsThread[comment._id] = comment;
+            })
+            console.log(commentsThread["421feec5-fade-4b71-ad6f-01690ba1f2be"]);
+            // Remove non-top level comments
+            forumData.commentsThread = Object.values(commentsThread).filter(x => !x.parentComment);
             info.forum = forumData;
             info.isOwner = (forumData.user === (req.user || {})._id);
             // console.log(JSON.stringify(info));
-            info.helpers = { contentToHtml }
-            
+            info.helpers = { contentToHtml, forum_id: () => forumData._id }
             // get user avatar
             return userData.getAvatar(info.forum.user);
         }).then((userAvatar) => {
@@ -274,9 +297,10 @@ router.post('/:forum_id/comments', (req, res) => {
     }
     const forumId = req.params.forum_id;
     const userId = req.user._id;
+    const parentCommentId = req.body.parentCommentId;
     const comment = req.body.comment;
 
-    forumsData.addComment(forumId, userId, comment)
+    forumsData.addComment(forumId, userId, parentCommentId, comment)
         .then(() => {
             return res.redirect(`/forums/${forumId}`);
         }).catch((err) => {

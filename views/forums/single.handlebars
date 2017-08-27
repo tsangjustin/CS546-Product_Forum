@@ -124,54 +124,8 @@
     <h2> Comments </h2>
     {{!-- Existing Comments --}}
     <ul class="list-group">
-    {{#each forum.comments }}
-        <li id="{{ this._id }}" class="list-group-item">
-            <span class="view">
-                <span class="floatRight">
-                    {{#if this.isOwner}}
-                    <span>
-                        <i onclick="editComment('{{ this._id }}')" class="fa fa-pencil hoverLink" aria-hidden="true"></i>
-                        <i onclick="deleteComment('{{ this._id }}')" class="fa fa-trash-o marginLeft hoverLink" aria-hidden="true"></i>
-                    </span>
-                    {{/if}}
-                    <i class="fa fa-comments marginLeft hoverLink" aria-hidden="true"></i>
-                </span>
-                <p> {{ this.datePosted }} </p>
-                <img src="{{ this.avatar }}" class="avatar" />
-
-                <p class="content"> {{{ contentToHtml this.content }}} </p>
-                <ul class="nav nav-pills">
-                    <li>
-                        <i onclick="likeComment(event, '{{ this._id }}')" class="fa fa-thumbs-up hoverLink" aria-hidden="true"></i>
-                        <span class="badge">{{ this.likes.length }}</span>
-                    </li>
-                    <li>
-                        <i onclick="dislikeComment(event, '{{ this._id }}')" class="fa fa-thumbs-down marginLeft hoverLink" aria-hidden="true"></i>
-                        <span class="badge">{{ this.dislikes.length }}</span>
-                    </li>
-                </ul>
-            </span>
-            {{#if this.isOwner}}
-                <form class="form-horizontal" style="display:none;" onSubmit="return false;">
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            <textarea class="form-control ldt"
-                                aria-label="New Comment"
-                                name="comment"
-                                placeholder="Checkout these #Suede Sneakers[http://www.hm.com/us/product/72665]&#10;Credit: @Dillon"
-                                required>{{ content }}</textarea>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            <input type="button" onclick="submitEditComment('{{ _id }}')" class="btn btn-default" value="Update" />
-                            <input type="button" onclick="cancelEditComment('{{ _id }}')" class="btn btn-default" value="Cancel" />
-                        </div>
-                    </div>
-                </form>
-            {{/if}}
-            {{!-- TODO view subthreads  --}}
-        </li>
+    {{#each forum.commentsThread }}
+        {{> comment }}
     {{ else }}
         <li class="text-center list-group-item">
             <p> Sorry there are currently no comments to display.</p>

@@ -5,5 +5,9 @@ var parser = new Parser(
     other: /\S+/ } );
 var textAreas = document.getElementsByTagName("textarea");
 for(el of textAreas) {
-    new TextareaDecorator( el, parser );
+    if (el.id) {
+        window[el.id] = new TextareaDecorator( el, parser );
+    } else {
+        new TextareaDecorator( el, parser );
+    }
 }
