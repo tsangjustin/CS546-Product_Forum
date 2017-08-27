@@ -84,13 +84,27 @@ function dislikeComment(event, commentId) {
     })
 }
 
+function subComment(commentId) {
+    $('#' + commentId + " textarea").val("");
+    $('#' + commentId + " textarea").data("editing", "false");
+    window["comment-" + commentId].update();
+    $('#' + commentId + " textarea").val();
+    $("#" + commentId + " form").show();
+}
+
 function editComment(commentId) {
+    $('#' + commentId + " textarea").val($('#' + commentId + " .content").data("original").trim());
+    $('#' + commentId + " textarea").data("editing", "true");
+    window["comment-" + commentId].update();
+    $('#' + commentId + " textarea").val();
     $("#" + commentId + " .view").hide();
     $("#" + commentId + " form").show();
 }
 
 function submitEditComment(commentId) {
-    console.log(commentId);
+    if ($('#' + commentId + " textarea").data("editing") === "false") {
+        return $("#" + commentId + " form").submit();
+    }
     $('#' + commentId + " input").attr("disabled", "disabled");
     
     var editedText = $('#' + commentId + " textarea").val();
@@ -100,6 +114,7 @@ function submitEditComment(commentId) {
         'type': 'PUT',
         'success': function(res) {
             $('#' + commentId + " .content").html(res.content);
+            $('#' + commentId + " .content").data("original", editedText);
             $("#" + commentId + " .view").show();
             $("#" + commentId + " form").hide();
             $('#' + commentId + " input").removeAttr("disabled");
@@ -112,11 +127,13 @@ function submitEditComment(commentId) {
         },
         'dataType': 'json'
     });
+    return false;
 }
 
 function cancelEditComment(commentId) {
     $("#" + commentId + " .view").show();
     $("#" + commentId + " form").hide();
+    return false;
 }
 
 function deleteComment(commentId) {
@@ -134,6 +151,7 @@ function deleteComment(commentId) {
         },
         'dataType': 'json'
     });
+    return false;
 }
 
 // This works...

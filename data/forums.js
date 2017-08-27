@@ -160,16 +160,16 @@ let exportedMethods = {
                 });
         });
     },
-    addComment(forumId, userId, comment) {
+    addComment(forumId, userId, parentCommentId, content) {
         return forums().then((forumCollection) => {
             const newComment = {
                 _id: uuidV4(),
                 datePosted: new Date(),
-                content: comment,
+                content,
                 user: userId,
+                parentComment: parentCommentId,
                 likes: [],
                 dislikes: [],
-                subthreads: [],
             };
             return forumCollection.update(
                 { _id: forumId },
