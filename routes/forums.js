@@ -126,7 +126,7 @@ router.get('/search/', (req, res) => {
 
 const contentToHtml = (content) => {
     return xss(content)
-    .replace(/#([^\[]+)\[([^\]]+)\]/g, (match, name, url) => `<a target='_blank' href='${encodeURIComponent(url)}'>${name}</a>`)
+    .replace(/#([^\[]+)\[([^\]]+)\]/g, (match, name, url) => `<a target='_blank' href='${url}'>${name}</a>`)
     .replace(/@([\w-]+)/g, (match, username) => `<a target='_blank' href='#'>${username}</a>`);
 }
 

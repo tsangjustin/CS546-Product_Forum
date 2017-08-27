@@ -42,7 +42,11 @@
 						New <i class="fa fa-plus landing-header-icon" aria-hidden="true"></i>
 					</a>
                     <a href="{{ this.url }}" target="_blank">
+                    {{#if this.image}}
                         <img src="{{ this.image }}" alt="{{ this.name }}" />
+                    {{else}}
+                        <p>{{ this.name }}</p>
+                    {{/if}}
                     </a>
                     <div class="caption">
                         <h3>{{ this.name }}</h3>
