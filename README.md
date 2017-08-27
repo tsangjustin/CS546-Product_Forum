@@ -7,6 +7,13 @@
 ## Project Name
 Style With Me?  
 
+## Setup
+
+1. Run `npm install` to install all Node dependencies
+2. Run `npm run seed` to populate MongoDB with user and forum documents
+3. Run `npm start` to start the Express server
+4. On open browser, enter `localhost:3000` to access the webpage
+
 ## Project Proposal
 A clothing forum website that allows users to create new and search for existing forum threads that focus on certain clothing brand, type, or outfit. The forum thread provides a platform for users to converse about that brand, type, or outfit and each forum can link sources to purchase those item(s) as well as provide general statistic information regarding those item(s).  
 
