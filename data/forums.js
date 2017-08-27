@@ -160,16 +160,25 @@ let exportedMethods = {
                 });
         });
     },
-    addComment(forumId, userId, comment) {
+    addComment(forumId, userId, parentCommentId, content) {
+        if (!isValidString(forumId)) {
+            return Promise.reject('Invalid forumId for forum comment')
+        }
+        if (!isValidString(userId)) {
+            return Promise.reject('Invalid userId for forum comment')
+        }
+        if (!isValidString(content)) {
+            return Promise.reject('Invalid content for forum comment')
+        }
         return forums().then((forumCollection) => {
             const newComment = {
                 _id: uuidV4(),
                 datePosted: new Date(),
-                content: comment,
+                content,
                 user: userId,
+                parentComment: parentCommentId,
                 likes: [],
                 dislikes: [],
-                subthreads: [],
             };
             return forumCollection.update(
                 { _id: forumId },

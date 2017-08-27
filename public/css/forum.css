@@ -11,3 +11,8 @@
 #forumClothing > div:hover .badge {
     display: inline-block;
 }
+
+ul.subthread {
+    margin-top: 20px;
+    margin-bottom: 0;
+}
