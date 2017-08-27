@@ -9,6 +9,11 @@ Style With Me?
 
 ## Setup
 
+### Mongo Setup
+1. In separate terminal, run `mongod` to start MongoDB service
+2. Keep this process running as long as development is happening
+
+### Node Setup
 1. Run `npm install` to install all Node dependencies
 2. Run `npm run seed` to populate MongoDB with user and forum documents
 3. Run `npm start` to start the Express server
