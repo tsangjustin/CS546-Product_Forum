@@ -2,6 +2,31 @@ const router = require('express').Router();
 const data = require("../data");
 const xss = require("xss");
 const forumsData = data.forums;
+const userData = data.user;
+
+// Get avatars for each community forum
+function getAllAvatars(forumList) {
+    return new Promise((resolve, reject) => {
+        if (forumList.length == 0) {
+            return resolve();
+        }
+        let numAvatars = 0;
+        forumList.forEach((element) => {
+            userData.getAvatar(element.user)
+                .then((avatar) => {
+                    element.avatar = avatar;
+                    numAvatars++;
+                    if (numAvatars == forumList.length) {
+                        //we have seen all the avatars and can return 
+                        return resolve();
+                    }
+                })
+                .catch((err) => {
+                    return reject();
+                });
+        });
+    });
+}
 
 // View existing forums by most recent or most popular
 router.get('/', (req, res) => {
@@ -48,9 +73,12 @@ router.get('/', (req, res) => {
         if (Object.keys(searchFilters.labels).length > 0) {
             info.labels = searchFilters.labels;
         }
-        // console.log(info);
+        return getAllAvatars(info.forums);
+    })
+    .then(() => {
         return res.render('forums', info);
-    }).catch((err) => {
+    })
+    .catch((err) => {
         return res.status(500).send();
     });
 });
@@ -167,6 +195,13 @@ router.get('/:forum_id/', (req, res) => {
             info.isOwner = (forumData.user === (req.user || {})._id);
             // console.log(JSON.stringify(info));
             info.helpers = { contentToHtml, forum_id: () => forumData._id }
+            // get user avatar
+            return userData.getAvatar(info.forum.user);
+        }).then((userAvatar) => {
+            info.forum.avatar = userAvatar;
+            // get all other avatars
+            return getAllAvatars(info.forum.comments);
+        }).then(() => {
             return res.render('forums/single', info);
         }).catch((err) => {
             console.log(err)
