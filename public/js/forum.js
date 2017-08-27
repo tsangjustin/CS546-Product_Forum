@@ -207,6 +207,10 @@ $(document).ready(function() {
                         </div>'
                     )
                 );
+                $("#forumLabels").html(
+                    res.labels.length ? 
+                        '<h2> Labels </h2><p>' + res.labels + '</p>' : ''
+                );
                 for (cloth of res.clothing) {
                     $("#forumClothing").append(
                         '<div class="col-sm-6 col-md-4">\

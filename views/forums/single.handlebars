@@ -26,10 +26,13 @@
             </li>
         </ul>
 
-        {{#if forum.label}}
+        <div id="forumLabels">
+        {{#if forum.labels}}
             <h2> Labels </h2>
-            <p> {{ forum.label }} </p>
+            <p> {{ forum.labels }} </p>
         {{/if}}
+        </div>
+
         <h2> Clothing </h2>
         <div class="row" id="forumClothing">
         {{#each forum.clothing }}
@@ -101,7 +104,11 @@
                     <div class="alert alert-info" role="alert">
                         <p>Seperate labels by commas</p>
                     </div>
-                    <input id="newForumLabels" type="text" class="form-control" name="labels" placeholder="label1,label2,label3" value={{forum.labels}} />
+                    {{#if forum.labels.length}}
+                        <input id="newForumLabels" type="text" class="form-control" name="labels" placeholder="label1,label2,label3" value={{forum.labels}} />
+                    {{else}}
+                        <input id="newForumLabels" type="text" class="form-control" name="labels" placeholder="label1,label2,label3" value=""/>
+                    {{/if}}
                 </div>
             </div>
 
