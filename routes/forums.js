@@ -194,6 +194,9 @@ router.put('/:forum_id', (req, res) => {
     if (labels) {
         labels = labels.split(",").map(label => label.trim());
     }
+    else {
+        labels = [];
+    }
 
     forumsData.updateForum(forumId, userId, title, content, labels)
         .then((forumData) => {
