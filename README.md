@@ -10,7 +10,7 @@ Style With Me
 ## Setup
 
 ### Mongo Setup
-1. In separate terminal, run `mongod` to start MongoDB service
+1. In separate terminal, run `mongod` or `sudo mongod` to start MongoDB service
 2. Keep this process running as long as development is happening
 
 ### Node Setup
@@ -43,7 +43,7 @@ Style With Me
     - Able to sign up for account on webpage
   6. Create Forum
     - Able to give pending creation forum title, content, and labels
-    - Supports URL markdown, so if provide a URL of specific company product, our scraper will extract images and pricing for product and display on forum page 
+    - Supports URL markdown, so if provide a URL of specific company product, our scraper will extract images and pricing for product and display on forum page
 
 ## Project Proposal
 A clothing forum website that allows users to create new and search for existing forum threads that focus on certain clothing brand, type, or outfit. The forum thread provides a platform for users to converse about that brand, type, or outfit and each forum can link sources to purchase those item(s) as well as provide general statistic information regarding those item(s).  
