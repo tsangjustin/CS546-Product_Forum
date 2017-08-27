@@ -5,21 +5,29 @@
 + Weronika Zamlynny
 
 ## Project Name
+
 Style With Me
 
 ## Setup
 
 ### Mongo Setup
+
 1. In separate terminal, run `mongod` or `sudo mongod` to start MongoDB service
 2. Keep this process running as long as development is happening
 
 ### Node Setup
+
 1. Run `npm install` to install all Node dependencies
 2. Run `npm run seed` to populate MongoDB with user and forum documents
 3. Run `npm start` to start the Express server
 4. On open browser, enter `localhost:3000` to access the webpage
 
+**Requirements**
+
+- Need Node version 7+ (We use Object.values)
+
 ## How to Use Our Product
+
 - Demo of how to use our product is included in the video presentation
 - It showcases all the features of our product as well as how to navigate the webpage
 - Logic:
