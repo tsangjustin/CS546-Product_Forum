@@ -2,6 +2,29 @@ const router = require('express').Router();
 const data = require("../data");
 const xss = require("xss");
 const forumsData = data.forums;
+const userData = data.user;
+
+// Get avatars for each community forum
+function getAllAvatars(forumList) {
+    return new Promise((resolve, reject) => {
+        let numAvatars = 0;
+        forumList.forEach((element) => {
+            console.log("elem", element);
+            userData.getAvatar(element.user)
+                .then((avatar) => {
+                    element.avatar = avatar;
+                    numAvatars++;
+                    if (numAvatars == forumList.length) {
+                        //we have seen all the avatars and can return 
+                        return resolve();
+                    }
+                })
+                .catch((err) => {
+                    return reject();
+                });
+        });
+    });
+}
 
 // View existing forums by most recent or most popular
 router.get('/', (req, res) => {
@@ -48,9 +71,13 @@ router.get('/', (req, res) => {
         if (Object.keys(searchFilters.labels).length > 0) {
             info.labels = searchFilters.labels;
         }
-        // console.log(info);
+        console.log(info.forums);
+        return getAllAvatars(info.forums);
+    })
+    .then(() => {
         return res.render('forums', info);
-    }).catch((err) => {
+    })
+    .catch((err) => {
         return res.status(500).send();
     });
 });
