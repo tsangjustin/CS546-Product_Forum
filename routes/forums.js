@@ -17,11 +17,12 @@ function getAllAvatars(forumList) {
                     element.avatar = avatar;
                     numAvatars++;
                     if (numAvatars == forumList.length) {
-                        //we have seen all the avatars and can return 
+                        //we have seen all the avatars and can return
                         return resolve();
                     }
                 })
                 .catch((err) => {
+                    element.avatar = "/public/image/avatar.png";
                     return reject();
                 });
         });
