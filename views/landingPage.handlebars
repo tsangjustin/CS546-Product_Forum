@@ -1,7 +1,7 @@
 <div class="row marginTop marginBottom">
 	<div class="col-md-4">
 			<ul class="list-group">
-				<li href="#" class="list-group-item active">
+				<li class="list-group-item active">
 					<a href="/forums/create" class="list-group-item-text badge">
 						New <i class="fa fa-plus landing-header-icon" aria-hidden="true"></i>
 					</a>
@@ -39,7 +39,7 @@
 		<ul id="community-forum-list" class="list-group">
 			{{#each communityForum}}
 				<li class="list-group-item">
-					<img src={{this.avatar}} class="avatar"/>
+					<img src={{this.avatar}} class="avatar" alt="Forum creator" />
 					<span class="badge">{{ this.comments.length }}</span>
 					<a href="forums/{{this._id}}">{{ this.title }}</a>
 				</li>

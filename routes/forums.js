@@ -17,11 +17,12 @@ function getAllAvatars(forumList) {
                     element.avatar = avatar;
                     numAvatars++;
                     if (numAvatars == forumList.length) {
-                        //we have seen all the avatars and can return 
+                        //we have seen all the avatars and can return
                         return resolve();
                     }
                 })
                 .catch((err) => {
+                    element.avatar = "/public/image/avatar.png";
                     return reject();
                 });
         });
@@ -154,8 +155,8 @@ router.get('/search/', (req, res) => {
 
 const contentToHtml = (content) => {
     return xss(content)
-    .replace(/#([^\[]+)\[([^\]]+)\]/g, (match, name, url) => `<a target='_blank' alt='${name}' href='${url}'>${name}</a>`)
-    .replace(/@([\w-]+)/g, (match, username) => `<a target='_blank' alt='${username}' href='#'>${username}</a>`);
+    .replace(/#([^\[]+)\[([^\]]+)\]/g, (match, name, url) => `<a target='_blank' href='${url}'>${name}</a>`)
+    .replace(/@([\w-]+)/g, (match, username) => `<a target='_blank' href='#'>${username}</a>`);
 }
 
 // View specific forum post
@@ -194,7 +195,11 @@ router.get('/:forum_id/', (req, res) => {
             info.forum = forumData;
             info.isOwner = (forumData.user === (req.user || {})._id);
             // console.log(JSON.stringify(info));
-            info.helpers = { contentToHtml, forum_id: () => forumData._id }
+            info.helpers = {
+                contentToHtml,
+                forum_id: () => forumData._id,
+                URIencode: (uri) => encodeURIComponent(uri),
+            };
             // get user avatar
             return userData.getAvatar(info.forum.user);
         }).then((userAvatar) => {

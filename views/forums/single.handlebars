@@ -4,7 +4,7 @@
 <section class="row">
     {{!-- TODO user avatar --}}
     <div id="viewForum">
-        <img src={{ forum.avatar }} class="avatar"/>
+        <img src="{{ forum.avatar }}" class="avatar" alt="Forum creator" />
         <h1>
             {{!-- Editing and deleting --}}
             {{#if isOwner}}
@@ -39,11 +39,15 @@
         {{#each forum.clothing }}
             <div class="col-sm-6 col-md-4">
                 <div class="thumbnail">
-                    <a href="/forums/create?c_name={{ this.name }}&c_url={{ this.url }}" class="badge">
+                    <a href="/forums/create?c_name={{ URIencode this.name }}&c_url={{ URIencode this.url }}" class="badge">
 						New <i class="fa fa-plus landing-header-icon" aria-hidden="true"></i>
 					</a>
-                    <a href="{{ this.url }}" target="_blank" alt="{{ this.name }}">
+                    <a href="{{ this.url }}" target="_blank">
+                    {{#if this.image}}
                         <img src="{{ this.image }}" alt="{{ this.name }}" />
+                    {{else}}
+                        <p>{{ this.name }}</p>
+                    {{/if}}
                     </a>
                     <div class="caption">
                         <h3>{{ this.name }}</h3>
@@ -53,9 +57,9 @@
             </div>
         {{ else }}
             <div class="col-sm-12">
-                <li class="text-center list-group-item">
-                    <p>No clothing was tagged.</p>
-                </li>
+                <span class="text-center list-group-item">
+                    No clothing was tagged.
+                </span>
             </div>
         {{/each}}
         </div>
