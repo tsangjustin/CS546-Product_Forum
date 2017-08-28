@@ -1,4 +1,5 @@
 <section class="marginTop">
+    <h2>Search Forums</h2>
     <form class="form-horizontal">
         <div class="form-group">
             <label class="col-sm-1 control-label" for="searchBox"><i class="fa fa-search" aria-hidden="true"></i></label>
@@ -8,7 +9,7 @@
         </div>
         {{#if price}}
             <div class="form-group">
-                <label class="col-sm-1 control-label" for="prices">Prices</label>
+                <label class="col-sm-1 control-label">Prices</label>
                 <div class="col-sm-10 inputitem" id="prices">
                     {{#each price}}
                         <input type="checkbox" name="prices[]" id="price-{{ @key }}" value="{{ @key }}" />
@@ -19,7 +20,7 @@
         {{/if}}
         {{#if labels}}
             <div class="form-group">
-                <label class="col-sm-1 control-label" for="labels">Labels</label>
+                <p class="col-sm-1 control-label">Labels</p>
                 <div class="col-sm-10 inputitem" id="labels">
                     {{#each labels}}
                         <input type="checkbox" name="labels[]" id="labels-{{ @key }}" value="{{ @key }}" />

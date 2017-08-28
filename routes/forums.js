@@ -47,7 +47,7 @@ router.get('/', (req, res) => {
             const currForum = forumList[f];
             // Check labels
             for (let l=0, lenLabels=(currForum.labels || []).length; l < lenLabels; ++l) {
-                searchFilters.labels[currForum.labels[l]] = true;
+                searchFilters.labels[currForum.labels[l].replace(/\s/g, '-')] = true;
             }
             // Check pricing filter
             const clothings = (currForum.clothing || []);
@@ -80,6 +80,7 @@ router.get('/', (req, res) => {
         return res.render('forums', info);
     })
     .catch((err) => {
+        console.log(err);
         return res.status(500).send();
     });
 });
