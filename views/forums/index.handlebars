@@ -12,8 +12,8 @@
                 <label class="col-sm-1 control-label">Prices</label>
                 <div class="col-sm-10 inputitem" id="prices">
                     {{#each price}}
-                        <input type="checkbox" name="prices[]" id="price-{{ @key }}" value="{{ @key }}" />
-                        <label for="price-{{ @key }}">{{ @key }}</label><br />
+                        <input type="checkbox" name="prices[]" id="price-{{ removeSpace @key }}" value="{{ @key }}" />
+                        <label for="price-{{ removeSpace @key }}">{{ @key }}</label><br />
                     {{/each}}
                 </div>
             </div>
@@ -23,8 +23,8 @@
                 <p class="col-sm-1 control-label">Labels</p>
                 <div class="col-sm-10 inputitem" id="labels">
                     {{#each labels}}
-                        <input type="checkbox" name="labels[]" id="labels-{{ @key }}" value="{{ @key }}" />
-                        <label for="labels-{{ @key }}">{{ @key }}</label><br />
+                        <input type="checkbox" name="labels[]" id="labels-{{ removeSpace @key }}" value="{{ @key }}" />
+                        <label for="labels-{{ removeSpace @key }}">{{ @key }}</label><br />
                     {{/each}}
                 </div>
             </div>

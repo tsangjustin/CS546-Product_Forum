@@ -47,7 +47,7 @@ router.get('/', (req, res) => {
             const currForum = forumList[f];
             // Check labels
             for (let l=0, lenLabels=(currForum.labels || []).length; l < lenLabels; ++l) {
-                searchFilters.labels[currForum.labels[l].replace(/\s/g, '-')] = true;
+                searchFilters.labels[currForum.labels[l]] = true;
             }
             // Check pricing filter
             const clothings = (currForum.clothing || []);
@@ -77,6 +77,9 @@ router.get('/', (req, res) => {
         return getAllAvatars(info.forums);
     })
     .then(() => {
+        info.helpers = {
+            removeSpace: (str) => str.replace(/\s/g, '-'),
+        };
         return res.render('forums', info);
     })
     .catch((err) => {
@@ -140,16 +143,19 @@ router.get('/search/', (req, res) => {
     const text = req.query.title || undefined;
     const prices = (req.query.prices || "").split('||') || undefined;
     const labels = (req.query.labels || "").split('||') || undefined;
+    let forumsInfo = {
+        layout: false,
+    };
 
     forumsData.searchForums(text, prices, labels).then((forumsQuery) => {
-        const forumsInfo = {
-            forums: forumsQuery,
-            layout: false,
-        };
+        forumsInfo.forums = forumsQuery
+        return getAllAvatars(forumsInfo.forums);
+    }).then(() => {
         // console.log(forumsInfo);
         // return res.json(forumsInfo);
         return res.render('forums/communityForums', forumsInfo);
     }).catch((err) => {
+        console.log(err);
         return res.sendStatus(500);
     });
 });
