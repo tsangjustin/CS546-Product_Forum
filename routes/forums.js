@@ -1,6 +1,8 @@
+// Node Modules
 const router = require('express').Router();
+const xss    = require("xss");
+// Custom Node Modules
 const data = require("../data");
-const xss = require("xss");
 const forumsData = data.forums;
 const userData = data.user;
 
@@ -112,9 +114,9 @@ router.post('/', (req, res) => {
         return res.redirect('/log_in');
     }
     let userId = req.user._id;
-    let title = req.body.title;
-    let content = req.body.content;
-    let labels = req.body.labels;
+    let title = xss(req.body.title);
+    let content = xss(req.body.content);
+    let labels = xss(req.body.labels);
     const clothing = req.body.clothing || [];
 
     if (!title || !content || !userId) {
@@ -229,15 +231,15 @@ router.put('/:forum_id', (req, res) => {
     }
     let userId = req.user._id;
     let forumId = req.params.forum_id;
-    let title = req.body.title;
+    let title = xss(req.body.title);
     if (title && title == "") {
         title = null;
     }
-    let content = req.body.content;
+    let content = xss(req.body.content);
     if (content && content == "") {
         content = null;
     }
-    let labels = req.body.labels;
+    let labels = xss(req.body.labels);
     if (labels) {
         labels = labels.split(",").map(label => label.trim());
     }
@@ -313,7 +315,7 @@ router.post('/:forum_id/comments', (req, res) => {
     const forumId = req.params.forum_id;
     const userId = req.user._id;
     const parentCommentId = req.body.parentCommentId;
-    const comment = req.body.comment;
+    const comment = xss(req.body.comment);
 
     forumsData.addComment(forumId, userId, parentCommentId, comment)
         .then(() => {
@@ -334,7 +336,6 @@ router.put('/:forum_id/comments/:comment_id/', (req, res) => {
     const commentId = req.params.comment_id;
     const userId = req.user._id;
     const newText = xss(req.query.comment);
-    console.log(req.query);
     forumsData.editComment(forumId, commentId, userId, newText).then((updatedComment) => {
         return res.json(Object.assign(updatedComment, {content: contentToHtml(newText)}));
     }).catch((err) => {
