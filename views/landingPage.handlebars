@@ -39,7 +39,7 @@
 		<ul id="community-forum-list" class="list-group">
 			{{#each communityForum}}
 				<li class="list-group-item">
-					<img src={{this.avatar}} class="avatar"/>
+					<img src={{this.avatar}} class="avatar" alt="Forum creator" />
 					<span class="badge">{{ this.comments.length }}</span>
 					<a href="forums/{{this._id}}">{{ this.title }}</a>
 				</li>
